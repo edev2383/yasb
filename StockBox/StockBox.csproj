@@ -1,0 +1,53 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Deedle" />
+    <None Remove="Adapters\Deedle\" />
+    <None Remove="Ticker\" />
+    <None Remove="Rules\" />
+    <None Remove="Setups\" />
+    <None Remove="Repositories\" />
+    <None Remove="Frame\" />
+    <None Remove="Microsoft.Extensions.Configuration" />
+    <None Remove="Microsoft.Extensions.Configuration.FileExtensions" />
+    <None Remove="Microsoft.Extensions.Configuration.Json" />
+    <None Remove="Microsoft.Extensions.Configuration.EnvironmentVariables" />
+    <None Remove="Deedle.Math" />
+    <None Remove="Actions\" />
+    <None Remove="Services\" />
+    <None Remove="States\" />
+    <None Remove="Models\" />
+    <None Remove="States\Helpers\" />
+    <None Remove="RiskProfiles\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Deedle" Version="2.5.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="6.0.1" />
+    <PackageReference Include="Deedle.Math" Version="2.5.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Ticker\" />
+    <Folder Include="Rules\" />
+    <Folder Include="Setups\" />
+    <Folder Include="Repositories\" />
+    <Folder Include="Actions\" />
+    <Folder Include="Services\" />
+    <Folder Include="States\" />
+    <Folder Include="Models\" />
+    <Folder Include="States\Helpers\" />
+    <Folder Include="RiskProfiles\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\StockBoxValidation\StockBoxValidation.csproj" />
+    <ProjectReference Include="..\StockBoxData\StockBoxData.csproj" />
+    <ProjectReference Include="..\StockBoxConfiguration\StockBoxConfiguration.csproj" />
+    <ProjectReference Include="..\StockBoxInterpreter\StockBoxInterpreter.csproj" />
+  </ItemGroup>
+</Project>

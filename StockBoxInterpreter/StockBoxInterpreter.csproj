@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Interpreter\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Interpreter\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\StockBoxValidation\StockBoxValidation.csproj" />
+    <ProjectReference Include="..\StockBoxData\StockBoxData.csproj" />
+    <ProjectReference Include="..\StockBoxConfiguration\StockBoxConfiguration.csproj" />
+  </ItemGroup>
+</Project>
