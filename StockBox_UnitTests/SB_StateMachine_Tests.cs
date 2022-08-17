@@ -8,12 +8,15 @@ using StockBox.Services;
 using StockBox.Setups;
 using StockBox.States;
 using StockBox_UnitTests.Accessors;
-using System;
+
+
 namespace StockBox_UnitTests
 {
+
     [TestClass]
     public class SB_StateMachine_Tests
     {
+
         [TestMethod]
         public void SB_StateMachine_01_TransitionCanBeCreated()
         {
@@ -116,7 +119,7 @@ namespace StockBox_UnitTests
         }
 
         [TestMethod, Description("Confirm that our Setup, Rules, Actions, and StateMachine all integrate properly")]
-        public void SB_StateMachine_10_StateMachineSetupIntegration()
+        public void SB_StateMachine_10_StateMachineSetupIntegration_TransitionSuccessful()
         {
             // user-defined states are defined by store string values, for now
             const string config_targetWatchList = "TargetWatchlist";
@@ -155,5 +158,52 @@ namespace StockBox_UnitTests
             Assert.AreEqual(sm.CurrentState, new UserDefinedState(config_targetState));
             Assert.AreNotEqual(sm.CurrentState, new UserDefinedState("start"));
         }
+
+        [TestMethod, Description("Confirm that our Setup, Rules, Actions, and StateMachine all integrate properly")]
+        public void SB_StateMachine_11_StateMachineSetupIntegration_TransitionFailure()
+        {
+            // config StateDataModels
+            const string config_startWatchList = "Start";
+            var config_startState = new StateDataModel(9, config_startWatchList, StockBox.States.Helpers.EStateType.eUserDefined);
+            const string config_givenWatchList = "ProvidedWatchlist";
+            var config_givenState = new StateDataModel(7, config_givenWatchList, StockBox.States.Helpers.EStateType.eUserDefined);
+            const string config_targetWatchList = "TargetWatchlist";
+            var config_targetState = new StateDataModel(8, config_targetWatchList, StockBox.States.Helpers.EStateType.eUserDefined);
+
+            // create a setup with a simple rulelist and action
+            var ruleList = new RuleList { new Rule("1 == 1"), };
+            var setup = new Setup(ruleList);
+            setup.AddAction(new Move(null, config_targetWatchList));
+
+            // define the valid states for the StateMachine
+            var validStates = new StateList {
+                new UserDefinedState(config_startState),
+                new UserDefinedState(config_givenState),
+                new UserDefinedState(config_targetState),
+            };
+
+            // create the statemachine and define a valid transition
+            var sm = new StateMachine(validStates, new UserDefinedState(config_startState));
+            sm.AddTransition(new Transition(new UserDefinedState(config_startState), new UserDefinedState(config_givenState)));
+
+            // create the service to perform the interpeting
+            var scanner = new Scanner();
+            var parser = new Parser();
+            var intepreter = new SbInterpreter();
+            var service = new ActiveService(scanner, parser, intepreter);
+
+            // run the interpeter process against the setup
+            var result = setup.Process(service);
+
+            // if the interpreter response is successful, try the next state
+            // of the statemachine, based on the action returned by the setup
+            if (result.Success)
+                // attempt to transition the the setup next state
+                sm.TryNextState(setup.Action.TransitionState);
+
+            // Assert that we did not transition to the action state
+            Assert.AreNotEqual(sm.CurrentState, setup.Action.TransitionState);
+        }
+
     }
 }

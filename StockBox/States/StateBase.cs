@@ -2,6 +2,7 @@
 using StockBox.Actions;
 using StockBox.Models;
 
+
 namespace StockBox.States
 {
     /// <summary>
@@ -83,6 +84,7 @@ namespace StockBox.States
         }
 
         #region Equality Overrides
+
         public static bool operator ==(StateBase left, StateBase right)
         {
             if (ReferenceEquals(left, null))
@@ -117,6 +119,7 @@ namespace StockBox.States
             else
                 return HashCode.Combine(_name);
         }
+
         #endregion
     }
 }

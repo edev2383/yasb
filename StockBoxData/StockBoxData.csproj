@@ -14,9 +14,15 @@
     <None Remove="Indicators\" />
     <None Remove="Managers\" />
     <None Remove="Context\" />
+    <None Remove="Interfaces\" />
+    <None Remove="Npgsql" />
+    <None Remove="Models\" />
+    <None Remove="NHibernate" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Deedle" Version="2.5.0" />
+    <PackageReference Include="Npgsql" Version="6.0.6" />
+    <PackageReference Include="NHibernate" Version="5.3.12" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="SBFrames\" />
@@ -26,6 +32,8 @@
     <Folder Include="Indicators\" />
     <Folder Include="Managers\" />
     <Folder Include="Context\" />
+    <Folder Include="Interfaces\" />
+    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\StockBoxConfiguration\StockBoxConfiguration.csproj" />

@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockBoxData", "StockBoxDat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockBoxConfiguration", "StockBoxConfiguration\StockBoxConfiguration.csproj", "{761518DE-8338-4C64-91B8-427E43F55369}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockBox_IntegrationTests", "StockBox_IntegrationTests\StockBox_IntegrationTests.csproj", "{FFF3DF98-1E88-43DD-B59D-26131178F6C7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{761518DE-8338-4C64-91B8-427E43F55369}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{761518DE-8338-4C64-91B8-427E43F55369}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{761518DE-8338-4C64-91B8-427E43F55369}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FFF3DF98-1E88-43DD-B59D-26131178F6C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFF3DF98-1E88-43DD-B59D-26131178F6C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFF3DF98-1E88-43DD-B59D-26131178F6C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFF3DF98-1E88-43DD-B59D-26131178F6C7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

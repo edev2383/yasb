@@ -1,5 +1,4 @@
-﻿using System;
-using StockBox.RiskProfiles;
+﻿using StockBox.RiskProfiles;
 using StockBox.States;
 
 namespace StockBox.Actions

@@ -87,12 +87,15 @@ namespace StockBox.States
         /// <returns></returns>
         public bool TransitionExists(Transition tryTransition)
         {
-            return TransitionCanBeAdded(tryTransition).HasFailures;
+            return _transitions.ContainsItem(tryTransition);
         }
 
         /// <summary>
         /// Validate the provided Transition can be added to the list of valid
-        /// Transitions
+        /// Transitions.
+        ///
+        /// A Transition can only be added if its states are valid and if the
+        /// Transition does not exist already
         /// </summary>
         /// <param name="tryTransition"></param>
         /// <returns></returns>
@@ -106,7 +109,7 @@ namespace StockBox.States
 
             // we want true/success if the provided transitions is NOT already
             // in the _transitions property
-            ret.Add(!_transitions.ContainsItem(tryTransition), "Transitions (_transitions) DOES NOT contain provided transtion");
+            ret.Add(!TransitionExists(tryTransition), "Transitions (_transitions) DOES NOT contain provided transtion");
 
             return ret;
         }
