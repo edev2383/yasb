@@ -5,6 +5,7 @@ using StockBox.Models;
 
 namespace StockBox.States
 {
+
     /// <summary>
     /// There are 6 application defined states, with corresponding
     /// responsible SbAction Parents:
@@ -32,6 +33,7 @@ namespace StockBox.States
     /// </summary>
     public abstract class StateBase : IState
     {
+
         public string Name { get { return _name; } }
         private readonly string _name;
 

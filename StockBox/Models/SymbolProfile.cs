@@ -3,8 +3,10 @@
 
 namespace StockBox.Models
 {
+
     public class SymbolProfile
     {
+
         public Symbol Symbol { get; set; }
         public StateBase State { get; set; }
 
@@ -18,7 +20,7 @@ namespace StockBox.Models
 
         public override string ToString()
         {
-            return string.Format($"SymbolProfile: ({Symbol.SymbolId}) {Symbol.Name}, CurrentState: {State}");
+            return string.Format($"SymbolProfile: ({Symbol.Token}) {Symbol.Name}, CurrentState: {State}");
         }
 
         public bool IdenfifiesAs(SymbolProfile item)

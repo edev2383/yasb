@@ -5,8 +5,10 @@ using StockBox.Interpreter.Tokens;
 using StockBox.Validation;
 using static StockBox.Interpreter.Tokens.TokenType;
 
+
 namespace StockBox.Interpreter.Scanner
 {
+
     public class Parser : IValidationResultsListProvider
     {
 

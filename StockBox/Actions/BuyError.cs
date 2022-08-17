@@ -1,8 +1,10 @@
 ﻿using System;
 using StockBox.States;
 
+
 namespace StockBox.Actions
 {
+
     /// <summary>
     /// BuyError is really just a Move command. If we're performing a Buy Error,
     /// that means the Buy command came back with a failure response and we can
@@ -10,6 +12,7 @@ namespace StockBox.Actions
     /// </summary>
     public class BuyError : SbActionBase
     {
+
         public BuyError(ISbActionAdapter adapter) : base(adapter, new ActiveErrorState())
         {
         }

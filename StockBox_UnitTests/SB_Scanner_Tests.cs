@@ -6,8 +6,10 @@ using static StockBox_UnitTests.Helpers.EFile;
 using StockBox.Data.Adapters.DataFrame;
 using StockBox.Data.SbFrames;
 
+
 namespace StockBox_UnitTests
 {
+
     [TestClass]
     public class SB_Scanner_Tests
     {

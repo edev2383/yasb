@@ -4,14 +4,17 @@ using StockBox.Interpreter.Scanner;
 using StockBox.Rules;
 using StockBox.Validation;
 
+
 namespace StockBox.Services
 {
+
     /// <summary>
     /// ActiveService is the forward looking testing service use to track
     /// the states of YTD setups
     /// </summary>
     public class ActiveService : SbServiceBase
     {
+
         private Scanner _scanner;
         private Parser _parser;
         private SbInterpreter _interperter;

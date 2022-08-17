@@ -1,10 +1,13 @@
 ﻿using System;
 using StockBox.States;
 
+
 namespace StockBox.Actions
 {
+
     public class Move : SbActionBase
     {
+
         /// <summary>
         /// Move will be the simplest of Actions, being that it is merely an
         /// update event to the database, moving the state of a given Symbol

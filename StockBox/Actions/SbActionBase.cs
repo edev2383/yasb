@@ -1,8 +1,10 @@
 ﻿using StockBox.RiskProfiles;
 using StockBox.States;
 
+
 namespace StockBox.Actions
 {
+
     /// <summary>
     /// An action acts as a wrapper around an external call to an API, i.e.,
     /// the ISbActionAdapter, the expected response, if any, and a state to
@@ -15,6 +17,7 @@ namespace StockBox.Actions
     /// </summary>
     public abstract class SbActionBase : ISbAction
     {
+
         public SbActionBase(ISbActionAdapter adapter, StateBase transitionState)
         {
             _adapter = adapter;

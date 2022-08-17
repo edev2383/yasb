@@ -204,6 +204,5 @@ namespace StockBox_UnitTests
             // Assert that we did not transition to the action state
             Assert.AreNotEqual(sm.CurrentState, setup.Action.TransitionState);
         }
-
     }
 }

@@ -3,11 +3,13 @@
 
 namespace StockBox.Models
 {
+
     /// <summary>
     /// 
     /// </summary>
     public class Symbol
     {
+
         public Guid? Token { get; set; }
         public string Name { get; set; }
         public DateTime? CreateDate { get; set; }

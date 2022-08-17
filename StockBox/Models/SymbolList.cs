@@ -3,8 +3,10 @@
 
 namespace StockBox.Models
 {
+
     public class SymbolList : List<Symbol>
     {
+
         public SymbolList()
         {
         }

@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 
+
 namespace StockBox.States
 {
+
     public class StateList : List<StateBase>
     {
+
         public StateList()
         {
         }

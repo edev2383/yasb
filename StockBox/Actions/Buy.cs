@@ -1,6 +1,7 @@
 ﻿using System;
 using StockBox.States;
 
+
 namespace StockBox.Actions
 {
 
@@ -12,6 +13,7 @@ namespace StockBox.Actions
     /// </summary>
     public class Buy : SbActionBase
     {
+
         public Buy(ISbActionAdapter adapter) : base(adapter, new ActivePendingState())
         {
         }

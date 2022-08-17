@@ -3,8 +3,10 @@
 
 namespace StockBox.Data.Context
 {
+
     public class CallContext
     {
+
         private string _connectionString;
         private NpgsqlConnection _conn;
 

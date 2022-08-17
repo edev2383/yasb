@@ -3,9 +3,11 @@ using StockBox.Interpreter;
 using StockBox.Interpreter.Scanner;
 using StockBox.Rules;
 using StockBox.Services;
-using System;
+
+
 namespace StockBox_UnitTests
 {
+
     [TestClass]
     public class SB_Rules_Tests
     {

@@ -4,13 +4,16 @@ using StockBox.Rules;
 using StockBox.Services;
 using StockBox.Validation;
 
+
 namespace StockBox.Setups
 {
+
     /// <summary>
     /// Setup tracks the provided RuleList and related Actions/Risk Profile
     /// </summary>
     public class Setup
     {
+
         /// <summary>
         /// The rules that determine a given setup
         /// </summary>

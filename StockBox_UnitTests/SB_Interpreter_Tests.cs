@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using StockBox.Data.Adapters.DataFrame;
 using StockBox.Data.SbFrames;
 using StockBox_UnitTests.Helpers;
@@ -9,8 +8,10 @@ using StockBox.Interpreter.Scanner;
 using StockBox.Interpreter.Tokens;
 using StockBox.Data.Indicators;
 
+
 namespace StockBox_UnitTests
 {
+
     [TestClass]
     public class SB_Interpreter_Tests
     {

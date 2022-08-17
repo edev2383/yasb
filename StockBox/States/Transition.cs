@@ -1,8 +1,12 @@
 ﻿using System;
+
+
 namespace StockBox.States
 {
+
     public class Transition
     {
+
         public StateBase StartState { get { return _startState; } }
         public StateBase EndState { get { return _endState; } }
 
