@@ -1,11 +1,13 @@
 ﻿using System;
-using StockBox.Interpreter.Tokens;
+using StockBox.Associations.Tokens;
+
 
 namespace StockBox.Interpreter.Expressions
 {
+
     public class Literal : Expr
     {
-        public Literal(object value):base(value)
+        public Literal(object value) : base(value)
         {
         }
 

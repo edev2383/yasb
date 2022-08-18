@@ -1,32 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using static StockBox.Interpreter.Tokens.TokenType;
+﻿//using System;
+//using System.Collections.Generic;
+//using static StockBox.Interpreter.Tokens.TokenType;
 
-namespace StockBox.Interpreter.Tokens
-{
-    public abstract class KeywordList : List<Keyword>
-    {
+//namespace StockBox.Interpreter.Tokens
+//{
+//    public abstract class KeywordList : List<Keyword>
+//    {
 
-        public KeywordList()
-        {
-            Init();
-        }
+//        public KeywordList()
+//        {
+//            Init();
+//        }
 
-        public void Add(string lexeme, TokenType tokenType, bool hasIndices = false)
-        {
-            Add(new Keyword(lexeme, tokenType, hasIndices));
-        }
+//        public void Add(string lexeme, TokenType tokenType, bool hasIndices = false)
+//        {
+//            Add(new Keyword(lexeme, tokenType, hasIndices));
+//        }
 
-        public Keyword Find(string lexeme)
-        {
-            foreach (Keyword item in this)
-            {
-                if (item.Lexeme == lexeme.ToLower())
-                    return item;
-            }
-            return new Keyword();
-        }
+//        public Keyword Find(string lexeme)
+//        {
+//            foreach (Keyword item in this)
+//            {
+//                if (item.Lexeme == lexeme.ToLower())
+//                    return item;
+//            }
+//            return new Keyword();
+//        }
 
-        protected abstract void Init();
-    }
-}
+//        protected abstract void Init();
+//    }
+//}

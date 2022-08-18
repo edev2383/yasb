@@ -1,11 +1,13 @@
 ﻿using System;
-using StockBox.Interpreter.Tokens;
+using StockBox.Associations.Tokens;
+
 
 namespace StockBox.Interpreter.Expressions
 {
+
     public class Unary : Expr
     {
-        public Unary(Token op, Expr right): base(null, op, right)
+        public Unary(Token op, Expr right) : base(null, op, right)
         {
         }
 

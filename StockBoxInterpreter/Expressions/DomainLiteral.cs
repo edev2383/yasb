@@ -1,8 +1,10 @@
 ﻿using System;
-using StockBox.Interpreter.Tokens;
+using StockBox.Associations.Tokens;
+
 
 namespace StockBox.Interpreter.Expressions
 {
+
     public class DomainLiteral : Expr
     {
         public DomainLiteral(object column, params int[] indices) : base(column, indices)

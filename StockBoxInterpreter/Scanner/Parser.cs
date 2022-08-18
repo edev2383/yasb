@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
 using StockBox.Interpreter.Expressions;
-using StockBox.Interpreter.Tokens;
+using StockBox.Associations.Tokens;
 using StockBox.Validation;
-using static StockBox.Interpreter.Tokens.TokenType;
+using static StockBox.Associations.Tokens.TokenType;
 
 
 namespace StockBox.Interpreter.Scanner

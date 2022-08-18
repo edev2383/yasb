@@ -1,21 +1,24 @@
 ﻿using System;
 using StockBox.Data.SbFrames;
 using StockBox.Interpreter.Expressions;
-using StockBox.Interpreter.Tokens;
+using StockBox.Associations.Tokens;
 using StockBox.Validation;
-using static StockBox.Interpreter.Tokens.TokenType;
+using static StockBox.Associations.Tokens.TokenType;
+
 
 namespace StockBox.Interpreter
 {
+
     /// <summary>
     /// Recursively calculate the provided expression
     /// </summary>
     public class SbInterpreter : IVisitor, IValidationResultsListProvider
     {
+
         private readonly SbFrameList _frames;
 
         public ValidationResultList Results { get { return _results; } }
-        private ValidationResultList _results = new ValidationResultList();
+        private readonly ValidationResultList _results = new ValidationResultList();
 
         public SbInterpreter(SbFrameList frames) { _frames = frames; }
 
@@ -244,8 +247,7 @@ namespace StockBox.Interpreter
             if (a.GetType() != b.GetType()) return false;
             // at this point, most of the evaluations here will be of numbers,
             // so this if statement should account for 99.9% of calls
-            if (a is double)
-                return (double)a == (double)b;
+            if (a is double) return (double)a == (double)b;
             return a == b;
         }
 

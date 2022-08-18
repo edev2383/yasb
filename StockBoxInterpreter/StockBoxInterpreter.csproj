@@ -5,14 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Interpreter\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Interpreter\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\StockBoxValidation\StockBoxValidation.csproj" />
     <ProjectReference Include="..\StockBoxData\StockBoxData.csproj" />
     <ProjectReference Include="..\StockBoxConfiguration\StockBoxConfiguration.csproj" />
+    <ProjectReference Include="..\StockBoxAssociations\StockBox.Associations.csproj" />
   </ItemGroup>
 </Project>

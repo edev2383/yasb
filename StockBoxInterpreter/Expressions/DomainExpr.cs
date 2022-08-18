@@ -1,8 +1,10 @@
 ﻿using System;
-using StockBox.Interpreter.Tokens;
+using StockBox.Associations.Tokens;
+
 
 namespace StockBox.Interpreter.Expressions
 {
+
     public class DomainExpr : Expr
     {
         /**
@@ -21,10 +23,10 @@ namespace StockBox.Interpreter.Expressions
          * */
 
 
-        
-        public DomainExpr(Literal index, Token op, DomainLiteral literal): base(index, op, literal)
+
+        public DomainExpr(Literal index, Token op, DomainLiteral literal) : base(index, op, literal)
         {
-           
+
         }
 
         public override object Accept(IVisitor visitor)

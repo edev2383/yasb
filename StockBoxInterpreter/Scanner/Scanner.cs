@@ -1,11 +1,12 @@
 ﻿using System;
-using StockBox.Interpreter.Tokens;
-using static StockBox.Interpreter.Tokens.TokenType;
+using StockBox.Associations.Tokens;
+using static StockBox.Associations.Tokens.TokenType;
 using StockBox.Validation;
-using System.Collections.Generic;
+
 
 namespace StockBox.Interpreter.Scanner
 {
+
     public class Scanner : IValidationResultsListProvider
     {
 

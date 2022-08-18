@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using StockBox.Interpreter.Tokens;
+using StockBox.Associations.Tokens;
+
 
 namespace StockBox.Interpreter.Expressions
 {
+
     public abstract class Expr
     {
-        public Expr Left {  get { return _left; } }
+        public Expr Left { get { return _left; } }
         public Token Operator { get { return _operator; } }
         public Expr Right { get { return _right; } }
         public object Value { get { return _value; } }
@@ -55,7 +57,7 @@ namespace StockBox.Interpreter.Expressions
                 List<int> tmp = new List<int>();
                 foreach (var idx in indices.Lexeme.Split(','))
                     tmp.Add(Convert.ToInt32(idx.Trim()));
-                _indices = tmp.ToArray();       
+                _indices = tmp.ToArray();
             }
         }
 

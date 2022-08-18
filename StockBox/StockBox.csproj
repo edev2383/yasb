@@ -23,6 +23,7 @@
     <None Remove="Models\" />
     <None Remove="States\Helpers\" />
     <None Remove="RiskProfiles\" />
+    <None Remove="Controllers\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Deedle" Version="2.5.0" />
@@ -43,6 +44,7 @@
     <Folder Include="Models\" />
     <Folder Include="States\Helpers\" />
     <Folder Include="RiskProfiles\" />
+    <Folder Include="Controllers\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\StockBoxValidation\StockBoxValidation.csproj" />

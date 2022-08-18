@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RootNamespace>StockBox.Associations</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Tokens\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Tokens\" />
+  </ItemGroup>
+</Project>

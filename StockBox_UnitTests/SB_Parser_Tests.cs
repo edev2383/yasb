@@ -1,11 +1,12 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using StockBox.Interpreter.Expressions;
 using StockBox.Interpreter.Scanner;
-using StockBox.Interpreter.Tokens;
+using StockBox.Associations.Tokens;
+
 
 namespace StockBox_UnitTests
 {
+
     [TestClass]
     public class SB_Parser_Tests
     {
@@ -13,8 +14,7 @@ namespace StockBox_UnitTests
         [TestMethod]
         public void SB_Parser_01_ParserCanBeCreated()
         {
-            var p = new Parser(new TokenList());
-            Assert.IsNotNull(p);
+            Assert.IsNotNull(new Parser(new TokenList()));
         }
 
         [TestMethod]

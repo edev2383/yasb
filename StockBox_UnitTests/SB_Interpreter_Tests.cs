@@ -5,7 +5,7 @@ using StockBox_UnitTests.Helpers;
 using StockBox.Interpreter.Expressions;
 using StockBox.Interpreter;
 using StockBox.Interpreter.Scanner;
-using StockBox.Interpreter.Tokens;
+using StockBox.Associations.Tokens;
 using StockBox.Data.Indicators;
 
 

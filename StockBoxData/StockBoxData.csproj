@@ -38,5 +38,6 @@
   <ItemGroup>
     <ProjectReference Include="..\StockBoxConfiguration\StockBoxConfiguration.csproj" />
     <ProjectReference Include="..\StockBoxValidation\StockBoxValidation.csproj" />
+    <ProjectReference Include="..\StockBoxAssociations\StockBox.Associations.csproj" />
   </ItemGroup>
 </Project>
