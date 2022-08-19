@@ -27,7 +27,14 @@ namespace StockBox.Data.Adapters.DataFrame
         /// </summary>
         public DateTime FirstKey { get { return _data.First().Date; } }
 
+        public BaseDataFrameAdapter() { }
+
         public BaseDataFrameAdapter(MemoryStream data)
+        {
+            AddData(data);
+        }
+
+        public void AddData(MemoryStream data)
         {
             var rawData = Frame.ReadCsv(data);
             _sourceData = rawData.IndexRows<DateTime>("Date").SortRowsByKey();

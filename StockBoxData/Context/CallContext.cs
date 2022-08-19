@@ -1,10 +1,11 @@
 ﻿using Npgsql;
+using StockBox.Associations;
 
 
 namespace StockBox.Data.Context
 {
 
-    public class CallContext
+    public class CallContext : ICallContextProvider
     {
 
         private string _connectionString;
@@ -12,15 +13,15 @@ namespace StockBox.Data.Context
 
         public CallContext(string connectionString)
         {
-            _connectionString = connectionString;
-            _conn = new NpgsqlConnection(_connectionString);
-            _conn.Open();
+            //_connectionString = connectionString;
+            //_conn = new NpgsqlConnection(_connectionString);
+            //_conn.Open();
 
-            var sql = "SELECT version()";
+            //var sql = "SELECT version()";
 
-            using var cmd = new NpgsqlCommand(sql, _conn);
+            //using var cmd = new NpgsqlCommand(sql, _conn);
 
-            var version = cmd.ExecuteScalar().ToString();
+            //var version = cmd.ExecuteScalar().ToString();
         }
     }
 }

@@ -62,5 +62,6 @@ namespace StockBox.Interpreter.Expressions
         }
 
         public abstract object Accept(IVisitor visitor);
+        public abstract object AcceptAnalyzer(IVisitor visitor);
     }
 }

@@ -1,12 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\StockBoxData\StockBoxData.csproj" />
-    <ProjectReference Include="..\StockBoxConfiguration\StockBoxConfiguration.csproj" />
-    <ProjectReference Include="..\StockBoxAssociations\StockBox.Associations.csproj" />
-  </ItemGroup>
+	<PropertyGroup>
+		<TargetFramework>netcoreapp3.1</TargetFramework>
+	</PropertyGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\StockBoxData\StockBoxData.csproj" />
+		<ProjectReference Include="..\StockBoxConfiguration\StockBoxConfiguration.csproj" />
+		<ProjectReference Include="..\StockBoxAssociations\StockBoxAssociations.csproj" />
+	</ItemGroup>
 </Project>

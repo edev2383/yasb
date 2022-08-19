@@ -33,5 +33,10 @@ namespace StockBox.Interpreter.Expressions
         {
             return visitor.VisitDomainExpr(this);
         }
+
+        public override object AcceptAnalyzer(IVisitor visitor)
+        {
+            return visitor.VisitDomainExpr(this);
+        }
     }
 }

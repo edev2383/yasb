@@ -4,7 +4,7 @@ using StockBox.Data.SbFrames;
 using StockBox.Interpreter;
 
 
-namespace StockBoxInterpreter
+namespace StockBox.Interpreter
 {
 
     public static class InterpreterFactory

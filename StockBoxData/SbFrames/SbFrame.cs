@@ -1,6 +1,7 @@
 ﻿using StockBox.Data.Adapters.DataFrame;
 using StockBox.Data.Indicators;
 
+
 namespace StockBox.Data.SbFrames
 {
     /// <summary>
@@ -23,6 +24,8 @@ namespace StockBox.Data.SbFrames
         private IDataFrameAdapter _adapter;
         private readonly EFrequency _frequency;
         private readonly IndicatorList _indicators = new IndicatorList();
+
+        public SbFrame() { }
 
         public SbFrame(EFrequency frequency)
         {

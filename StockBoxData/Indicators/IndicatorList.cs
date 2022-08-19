@@ -7,5 +7,13 @@ namespace StockBox.Data.Indicators
         public IndicatorList()
         {
         }
+
+        public bool ContainsItem(BaseIndicator item)
+        {
+            foreach (var ind in this)
+                if (ind.IdentifiesAs(item))
+                    return true;
+            return false;
+        }
     }
 }

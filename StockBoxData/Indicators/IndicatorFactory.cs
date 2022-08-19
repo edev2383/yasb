@@ -5,13 +5,11 @@ namespace StockBox.Data.Indicators
     {
         public static IIndicator Create(string column, params int[] indices)
         {
-            switch(column.ToLower())
+            return column.ToLower() switch
             {
-                case "sma":
-                    return new SimpleMovingAverage(column, indices);
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+                "sma" => new SimpleMovingAverage(column, indices),
+                _ => throw new ArgumentOutOfRangeException(),
+            };
         }
     }
 }

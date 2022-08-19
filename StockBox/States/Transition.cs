@@ -4,6 +4,9 @@
 namespace StockBox.States
 {
 
+    /// <summary>
+    /// 
+    /// </summary>
     public class Transition
     {
 
@@ -37,6 +40,7 @@ namespace StockBox.States
         }
 
         #region Equality Overrides
+
         public static bool operator ==(Transition left, Transition right)
         {
             if (ReferenceEquals(left, null))
@@ -67,6 +71,7 @@ namespace StockBox.States
         {
             return HashCode.Combine(_startState, _endState);
         }
+
         #endregion
     }
 }

@@ -18,6 +18,8 @@ namespace StockBox.Data.Adapters.DataFrame
         /// </summary>
         /// <param name="column"></param>
         /// <returns></returns>
+
+        void AddData(MemoryStream data);
         DataPoint GetDataPoint(int indexFromZero);
         ColumnSeries GetColumnData(DataColumn column);
         void MapIndicator(IIndicator indicator);

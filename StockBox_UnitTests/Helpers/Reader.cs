@@ -1,9 +1,10 @@
 ﻿using System;
 using System.IO;
+using StockBox.Associations;
 
 namespace StockBox_UnitTests.Helpers
 {
-    public class Reader
+    public class Reader : ICallContextProvider
     {
 
         private string _root = "/Users/jefferyedick/Projects/StockBox/StockBox_UnitTests/Files/";
@@ -13,7 +14,7 @@ namespace StockBox_UnitTests.Helpers
 
         public Reader()
         {
-           
+
         }
 
         internal object GetFileStream(object eAmdDaily)
@@ -56,7 +57,7 @@ namespace StockBox_UnitTests.Helpers
         {
             string ret = string.Empty;
             EExt ext = EExt.eTxt;
-            switch(target)
+            switch (target)
             {
                 case EFile.eBasicString:
                     ret = "BasicString";
@@ -87,7 +88,7 @@ namespace StockBox_UnitTests.Helpers
 
         private string GetFIleExtension(EExt ext)
         {
-            switch(ext)
+            switch (ext)
             {
                 case EExt.eTxt:
                     return "txt";

@@ -1,43 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-    <RootNamespace>StockBox.Data</RootNamespace>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="Deedle" />
-    <None Remove="SBFrames\" />
-    <None Remove="Adapters\" />
-    <None Remove="Adapters\DataFrame\" />
-    <None Remove="Repositories\" />
-    <None Remove="Indicators\" />
-    <None Remove="Managers\" />
-    <None Remove="Context\" />
-    <None Remove="Interfaces\" />
-    <None Remove="Npgsql" />
-    <None Remove="Models\" />
-    <None Remove="NHibernate" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Deedle" Version="2.5.0" />
-    <PackageReference Include="Npgsql" Version="6.0.6" />
-    <PackageReference Include="NHibernate" Version="5.3.12" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="SBFrames\" />
-    <Folder Include="Adapters\" />
-    <Folder Include="Adapters\DataFrame\" />
-    <Folder Include="Repositories\" />
-    <Folder Include="Indicators\" />
-    <Folder Include="Managers\" />
-    <Folder Include="Context\" />
-    <Folder Include="Interfaces\" />
-    <Folder Include="Models\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\StockBoxConfiguration\StockBoxConfiguration.csproj" />
-    <ProjectReference Include="..\StockBoxValidation\StockBoxValidation.csproj" />
-    <ProjectReference Include="..\StockBoxAssociations\StockBox.Associations.csproj" />
-  </ItemGroup>
+	<PropertyGroup>
+		<TargetFramework>netcoreapp3.1</TargetFramework>
+		<RootNamespace>StockBox.Data</RootNamespace>
+	</PropertyGroup>
+	<ItemGroup>
+		<None Remove="Deedle" />
+		<None Remove="SBFrames\" />
+		<None Remove="Adapters\" />
+		<None Remove="Adapters\DataFrame\" />
+		<None Remove="Repositories\" />
+		<None Remove="Indicators\" />
+		<None Remove="Managers\" />
+		<None Remove="Context\" />
+		<None Remove="Interfaces\" />
+		<None Remove="Npgsql" />
+		<None Remove="Models\" />
+		<None Remove="NHibernate" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Deedle" Version="2.5.0" />
+		<PackageReference Include="Npgsql" Version="6.0.6" />
+		<PackageReference Include="NHibernate" Version="5.3.12" />
+	</ItemGroup>
+	<ItemGroup>
+		<Folder Include="SBFrames\" />
+		<Folder Include="Adapters\" />
+		<Folder Include="Adapters\DataFrame\" />
+		<Folder Include="Repositories\" />
+		<Folder Include="Indicators\" />
+		<Folder Include="Managers\" />
+		<Folder Include="Context\" />
+		<Folder Include="Interfaces\" />
+		<Folder Include="Models\" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\StockBoxConfiguration\StockBoxConfiguration.csproj" />
+		<ProjectReference Include="..\StockBoxValidation\StockBoxValidation.csproj" />
+		<ProjectReference Include="..\StockBoxAssociations\StockBoxAssociations.csproj" />
+	</ItemGroup>
 </Project>

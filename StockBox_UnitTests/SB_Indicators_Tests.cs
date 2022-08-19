@@ -1,5 +1,4 @@
 ﻿using System;
-using Deedle;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using StockBox.Data.Adapters.DataFrame;
 using StockBox.Data.SbFrames;
@@ -9,8 +8,10 @@ using static StockBox_UnitTests.Helpers.EFile;
 using System.Collections.Generic;
 using System.Linq;
 
+
 namespace StockBox_UnitTests
 {
+
     [TestClass]
     public class SB_Indicators_Tests
     {
@@ -21,7 +22,7 @@ namespace StockBox_UnitTests
             var stream = new Reader().GetFileStream(eAmdDaily);
             var adapter = new DeedleAdapter(stream);
             var frame = new SbFrame(adapter, EFrequency.eDaily);
-            var sma = new SimpleMovingAverage("SMA", 25);
+            var sma = IndicatorFactory.Create("SMA", 25);
             frame.AddIndicator(sma);
 
             // Asserting the Indicator initializes correctly and performs the

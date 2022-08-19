@@ -1,7 +1,4 @@
-﻿using System;
-using Deedle;
-using StockBox.Data.Adapters.DataFrame;
-using StockBox.Data.SbFrames;
+﻿using StockBox.Data.Adapters.DataFrame;
 
 namespace StockBox.Data.Indicators
 {
@@ -41,6 +38,15 @@ namespace StockBox.Data.Indicators
         public void Calculate(IDataFrameAdapter adapter)
         {
             _payload = CalculateIndicator(adapter);
+        }
+
+        public bool IdentifiesAs(BaseIndicator item)
+        {
+            if (item.Name != Name) return false;
+            if (item.Type != Type) return false;
+            if (item.ColumnKey != ColumnKey) return false;
+            if (item.Indices != Indices) return false;
+            return true;
         }
 
         /// <summary>
