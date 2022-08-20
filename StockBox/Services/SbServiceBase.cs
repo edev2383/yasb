@@ -10,6 +10,6 @@ namespace StockBox.Services
         {
         }
 
-        public abstract ValidationResultList Process(RuleList rules);
+        public abstract ValidationResultList ProcessRules(RuleList rules);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using StockBox.Actions;
+using StockBox.Interpreter;
 using StockBox.RiskProfiles;
 using StockBox.Rules;
 using StockBox.Services;
@@ -60,9 +61,27 @@ namespace StockBox.Setups
             RiskProfile = profile;
         }
 
+        /// <summary>
+        /// Evaluate the _rules List<Expr>
+        /// </summary>
+        /// <param name="interpreter"></param>
+        /// <returns></returns>
+        public ValidationResultList Evaluate(SbInterpreter interpreter)
+        {
+            return _rules.Evalute(interpreter);
+        }
+
+
+        /// <summary>
+        /// Use the provided service to Process the Setup's _rules and turn the
+        /// Rule.Statements into domain Expressions. These Expressions can then
+        /// be analyzed and Evaluated 
+        /// </summary>
+        /// <param name="service"></param>
+        /// <returns></returns>
         public ValidationResultList Process(ISbService service)
         {
-            return _rules.Process(service);
+            return _rules.ProcessRules(service);
         }
 
         public void AddAction(SbActionBase action)

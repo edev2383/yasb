@@ -144,10 +144,18 @@ namespace StockBox_UnitTests
             var scanner = new Scanner();
             var parser = new Parser();
             var intepreter = new SbInterpreter();
-            var service = new ActiveService(scanner, parser, intepreter);
+            var service = new ActiveService(scanner, parser);
 
+            setup.Process(service);
             // run the interpeter process against the setup
-            var result = setup.Process(service);
+            // note: if the setup contains rules that have domain expressions,
+            // i.e., Close, SMA, etc, between these two steps will require us
+            // to analyze the expression list AND load data to an SBFrame
+            // this is a simple rule example, so that step is not needed here
+            var result = setup.Evaluate(intepreter);
+
+            // Confirm the expected Success result
+            Assert.IsTrue(result.Success);
 
             // if the interpreter response is successful, try the next state
             // of the statemachine, based on the action returned by the setup
@@ -190,10 +198,19 @@ namespace StockBox_UnitTests
             var scanner = new Scanner();
             var parser = new Parser();
             var intepreter = new SbInterpreter();
-            var service = new ActiveService(scanner, parser, intepreter);
+            var service = new ActiveService(scanner, parser);
 
+            // use the service to turn the rule statements into domain exprs
+            setup.Process(service);
             // run the interpeter process against the setup
-            var result = setup.Process(service);
+            // note: if the setup contains rules that have domain expressions,
+            // i.e., Close, SMA, etc, between these two steps will require us
+            // to analyze the expression list AND load data to an SBFrame
+            // this is a simple rule example, so that step is not needed here
+            var result = setup.Evaluate(intepreter);
+
+            // Confirm the expected Success result
+            Assert.IsTrue(result.Success);
 
             // if the interpreter response is successful, try the next state
             // of the statemachine, based on the action returned by the setup
@@ -203,6 +220,7 @@ namespace StockBox_UnitTests
 
             // Assert that we did not transition to the action state
             Assert.AreNotEqual(sm.CurrentState, setup.Action.TransitionState);
+            Assert.AreEqual(sm.CurrentState, new UserDefinedState(config_startState));
         }
     }
 }

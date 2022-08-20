@@ -21,6 +21,7 @@ namespace StockBox.Data.Adapters.DataFrame
         /// </summary>
         public Frame<DateTime, string> SourceData { get { return _sourceData; } }
         protected Frame<DateTime, string> _sourceData;
+        public int? Length { get { return _data.Count; } }
 
         /// <summary>
         /// The first DateTime value in the adapter's data list

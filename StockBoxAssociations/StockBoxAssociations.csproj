@@ -11,4 +11,7 @@
   <ItemGroup>
     <Folder Include="Tokens\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\StockBoxValidation\StockBoxValidation.csproj" />
+  </ItemGroup>
 </Project>

@@ -18,7 +18,7 @@ namespace StockBox_UnitTests
         public void SB_Controllers_01_DomainControllerCanBeCreated()
         {
 
-            var activeService = new ActiveService(new Scanner(), new Parser(), new SbInterpreter());
+            var activeService = new ActiveService(new Scanner(), new Parser());
             var stateMachine = new StateMachine(new StateList(), new ActiveState());
             var controller = new DomainController(activeService, stateMachine);
 

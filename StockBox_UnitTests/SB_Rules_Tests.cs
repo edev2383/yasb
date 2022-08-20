@@ -27,11 +27,12 @@ namespace StockBox_UnitTests
 
             var scanner = new Scanner();
             var parser = new Parser();
-            var intepreter = new SbInterpreter();
+            var interpreter = new SbInterpreter();
 
-            var service = new ActiveService(scanner, parser, intepreter);
+            var service = new ActiveService(scanner, parser);
 
-            var results = service.Process(rulelist);
+            service.ProcessRules(rulelist);
+            var results = rulelist.Evalute(interpreter);
 
             Assert.IsTrue(results.Success);
         }
@@ -45,11 +46,12 @@ namespace StockBox_UnitTests
 
             var scanner = new Scanner();
             var parser = new Parser();
-            var intepreter = new SbInterpreter();
+            var interpreter = new SbInterpreter();
 
-            var service = new ActiveService(scanner, parser, intepreter);
+            var service = new ActiveService(scanner, parser);
 
-            var results = service.Process(rulelist);
+            service.ProcessRules(rulelist);
+            var results = rulelist.Evalute(interpreter);
 
             Assert.IsFalse(results.Success);
         }
@@ -65,11 +67,43 @@ namespace StockBox_UnitTests
                 new Rule("15 == (10 + 5)")
             };
 
-            var service = new ActiveService(new Scanner(), new Parser(), new SbInterpreter());
+            var service = new ActiveService(new Scanner(), new Parser());
 
-            var results = service.Process(rulelist);
+            service.ProcessRules(rulelist);
 
-            Assert.IsTrue(results.Success);
+            // this results list will be an aggregate of all scanner and parser
+            // actions
+            var results = service.GetResults();
+
+            var exprResults = rulelist.Evalute(new SbInterpreter());
+
+            Assert.AreEqual(rulelist.Expressions.Count, 4);
+            Assert.IsTrue(exprResults.Success);
+        }
+
+        [TestMethod]
+        public void SB_Rules_05_CanProcessSimpleRuleSets_ExpectFalse()
+        {
+            var rulelist = new RuleList
+            {
+                new Rule("5 < 10"),
+                new Rule("15 > 10"),
+                new Rule("15 != 10"),
+                new Rule("15 != (10 + 5)")
+            };
+
+            var service = new ActiveService(new Scanner(), new Parser());
+
+            service.ProcessRules(rulelist);
+
+            // this results list will be an aggregate of all scanner and parser
+            // actions
+            var results = service.GetResults();
+
+            var exprResults = rulelist.Evalute(new SbInterpreter());
+
+            Assert.AreEqual(rulelist.Expressions.Count, 4);
+            Assert.IsTrue(exprResults.HasFailures);
         }
     }
 }

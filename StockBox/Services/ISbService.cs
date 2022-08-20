@@ -11,6 +11,6 @@ namespace StockBox.Services
     public interface ISbService
     {
 
-        ValidationResultList Process(RuleList rules);
+        ValidationResultList ProcessRules(RuleList rules);
     }
 }

@@ -2,6 +2,7 @@
 using Deedle;
 using System;
 using StockBox.Data.Indicators;
+using System.IO;
 
 namespace StockBox.Data.Adapters.DataFrame
 {
@@ -13,6 +14,7 @@ namespace StockBox.Data.Adapters.DataFrame
     public interface IDataFrameAdapter
     {
         Frame<DateTime, string> SourceData { get; }
+        public int? Length { get; }
         /// <summary>  
         /// Return a single datapoint
         /// </summary>

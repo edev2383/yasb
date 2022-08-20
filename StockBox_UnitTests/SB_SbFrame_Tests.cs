@@ -30,6 +30,11 @@ namespace StockBox_UnitTests
             var sbframelist = factory.Create(exprAnalyzer.Combos);
 
             Assert.IsNotNull(sbframelist);
+
+            var dailyFrame = sbframelist.FindByFrequency(EFrequency.eDaily);
+
+            Assert.IsNotNull(dailyFrame);
+            Assert.IsTrue(dailyFrame.Length > 0);
         }
     }
 }

@@ -80,5 +80,20 @@ namespace StockBox.Associations.Tokens
         {
             return new Token(this);
         }
+
+        public bool IsOfSameType(Token item)
+        {
+            return Type == item.Type;
+        }
+
+        public bool IdentifiesAs(Token item)
+        {
+            if (Type != item.Type) return false;
+            if (Lexeme != item.Lexeme) return false;
+            if (Literal != item.Literal) return false;
+            if (Char != item.Char) return false;
+            if (Line != item.Line) return false;
+            return true;
+        }
     }
 }

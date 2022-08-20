@@ -13,6 +13,8 @@ namespace StockBox.Interpreter.Expressions
         public Expr Right { get { return _right; } }
         public object Value { get { return _value; } }
 
+        public string Statement { get; set; }
+
         public object Column { get { return _column; } }
         public int[] Indices { get { return _indices; } }
 

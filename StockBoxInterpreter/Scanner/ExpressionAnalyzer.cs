@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using StockBox.Associations.Tokens;
 using StockBox.Interpreter.Expressions;
 
@@ -14,16 +15,19 @@ namespace StockBox.Interpreter.Scanner
     {
 
         public DomainCombinationList Combos { get; set; } = new DomainCombinationList();
-        private Expr _expression;
+        private List<Expr> _expressions;
 
-        public ExpressionAnalyzer(Expr expression)
+        public ExpressionAnalyzer(Expr expression) : this(new List<Expr> { expression }) { }
+
+        public ExpressionAnalyzer(List<Expr> expressions)
         {
-            _expression = expression;
+            _expressions = expressions;
         }
 
         public void Scan()
         {
-            Scan(_expression);
+            foreach (var e in _expressions)
+                Scan(e);
         }
 
         public object VisitBinaryExpr(Binary expr)
@@ -78,7 +82,7 @@ namespace StockBox.Interpreter.Scanner
             return null;
         }
 
-        private object Scan(Expr expression)
+        public object Scan(Expr expression)
         {
             return expression.AcceptAnalyzer(this);
         }

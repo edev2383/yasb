@@ -20,6 +20,10 @@ namespace StockBox.Data.Indicators
             // will be able to take that ordered resultset and apply those
             // values to the appropriate DataPoint object, by shared DateTime
             // key
+
+            // guard out if the adapter hasn't been sourced. 
+            if (adapter.SourceData == null) return ret;
+
             var orderedSeries = adapter.SourceData.GetColumn<double>("Close").SortByKey();
             var values = orderedSeries.WindowInto(Indices[0], win => win.Mean());
             for (var idx = 0; idx < values.KeyCount; idx++)

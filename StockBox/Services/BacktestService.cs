@@ -14,7 +14,7 @@ namespace StockBox.Services
         {
         }
 
-        public override ValidationResultList Process(RuleList rules)
+        public override ValidationResultList ProcessRules(RuleList rules)
         {
             throw new NotImplementedException();
         }
