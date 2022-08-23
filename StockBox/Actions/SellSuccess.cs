@@ -1,5 +1,7 @@
 ﻿using System;
 using StockBox.States;
+using StockBox.Actions.Adapters;
+using StockBox.Actions.Helpers;
 
 
 namespace StockBox.Actions
@@ -10,7 +12,7 @@ namespace StockBox.Actions
 
         public SellSuccess(SellSuccess source) : base(source) { }
 
-        public SellSuccess(ISbActionAdapter adapter) : base(adapter, new InactivePendingState())
+        public SellSuccess(ISbActionAdapter adapter) : base(adapter, new InactivePendingState(), EActionType.eMoveSuccess)
         {
         }
 
@@ -19,7 +21,7 @@ namespace StockBox.Actions
             return new SellSuccess(this);
         }
 
-        public override object PerformAction()
+        public override ActionResponse PerformAction()
         {
             return null;
         }

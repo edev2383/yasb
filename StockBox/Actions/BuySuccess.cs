@@ -1,5 +1,7 @@
 ﻿using System;
 using StockBox.States;
+using StockBox.Actions.Adapters;
+using StockBox.Actions.Helpers;
 
 
 namespace StockBox.Actions
@@ -15,7 +17,7 @@ namespace StockBox.Actions
 
         public BuySuccess(BuySuccess source) : base(source) { }
 
-        public BuySuccess(ISbActionAdapter adapter) : base(adapter, new ActiveState())
+        public BuySuccess(ISbActionAdapter adapter) : base(adapter, new ActiveState(), EActionType.eMoveSuccess)
         {
         }
 
@@ -24,7 +26,7 @@ namespace StockBox.Actions
             return new BuySuccess(this);
         }
 
-        public override object PerformAction()
+        public override ActionResponse PerformAction()
         {
             return null;
         }

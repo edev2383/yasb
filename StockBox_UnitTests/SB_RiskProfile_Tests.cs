@@ -38,7 +38,8 @@ namespace StockBox_UnitTests
         public void SB_RiskProfile_04_TestProfileCalculations()
         {
             // with no risk set, the calculation throws an exception which
-            // results in an automatic 0 return
+            // results in an automatic 0 return value for Shares and a
+            // failure result in the VRL
             var rpa = RiskProfile_Accessor.CreateSample_NoTotalRiskSet();
             var calc = rpa.CalculateTotalShares(20);
             Assert.AreEqual(0, calc.Shares);

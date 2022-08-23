@@ -1,5 +1,7 @@
 ﻿using System;
 using StockBox.States;
+using StockBox.Actions.Adapters;
+using StockBox.Actions.Helpers;
 
 
 namespace StockBox.Actions
@@ -18,7 +20,7 @@ namespace StockBox.Actions
         /// <param name="adapter"></param>
         /// <param name="watchlistName"></param>
         public Move(ISbActionAdapter adapter, string watchlistName)
-            : base(adapter, new UserDefinedState(watchlistName))
+            : base(adapter, new UserDefinedState(watchlistName), EActionType.eMoveGeneral)
         {
         }
 
@@ -30,7 +32,7 @@ namespace StockBox.Actions
         /// <summary>
         /// 
         /// </summary>
-        public override object PerformAction()
+        public override ActionResponse PerformAction()
         {
             return null;
         }

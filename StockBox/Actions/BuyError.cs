@@ -1,5 +1,7 @@
 ﻿using System;
 using StockBox.States;
+using StockBox.Actions.Adapters;
+using StockBox.Actions.Helpers;
 
 
 namespace StockBox.Actions
@@ -15,7 +17,7 @@ namespace StockBox.Actions
 
         public BuyError(BuyError source) : base(source) { }
 
-        public BuyError(ISbActionAdapter adapter) : base(adapter, new ActiveErrorState())
+        public BuyError(ISbActionAdapter adapter) : base(adapter, new ActiveErrorState(), EActionType.eMoveFailure)
         {
         }
 
@@ -24,7 +26,7 @@ namespace StockBox.Actions
             return new BuyError(this);
         }
 
-        public override object PerformAction()
+        public override ActionResponse PerformAction()
         {
             return null;
         }

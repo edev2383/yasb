@@ -1,6 +1,10 @@
 ﻿using System;
-namespace StockBox.Actions
+using StockBox.Associations;
+using StockBox.Data.Managers;
+
+namespace StockBox.Actions.Adapters
 {
+
     /// <summary>
     /// The ActionAdapter will provide the interface for all actions. This
     /// includes simple state transitions, i.e., updating database records,
@@ -8,7 +12,7 @@ namespace StockBox.Actions
     /// </summary>
     public interface ISbActionAdapter
     {
-
+        ISbAction ParentAction { get; set; }
         ISbActionAdapter Clone();
     }
 }

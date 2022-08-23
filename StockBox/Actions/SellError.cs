@@ -1,5 +1,7 @@
 ﻿using System;
 using StockBox.States;
+using StockBox.Actions.Adapters;
+using StockBox.Actions.Helpers;
 
 
 namespace StockBox.Actions
@@ -10,7 +12,7 @@ namespace StockBox.Actions
 
         public SellError(SellError source) : base(source) { }
 
-        public SellError(ISbActionAdapter adapter) : base(adapter, new InactiveErrorState())
+        public SellError(ISbActionAdapter adapter) : base(adapter, new InactiveErrorState(), EActionType.eMoveFailure)
         {
         }
 
@@ -19,7 +21,7 @@ namespace StockBox.Actions
             return new SellError(this);
         }
 
-        public override object PerformAction()
+        public override ActionResponse PerformAction()
         {
             return null;
         }

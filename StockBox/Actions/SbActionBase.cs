@@ -1,6 +1,7 @@
 ﻿using StockBox.RiskProfiles;
 using StockBox.States;
-
+using StockBox.Actions.Adapters;
+using StockBox.Actions.Helpers;
 
 namespace StockBox.Actions
 {
@@ -17,15 +18,19 @@ namespace StockBox.Actions
     /// </summary>
     public abstract class SbActionBase : ISbAction
     {
+        public EActionType ActionType { get { return _actionType; } }
+        private EActionType _actionType;
 
         public SbActionBase(SbActionBase source) : this(source._adapter.Clone(), source._transitionState.Clone())
         {
         }
 
-        public SbActionBase(ISbActionAdapter adapter, StateBase transitionState)
+        public SbActionBase(ISbActionAdapter adapter, StateBase transitionState, EActionType actionType)
         {
             _adapter = adapter;
+            _adapter.ParentAction = this;
             _transitionState = transitionState;
+            _actionType = actionType;
         }
 
         /// <summary>
@@ -57,7 +62,7 @@ namespace StockBox.Actions
         private ISbActionAdapter _adapter;
         private StateBase _transitionState;
 
-        public abstract object PerformAction();
+        public abstract ActionResponse PerformAction();
         public abstract SbActionBase Clone();
     }
 }

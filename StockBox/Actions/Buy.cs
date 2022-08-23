@@ -1,6 +1,9 @@
 ﻿using System;
 using StockBox.States;
 using StockBox.Validation;
+using StockBox.Actions.Adapters;
+using StockBox.Actions.Helpers;
+
 
 namespace StockBox.Actions
 {
@@ -16,7 +19,7 @@ namespace StockBox.Actions
 
         public Buy(Buy source) : base(source) { }
 
-        public Buy(ISbActionAdapter adapter) : base(adapter, new ActivePendingState())
+        public Buy(ISbActionAdapter adapter) : base(adapter, new ActivePendingState(), EActionType.eBuy)
         {
         }
 
@@ -25,7 +28,7 @@ namespace StockBox.Actions
             return new Buy(this);
         }
 
-        public override object PerformAction()
+        public override ActionResponse PerformAction()
         {
             var vr = new ValidationResultList();
 

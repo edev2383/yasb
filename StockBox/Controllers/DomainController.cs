@@ -53,9 +53,9 @@ namespace StockBox.Controllers
                 // for this local transaction only
                 var localSm = _stateMachine.CreateWithStateAndTransitions();
 
-                // apply the current state from the profile (this could also
-                // come from the setup..)
-                localSm.SetCurrentState(sp.State);
+                // apply the current state from the setup (this could also
+                // come from the given SymbolProfile, dealer's choice..)
+                localSm.SetCurrentState(setup.OriginState);
 
                 // pass the service to the Setup, which will break all of the
                 // rule statements into an Expression list
