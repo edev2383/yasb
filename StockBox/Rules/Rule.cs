@@ -17,10 +17,16 @@ namespace StockBox.Rules
     {
         public string Statement { get { return _statement; } }
         private readonly string _statement;
-        
+
         public Rule(string statement)
         {
             _statement = statement;
+        }
+
+        public bool IdentifiesAs(Rule item)
+        {
+            if (item.Statement != Statement) return false;
+            return true;
         }
     }
 }

@@ -21,7 +21,15 @@ namespace StockBox.Data.Adapters.DataFrame
         /// </summary>
         public Frame<DateTime, string> SourceData { get { return _sourceData; } }
         protected Frame<DateTime, string> _sourceData;
-        public int? Length { get { return _data.Count; } }
+
+        public int? Length
+        {
+            get
+            {
+                if (_data == null) return 0;
+                return _data.Count;
+            }
+        }
 
         /// <summary>
         /// The first DateTime value in the adapter's data list
@@ -67,7 +75,8 @@ namespace StockBox.Data.Adapters.DataFrame
 
         public void MapIndicator(IIndicator indicator)
         {
-            _data.MapIndicator(indicator);
+            if (_data != null)
+                _data.MapIndicator(indicator);
         }
 
         /// <summary>
@@ -103,8 +112,10 @@ namespace StockBox.Data.Adapters.DataFrame
                 Open = obj.GetAs<double>("Open"),
                 Close = obj.GetAs<double>("Close"),
                 AdjClose = obj.GetAs<double>("Adj Close"),
-                Volume = obj.GetAs<int>("Volume")
+                Volume = obj.GetAs<double>("Volume")
             };
         }
+
+        public abstract IDataFrameAdapter Create();
     }
 }

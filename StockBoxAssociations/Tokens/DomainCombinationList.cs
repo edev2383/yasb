@@ -42,39 +42,110 @@ namespace StockBox.Associations.Tokens
         }
 
         /// <summary>
-        /// Return the max index value to inform the request length of any
-        /// data queries
+        /// Compress a combinationlist down to the unique combos of keyword and
+        /// indices
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public DomainCombinationList GetUniqueDomainCombos()
+        {
+            if (IsHomogenousGroup().HasFailures)
+                throw new Exception("The DomainCombinationList being queried contains more than on type of IntervalFrequency Token. Before calling `GetUniqueDomainCombos`, request a specific frequency subset of data, i.e., GetDailyDomainCombos()");
+
+            var ret = new DomainCombinationList();
+            foreach (var item in this)
+                if (!ret.ContainsComparableDomainKeywordWithMatchingIndex(item))
+                    ret.Add(item);
+            return ret;
+        }
+
+        /// <summary>
+        /// Return all unqiue domain combos that are of indicator type 
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public DomainCombinationList GetIndicatorsByInterval(TokenType type)
+        {
+            return GetDomainCombosByInterval(type).GetUniqueDomainCombos().GetIndicators();
+        }
+
+        /// <summary>
+        /// Return all unique domain columns that are NOT indicators
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public DomainCombinationList GetDomainColumnsByInterval(TokenType type)
+        {
+            return GetDomainCombosByInterval(type).GetUniqueDomainCombos().GetDomainColumns();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public DomainCombinationList GetDomainColumns()
+        {
+            if (IsHomogenousGroup().HasFailures)
+                throw new Exception("The DomainCombinationList being queried contains more than on type of IntervalFrequency Token. Before calling `GetDomainColumns`, request a specific frequency subset of data, i.e., GetDailyDomainCombos()");
+
+            var ret = new DomainCombinationList();
+            foreach (var item in this)
+                if (!item.IsIndicator)
+                    ret.Add(item);
+            return ret;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public DomainCombinationList GetIndicators()
+        {
+            if (IsHomogenousGroup().HasFailures)
+                throw new Exception("The DomainCombinationList being queried contains more than on type of IntervalFrequency Token. Before calling `GetIndicators`, request a specific frequency subset of data, i.e., GetDailyDomainCombos()");
+
+            var ret = new DomainCombinationList();
+            foreach (var item in this)
+                if (item.IsIndicator)
+                    ret.Add(item);
+            return ret;
+        }
+
+        /// <summary>
+        /// 
         /// </summary>
         /// <returns></returns>
         public double GetMaxIndex()
         {
-            if (this.Count == 0) return 0;
-
-            var vr = IsHomogenousGroup();
-            if (vr.HasFailures)
-                throw new Exception("The DomainCombinationList being queried contains more than one type of IntervalFrequency Token. Before calling `GetMaxIndex`, request a specific frequency subset of data, i.e., GetDailyDomainCombos()");
+            if (IsHomogenousGroup().HasFailures)
+                throw new Exception("The DomainCombinationList being queried contains more than on type of IntervalFrequency Token. Before calling `GetIndicators`, request a specific frequency subset of data, i.e., GetDailyDomainCombos()");
 
             return this.Select(x => x.IntervalIndex).Max();
         }
 
         /// <summary>
-        /// Return the max indicator index to inform the request length of any
-        /// data queries
+        /// 
         /// </summary>
+        /// <param name="item"></param>
         /// <returns></returns>
-        public int GetMaxIndicatorIndex()
+        public bool ContainsItem(DomainCombination item)
         {
-            if (this.Count == 0) return 0;
+            foreach (var dc in this)
+                if (dc.IdentifiesAs(item))
+                    return true;
+            return false;
+        }
 
-            var vr = IsHomogenousGroup();
-            if (vr.HasFailures)
-                throw new Exception("The DomainCombinationList being queried contains more than one type of IntervalFrequency Token. Before calling `GetMaxIndicatorIndex`, request a specific frequency subset of data, i.e., GetDailyDomainCombos()");
-
-            var foundInts = new List<int>();
-            foreach (var combo in this)
-                if (combo.Indices != null)
-                    foundInts.AddRange(combo.Indices);
-            return foundInts.Max();
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public bool ContainsComparableDomainKeywordWithMatchingIndex(DomainCombination item)
+        {
+            foreach (var dc in this)
+                if (item.IsMatchMinusIntervalIndex(dc)) return true;
+            return false;
         }
 
         /// <summary>
@@ -86,15 +157,9 @@ namespace StockBox.Associations.Tokens
         {
             var ret = new ValidationResultList();
 
-            // this isn't exactly null safe, but this method should only be
-            // called AFTER the calling method performs a zero check on the
-            // list.Count prop
-            ret.Add(this.Count > 0, "List contains at least one DomainCombination", this.FirstOrDefault());
-
-            var first = this.First();
-
+            if (this.Count == 0) return ret;
             foreach (var item in this)
-                ret.Add(new ValidationResult(item.IntervalFrequency.IsOfSameType(first.IntervalFrequency), "Item is a homogenous match.", item));
+                ret.Add(new ValidationResult(item.IntervalFrequency.IsOfSameType(this.First().IntervalFrequency), "Item is a homogenous match.", item));
 
             return ret;
         }

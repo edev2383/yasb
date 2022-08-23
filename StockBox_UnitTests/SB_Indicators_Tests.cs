@@ -7,6 +7,7 @@ using StockBox_UnitTests.Helpers;
 using static StockBox_UnitTests.Helpers.EFile;
 using System.Collections.Generic;
 using System.Linq;
+using StockBox.Associations.Enums;
 
 
 namespace StockBox_UnitTests

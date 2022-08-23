@@ -6,7 +6,9 @@ using StockBox.Associations.Tokens;
 using StockBox.Interpreter.Expressions;
 using StockBox.Interpreter.Scanner;
 using StockBox.Rules;
+using StockBox.Services;
 using StockBox_UnitTests.Accessors;
+
 
 namespace StockBox_UnitTests
 {
@@ -29,7 +31,6 @@ namespace StockBox_UnitTests
             exprAnalyzer.Scan();
 
             Assert.IsTrue(exprAnalyzer.Combos.Count == 1);
-
         }
 
         [TestMethod, Description("Analyzer returns expected number of DomainCombinations")]
@@ -46,32 +47,35 @@ namespace StockBox_UnitTests
             exprAnalyzer.Scan();
 
             Assert.IsTrue(exprAnalyzer.Combos.Count == 2);
-
         }
 
         [TestMethod, Description("Expected Exception thrown when querying a non-subset of data")]
         [ExpectedException(typeof(Exception), "CombinationList queried before subset requested")]
         public void SB_Expr_03_DomainCombinationListThrowsExpectedException()
         {
-            var dcl = new DomainCombinationList();
-            dcl.Add(new DomainCombination(1, new Token_Accessor(TokenType.eDaily), "Close"));
-            dcl.Add(new DomainCombination(2, new Token_Accessor(TokenType.eDaily), "SMA", new int[] { 25 }));
-            dcl.Add(new DomainCombination(3, new Token_Accessor(TokenType.eDaily), "Close"));
-            dcl.Add(new DomainCombination(4, new Token_Accessor(TokenType.eDaily), "Close"));
-            dcl.Add(new DomainCombination(5, new Token_Accessor(TokenType.eWeekly), "Close"));
+            var dcl = new DomainCombinationList
+            {
+                new DomainCombination(1, new Token_Accessor(TokenType.eDaily), "Close"),
+                new DomainCombination(2, new Token_Accessor(TokenType.eDaily), "SMA", new int[] { 25 }),
+                new DomainCombination(3, new Token_Accessor(TokenType.eDaily), "Close"),
+                new DomainCombination(4, new Token_Accessor(TokenType.eDaily), "Close"),
+                new DomainCombination(5, new Token_Accessor(TokenType.eWeekly), "Close")
+            };
 
-            dcl.GetMaxIndex();
+            dcl.GetIndicators();
         }
 
         [TestMethod, Description("Ensure the combolist subset returns the expected primary index")]
         public void SB_Expr_04_DomainCombinationListReturnsCorrectIndexValue()
         {
-            var dcl = new DomainCombinationList();
-            dcl.Add(new DomainCombination(1, new Token_Accessor(TokenType.eDaily), "Close"));
-            dcl.Add(new DomainCombination(2, new Token_Accessor(TokenType.eDaily), "SMA", new int[] { 25 }));
-            dcl.Add(new DomainCombination(3, new Token_Accessor(TokenType.eDaily), "Close"));
-            dcl.Add(new DomainCombination(4, new Token_Accessor(TokenType.eDaily), "Close"));
-            dcl.Add(new DomainCombination(5, new Token_Accessor(TokenType.eWeekly), "Close"));
+            var dcl = new DomainCombinationList
+            {
+                new DomainCombination(1, new Token_Accessor(TokenType.eDaily), "Close"),
+                new DomainCombination(2, new Token_Accessor(TokenType.eDaily), "SMA", new int[] { 25 }),
+                new DomainCombination(3, new Token_Accessor(TokenType.eDaily), "Close"),
+                new DomainCombination(4, new Token_Accessor(TokenType.eDaily), "Close"),
+                new DomainCombination(5, new Token_Accessor(TokenType.eWeekly), "Close")
+            };
 
             var daily = dcl.GetDailyDomainCombos();
             var maxIndex = daily.GetMaxIndex();
@@ -83,29 +87,32 @@ namespace StockBox_UnitTests
         [TestMethod, Description("Ensure the combolist subset returns the expected indicator index")]
         public void SB_Expr_05_DomainCombinationListReturnsCorrectIndexValue()
         {
-            var dcl = new DomainCombinationList();
-            dcl.Add(new DomainCombination(1, new Token_Accessor(TokenType.eDaily), "Close"));
-            dcl.Add(new DomainCombination(2, new Token_Accessor(TokenType.eDaily), "SMA", new int[] { 25 }));
-            dcl.Add(new DomainCombination(3, new Token_Accessor(TokenType.eDaily), "Close"));
-            dcl.Add(new DomainCombination(4, new Token_Accessor(TokenType.eDaily), "Close"));
-            dcl.Add(new DomainCombination(5, new Token_Accessor(TokenType.eWeekly), "Close"));
+            var dcl = new DomainCombinationList
+            {
+                new DomainCombination(1, new Token_Accessor(TokenType.eDaily), "Close"),
+                new DomainCombination(2, new Token_Accessor(TokenType.eDaily), "SMA", new int[] { 25 }),
+                new DomainCombination(3, new Token_Accessor(TokenType.eDaily), "Close"),
+                new DomainCombination(4, new Token_Accessor(TokenType.eDaily), "Close"),
+                new DomainCombination(5, new Token_Accessor(TokenType.eWeekly), "Close")
+            };
 
-            var daily = dcl.GetDailyDomainCombos();
-            var maxIndicatorIndex = daily.GetMaxIndicatorIndex();
+            var indicators = dcl.GetIndicatorsByInterval(TokenType.eDaily);
 
-            Assert.AreEqual(daily.First().IntervalFrequency.Type, TokenType.eDaily);
-            Assert.AreEqual(25, maxIndicatorIndex);
+            Assert.AreEqual(indicators.First().IntervalFrequency.Type, TokenType.eDaily);
+            Assert.AreEqual(25, indicators.First().Indices.First());
         }
 
         [TestMethod, Description("Ensure the proper subset is pulled from the primary list")]
         public void SB_Expr_06_DomainCombinationListReturnsCorrectIndexValue()
         {
-            var dcl = new DomainCombinationList();
-            dcl.Add(new DomainCombination(1, new Token_Accessor(TokenType.eDaily), "Close"));
-            dcl.Add(new DomainCombination(2, new Token_Accessor(TokenType.eDaily), "SMA", new int[] { 25 }));
-            dcl.Add(new DomainCombination(3, new Token_Accessor(TokenType.eDaily), "Close"));
-            dcl.Add(new DomainCombination(4, new Token_Accessor(TokenType.eDaily), "Close"));
-            dcl.Add(new DomainCombination(5, new Token_Accessor(TokenType.eWeekly), "Close"));
+            var dcl = new DomainCombinationList
+            {
+                new DomainCombination(1, new Token_Accessor(TokenType.eDaily), "Close"),
+                new DomainCombination(2, new Token_Accessor(TokenType.eDaily), "SMA", new int[] { 25 }),
+                new DomainCombination(3, new Token_Accessor(TokenType.eDaily), "Close"),
+                new DomainCombination(4, new Token_Accessor(TokenType.eDaily), "Close"),
+                new DomainCombination(5, new Token_Accessor(TokenType.eWeekly), "Close")
+            };
 
             var weekly = dcl.GetWeeklyDomainCombos();
             var maxIndex = weekly.GetMaxIndex();
@@ -117,18 +124,19 @@ namespace StockBox_UnitTests
         [TestMethod, Description("Ensure the proper subset is pulled from the primary list")]
         public void SB_Expr_08_DomainCombinationListReturnsCorrectIndexValue()
         {
-            var dcl = new DomainCombinationList();
-            dcl.Add(new DomainCombination(1, new Token_Accessor(TokenType.eDaily), "Close"));
-            dcl.Add(new DomainCombination(2, new Token_Accessor(TokenType.eMonthly), "SMA", new int[] { 25 }));
-            dcl.Add(new DomainCombination(3, new Token_Accessor(TokenType.eDaily), "Close"));
-            dcl.Add(new DomainCombination(4, new Token_Accessor(TokenType.eDaily), "Close"));
-            dcl.Add(new DomainCombination(5, new Token_Accessor(TokenType.eWeekly), "Close"));
+            var dcl = new DomainCombinationList
+            {
+                new DomainCombination(1, new Token_Accessor(TokenType.eDaily), "Close"),
+                new DomainCombination(2, new Token_Accessor(TokenType.eMonthly), "SMA", new int[] { 25 }),
+                new DomainCombination(3, new Token_Accessor(TokenType.eDaily), "Close"),
+                new DomainCombination(4, new Token_Accessor(TokenType.eDaily), "Close"),
+                new DomainCombination(5, new Token_Accessor(TokenType.eWeekly), "Close")
+            };
 
             var monthly = dcl.GetMonthyDomainCombos();
-            var maxIndex = monthly.GetMaxIndex();
 
             Assert.AreEqual(monthly.First().IntervalFrequency.Type, TokenType.eMonthly);
-            Assert.AreEqual(2, maxIndex);
+            Assert.AreEqual(25, monthly.First().Indices.First());
         }
 
         [TestMethod, Description("Analyzer returns expected number of DomainCombinations")]
@@ -153,11 +161,29 @@ namespace StockBox_UnitTests
             }
 
             var exprAnalyzer = new ExpressionAnalyzer(expressionList);
-
             exprAnalyzer.Scan();
 
             Assert.IsTrue(exprAnalyzer.Combos.Count == 4);
+        }
 
+        [TestMethod, Description("Analyzer returns expected number of DomainCombinations")]
+        public void SB_Expr_08_ExpressionAnalyzer_CanAnalyzeMultpleExpression_WithMoreCollaborationBetweenObjects()
+        {
+            var rules = new RuleList() {
+                new Rule("SMA(25) > 140"),
+                new Rule("2 Weeks Ago Close"),
+                new Rule("2 Days Ago Close"),
+                new Rule("3 Weeks Ago SMA(14)"),
+                new Rule("4 Months Ago Open"),
+            };
+
+            var service = new ActiveService(new Scanner(), new Parser());
+            service.ProcessRules(rules);
+
+            var exprAnalyzer = new ExpressionAnalyzer(rules.Expressions);
+            exprAnalyzer.Scan();
+
+            Assert.IsTrue(exprAnalyzer.Combos.Count == 5);
         }
     }
 }

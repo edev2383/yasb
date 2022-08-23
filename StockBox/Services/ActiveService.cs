@@ -37,7 +37,9 @@ namespace StockBox.Services
 
 
         /// <summary>
-        /// Iterate through the rules in the RuleList and evaluate the statement
+        /// Iterate through the rules in the RuleList and parse the statement
+        /// into an expression. The resultant expression is added to the
+        /// RuleList where it can be analyzed and then interpretted
         /// </summary>
         /// <param name="rules"></param>
         /// <returns></returns>
@@ -48,15 +50,12 @@ namespace StockBox.Services
             foreach (Rule rule in rules)
             {
                 var tokens = _scanner.ScanTokens(rule.Statement);
-                var expression = _parser.Parse(tokens);
-                expression.Statement = rule.Statement;
-                rules.AddExpr(expression);
+                rules.AddExpr(_parser.Parse(tokens), rule.Statement);
             }
 
             // add process results to the service results object
             _results.AddRange(_scanner.GetResults());
             _results.AddRange(_parser.GetResults());
-
             return ret;
         }
     }

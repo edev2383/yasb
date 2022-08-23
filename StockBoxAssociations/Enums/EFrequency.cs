@@ -1,6 +1,9 @@
 ﻿using System;
-namespace StockBox.Data.SbFrames
+
+
+namespace StockBox.Associations.Enums
 {
+
     public enum EFrequency
     {
         eDaily = 0,

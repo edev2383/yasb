@@ -18,11 +18,14 @@ namespace StockBox.Actions
     public abstract class SbActionBase : ISbAction
     {
 
+        public SbActionBase(SbActionBase source) : this(source._adapter.Clone(), source._transitionState.Clone())
+        {
+        }
+
         public SbActionBase(ISbActionAdapter adapter, StateBase transitionState)
         {
             _adapter = adapter;
             _transitionState = transitionState;
-            _transitionState.ParentAction = this;
         }
 
         /// <summary>
@@ -55,5 +58,6 @@ namespace StockBox.Actions
         private StateBase _transitionState;
 
         public abstract object PerformAction();
+        public abstract SbActionBase Clone();
     }
 }

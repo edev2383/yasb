@@ -15,7 +15,7 @@ namespace StockBox.Interpreter.Scanner
     {
 
         public DomainCombinationList Combos { get; set; } = new DomainCombinationList();
-        private List<Expr> _expressions;
+        private readonly List<Expr> _expressions;
 
         public ExpressionAnalyzer(Expr expression) : this(new List<Expr> { expression }) { }
 
@@ -40,6 +40,9 @@ namespace StockBox.Interpreter.Scanner
             }
             else
             {
+                // At present, we are only interested in scanning Binary Exprs
+                // because we forced all DomainExpressions to be a subset of
+                // Binary
                 if (expr.Left is Binary)
                     Scan(expr.Left);
                 if (expr.Right is Binary)
@@ -58,6 +61,8 @@ namespace StockBox.Interpreter.Scanner
 
         public object VisitGroupingExpr(Grouping expr)
         {
+            // Groupings are generally two Binary Exprs separated by an operator
+            // so we can just scan them like anything else
             object left = Scan(expr.Left);
             object right = Scan(expr.Right);
             return null;

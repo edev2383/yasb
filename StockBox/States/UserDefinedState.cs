@@ -7,6 +7,8 @@ namespace StockBox.States
     public class UserDefinedState : StateBase
     {
 
+        public UserDefinedState(UserDefinedState source) : base(source) { }
+
         public UserDefinedState(string name) : base(
             new StateDataModel
             {
@@ -20,5 +22,9 @@ namespace StockBox.States
         {
         }
 
+        public override StateBase Clone()
+        {
+            return new UserDefinedState(this);
+        }
     }
 }

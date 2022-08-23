@@ -7,6 +7,8 @@ namespace StockBox.States
     public class InactiveState : StateBase
     {
 
+        public InactiveState(InactiveState source) : base(source) { }
+
         public InactiveState() : base(
             new StateDataModel
             {
@@ -16,5 +18,9 @@ namespace StockBox.States
             })
         { }
 
+        public override StateBase Clone()
+        {
+            return new InactiveState(this);
+        }
     }
 }

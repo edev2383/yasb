@@ -1,11 +1,14 @@
 ﻿using System;
 using StockBox.Data.Adapters.DataFrame;
+using StockBox.Associations.Enums;
+
 
 namespace StockBox.Data.SbFrames
 {
-    public class DailyFrame :SbFrame 
+
+    public class DailyFrame : SbFrame
     {
-        public DailyFrame(IDataFrameAdapter adapter): base(adapter, EFrequency.eDaily)
+        public DailyFrame(IDataFrameAdapter adapter) : base(adapter, EFrequency.eDaily)
         {
         }
     }

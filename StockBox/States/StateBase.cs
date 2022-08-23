@@ -39,12 +39,11 @@ namespace StockBox.States
 
         public StateDataModel State { get; set; }
 
-        /// <summary>
-        /// A reference to the parent SbActionBase object. When the State is
-        /// entered, the Action method is called which returns the parent's
-        /// PerformAction method response object
-        /// </summary>
-        public SbActionBase ParentAction { get; set; }
+        public StateBase(StateBase source)
+        {
+            _name = source._name;
+            State = source.State.Clone();
+        }
 
         public StateBase(StateDataModel state) : this(state.Name)
         {
@@ -56,20 +55,13 @@ namespace StockBox.States
             _name = name;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public object Action()
-        {
-            if (ParentAction != null) return ParentAction.PerformAction();
-            return null;
-        }
-
         public override string ToString()
         {
             return string.Format("State: {0}) {1} - {2}", State.StateDataModelId, State.Name, State.Type);
         }
+
+        public abstract StateBase Clone();
+
 
         /// <summary>
         /// Return true if provided item matches, or is equivalent to, this item

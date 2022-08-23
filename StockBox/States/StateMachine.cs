@@ -67,6 +67,27 @@ namespace StockBox.States
             _currentState = startState;
         }
 
+        public StateMachine(StateMachine source)
+        {
+            _transitions = source._transitions;
+            _states = source._states;
+        }
+
+        public StateMachine CreateWithStateAndTransitions()
+        {
+            return new StateMachine(this);
+        }
+
+
+        /// <summary>
+        /// Manually set the current state
+        /// </summary>
+        /// <param name="state"></param>
+        public void SetCurrentState(StateBase state)
+        {
+            _currentState = state;
+        }
+
         /// <summary>
         /// Add a Transition object to the StateMachines list of valid
         /// Transitions (_transitions)
@@ -131,25 +152,19 @@ namespace StockBox.States
             // the requested transition
             vr.Add(TransitionExists(new Transition(_currentState, tryState)), $"Provided state {tryState.ToString()} is valid target from {_currentState.ToString()}");
             if (vr.Success)
-            {
-                var result = PerformTransition(tryState);
-                // attach the result object to the result list
-                vr.Add(new ValidationResult(true, "Transition to new state", result));
-            }
+                PerformTransition(tryState);
             return vr;
         }
 
         /// <summary>
-        /// Add current state to history, update current state to next state and
-        /// perform/return state Action method
+        /// Add current state to history, update current state to next state 
         /// </summary>
         /// <param name="nextState"></param>
         /// <returns></returns>
-        protected object PerformTransition(StateBase nextState)
+        protected void PerformTransition(StateBase nextState)
         {
-            _history.Add(_currentState);
+            _history.Add(_currentState.Clone());
             _currentState = nextState;
-            return nextState.Action();
         }
     }
 }

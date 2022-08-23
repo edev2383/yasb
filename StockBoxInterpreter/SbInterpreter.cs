@@ -4,6 +4,7 @@ using StockBox.Interpreter.Expressions;
 using StockBox.Associations.Tokens;
 using StockBox.Validation;
 using static StockBox.Associations.Tokens.TokenType;
+using StockBox.Associations.Enums;
 
 
 namespace StockBox.Interpreter
@@ -31,7 +32,19 @@ namespace StockBox.Interpreter
         /// <returns></returns>
         public object Interpret(Expr expression)
         {
-            return evaluate(expression);
+            try
+            {
+                return evaluate(expression);
+            }
+            catch (Exception e)
+            {
+                // this is a bandaid solution. If ANYTHING fails downstream, we
+                // catch all exceptions and just return false. This will allow
+                // the interpreter to continue evaluating. In the future we need
+                // to come up with a more comprehensive, error-logging/handling
+                // way to handle this behavior
+                return false;
+            }
         }
 
         /// <summary>

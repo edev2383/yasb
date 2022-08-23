@@ -13,8 +13,15 @@ namespace StockBox.Actions
     public class BuySuccess : SbActionBase
     {
 
+        public BuySuccess(BuySuccess source) : base(source) { }
+
         public BuySuccess(ISbActionAdapter adapter) : base(adapter, new ActiveState())
         {
+        }
+
+        public override SbActionBase Clone()
+        {
+            return new BuySuccess(this);
         }
 
         public override object PerformAction()

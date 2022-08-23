@@ -58,9 +58,18 @@ namespace StockBox.Rules
             return _results;
         }
 
-        public void AddExpr(Expr e)
+        public void AddExpr(Expr e, string statement)
         {
+            e.Statement = statement;
             Expressions.Add(e);
+        }
+
+        public bool ContainsItem(Rule item)
+        {
+            foreach (Rule r in this)
+                if (r.IdentifiesAs(item))
+                    return true;
+            return false;
         }
     }
 }

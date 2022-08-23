@@ -13,8 +13,15 @@ namespace StockBox.Actions
     public class BuyError : SbActionBase
     {
 
+        public BuyError(BuyError source) : base(source) { }
+
         public BuyError(ISbActionAdapter adapter) : base(adapter, new ActiveErrorState())
         {
+        }
+
+        public override SbActionBase Clone()
+        {
+            return new BuyError(this);
         }
 
         public override object PerformAction()

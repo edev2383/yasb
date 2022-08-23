@@ -8,5 +8,7 @@ namespace StockBox.Actions
     /// </summary>
     public interface ISbActionAdapter
     {
+
+        ISbActionAdapter Clone();
     }
 }

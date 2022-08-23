@@ -1,6 +1,6 @@
 ﻿using System;
 using StockBox.States;
-
+using StockBox.Validation;
 
 namespace StockBox.Actions
 {
@@ -14,12 +14,32 @@ namespace StockBox.Actions
     public class Buy : SbActionBase
     {
 
+        public Buy(Buy source) : base(source) { }
+
         public Buy(ISbActionAdapter adapter) : base(adapter, new ActivePendingState())
         {
         }
 
+        public override SbActionBase Clone()
+        {
+            return new Buy(this);
+        }
+
         public override object PerformAction()
         {
+            var vr = new ValidationResultList();
+
+            // perform action
+            if (vr.Success)
+            {
+                //var successAction = new BuySuccess(moveAdapter, new ActiveState());
+                //
+            }
+            else
+            {
+                //var failAction = new BuyError(moveAdapter, new ActiveErrorState());
+            }
+
             return null;
         }
     }

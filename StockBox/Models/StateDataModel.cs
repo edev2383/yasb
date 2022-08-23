@@ -17,6 +17,13 @@ namespace StockBox.Models
             Name = name;
         }
 
+        public StateDataModel(StateDataModel source)
+        {
+            StateDataModelId = source.StateDataModelId;
+            Name = source.Name;
+            Type = source.Type;
+        }
+
         public StateDataModel(int id, string name, EStateType type)
         {
             StateDataModelId = id;
@@ -32,6 +39,11 @@ namespace StockBox.Models
 
         public StateDataModel()
         {
+        }
+
+        public StateDataModel Clone()
+        {
+            return new StateDataModel(this);
         }
     }
 }

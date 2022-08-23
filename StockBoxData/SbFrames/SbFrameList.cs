@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using StockBox.Associations.Enums;
 
 namespace StockBox.Data.SbFrames
 {
@@ -15,7 +16,7 @@ namespace StockBox.Data.SbFrames
             foreach (var frame in this)
             {
                 if (frame.Frequency == frequency)
-                    ret =  frame;
+                    ret = frame;
             }
             return ret;
         }

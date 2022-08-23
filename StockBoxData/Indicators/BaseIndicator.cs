@@ -1,4 +1,5 @@
-﻿using StockBox.Data.Adapters.DataFrame;
+﻿using System.Linq;
+using StockBox.Data.Adapters.DataFrame;
 
 namespace StockBox.Data.Indicators
 {
@@ -42,10 +43,11 @@ namespace StockBox.Data.Indicators
 
         public bool IdentifiesAs(BaseIndicator item)
         {
-            if (item.Name != Name) return false;
+            if (item.Name.ToLower() != Name.ToLower()) return false;
             if (item.Type != Type) return false;
-            if (item.ColumnKey != ColumnKey) return false;
-            if (item.Indices != Indices) return false;
+            if (item.ColumnKey.ToLower() != ColumnKey.ToLower()) return false;
+            if (item.Indices.Length != Indices.Length) return false;
+            if (item.Indices.Intersect(Indices).Count() != Indices.Length) return false;
             return true;
         }
 

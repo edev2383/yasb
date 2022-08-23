@@ -1,5 +1,7 @@
-﻿using StockBox.Data.Adapters.DataFrame;
+﻿using System.IO;
+using StockBox.Data.Adapters.DataFrame;
 using StockBox.Data.Indicators;
+using StockBox.Associations.Enums;
 
 
 namespace StockBox.Data.SbFrames
@@ -25,7 +27,14 @@ namespace StockBox.Data.SbFrames
         /// <summary>
         /// Length of active dataset
         /// </summary>
-        public int? Length { get { return _adapter.Length; } }
+        public int? Length
+        {
+            get
+            {
+                if (_adapter == null) return 0;
+                return _adapter.Length;
+            }
+        }
 
         private IDataFrameAdapter _adapter;
         private readonly EFrequency _frequency;
@@ -107,6 +116,11 @@ namespace StockBox.Data.SbFrames
 
             // add the indicator to the frame's list of indicators
             _indicators.Add(indicator);
+        }
+
+        public void AddData(MemoryStream data)
+        {
+            _adapter.AddData(data);
         }
     }
 }

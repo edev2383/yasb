@@ -3,6 +3,7 @@ using StockBox.Interpreter;
 using StockBox.RiskProfiles;
 using StockBox.Rules;
 using StockBox.Services;
+using StockBox.States;
 using StockBox.Validation;
 
 
@@ -19,6 +20,12 @@ namespace StockBox.Setups
         /// The rules that determine a given setup
         /// </summary>
         public RuleList Rules { get { return _rules; } }
+
+        /// <summary>
+        /// Explicitly defined origin state
+        /// </summary>
+        public StateBase OriginState { get { return _originState; } }
+        private readonly StateBase _originState;
 
         /// <summary>
         /// All actions associated with a setup
@@ -58,6 +65,13 @@ namespace StockBox.Setups
 
         public Setup(RuleList rules, RiskProfile profile) : this(rules)
         {
+            RiskProfile = profile;
+        }
+
+        public Setup(RuleList rules, StateBase originState, RiskProfile profile)
+        {
+            _rules = rules;
+            _originState = originState;
             RiskProfile = profile;
         }
 

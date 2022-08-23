@@ -1,4 +1,5 @@
-﻿using Npgsql;
+﻿using System.IO;
+using Npgsql;
 using StockBox.Associations;
 
 
@@ -22,6 +23,21 @@ namespace StockBox.Data.Context
             //using var cmd = new NpgsqlCommand(sql, _conn);
 
             //var version = cmd.ExecuteScalar().ToString();
+        }
+
+        public MemoryStream GetDaily()
+        {
+            throw new System.Exception("");
+        }
+
+        public MemoryStream GetWeekly()
+        {
+            throw new System.Exception("");
+        }
+
+        public MemoryStream GetMontly()
+        {
+            throw new System.Exception("");
         }
     }
 }

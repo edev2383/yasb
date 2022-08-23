@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.Linq;
 
 namespace StockBox.Associations.Tokens
 {
@@ -70,6 +70,29 @@ namespace StockBox.Associations.Tokens
                 default: break;
             }
             return ret;
+        }
+
+        public bool IdentifiesAs(DomainCombination item)
+        {
+            if (IntervalIndex != item.IntervalIndex) return false;
+            if (IntervalFrequency != item.IntervalFrequency) return false;
+            if (DomainKeyword != item.DomainKeyword) return false;
+            if (Indices == null && item.Indices == null) return true;
+            if (Indices == null) return false;
+            foreach (int i in Indices)
+                if (!item.Indices.Contains(i)) return false;
+            return true;
+        }
+
+        public bool IsMatchMinusIntervalIndex(DomainCombination item)
+        {
+            if (DomainKeyword != item.DomainKeyword) return false;
+            // if both are null, we can guard out w/ a true
+            if (Indices == null && item.Indices == null) return true;
+            if (Indices == null) return false;
+            if (Indices.Count() != item.Indices.Count()) return false;
+            if (Indices.Intersect(item.Indices).Count() != item.Indices.Count()) return false;
+            return true;
         }
     }
 }

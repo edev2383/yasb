@@ -12,5 +12,10 @@ namespace StockBox.Data.Adapters.DataFrame
             // forward testing requires a descending ordered data set
             _data = _data.Reversed;
         }
+
+        public override IDataFrameAdapter Create()
+        {
+            return new DeedleAdapter();
+        }
     }
 }

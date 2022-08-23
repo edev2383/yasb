@@ -25,5 +25,6 @@ namespace StockBox.Data.Adapters.DataFrame
         DataPoint GetDataPoint(int indexFromZero);
         ColumnSeries GetColumnData(DataColumn column);
         void MapIndicator(IIndicator indicator);
+        IDataFrameAdapter Create();
     }
 }

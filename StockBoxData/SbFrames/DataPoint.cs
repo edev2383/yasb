@@ -11,7 +11,7 @@ namespace StockBox.Data.SbFrames
         public double Open { get; set; }
         public double Close { get; set; }
         public double AdjClose { get; set; }
-        public int Volume { get; set; }
+        public double Volume { get; set; }
 
         public IndicatorDataPointList Indicators { get; set; } = new IndicatorDataPointList();
 
@@ -19,7 +19,7 @@ namespace StockBox.Data.SbFrames
         {
         }
 
-        public DataPoint(DateTime date, double high, double low, double open, double close, double adjClose, int volume)
+        public DataPoint(DateTime date, double high, double low, double open, double close, double adjClose, double volume)
         {
             Date = date;
             High = high;

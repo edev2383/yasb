@@ -15,6 +15,11 @@ namespace StockBox.Data.SbFrames
     /// </summary>
     public class FrameListFactory
     {
+
+        /// <summary>
+        /// ICallContextProviders are intended to provide MemoryStream results
+        /// that can be applied to the adapter through the AddData method
+        /// </summary>
         private ICallContextProvider _ctx;
         private IDataFrameAdapter _adapter;
 
@@ -45,35 +50,33 @@ namespace StockBox.Data.SbFrames
 
         public SbFrame CreateDailySbFrame(DomainCombinationList dailyCombos)
         {
-            var ret = new DailyFrame(_adapter);
-            double maxIndex = dailyCombos.GetMaxIndex();
-            //_adapter.AddData(_ctx.)
+            var ret = new DailyFrame(_adapter.Create());
+            ret.AddData(_ctx.GetDaily());
             MapIndicators(ret, dailyCombos);
             return ret;
         }
 
         public SbFrame CreateWeeklySbFrame(DomainCombinationList weeklyCombos)
         {
-            var ret = new WeeklyFrame(_adapter);
-            double maxIndex = weeklyCombos.GetMaxIndex();
+            var ret = new WeeklyFrame(_adapter.Create());
+            ret.AddData(_ctx.GetWeekly());
             MapIndicators(ret, weeklyCombos);
             return ret;
         }
 
         public SbFrame CreateMonthlySbFrame(DomainCombinationList monthlyCombos)
         {
-            var ret = new MonthlyFrame(_adapter);
-            double maxIndex = monthlyCombos.GetMaxIndex();
+            var ret = new MonthlyFrame(_adapter.Create());
+            ret.AddData(_ctx.GetMontly());
             MapIndicators(ret, monthlyCombos);
             return ret;
         }
 
         private void MapIndicators(SbFrame frame, DomainCombinationList combos)
         {
-            foreach (var c in combos)
+            foreach (var c in combos.GetIndicators())
             {
-                if (c.IsIndicator)
-                    frame.AddIndicator(IndicatorFactory.Create(c.DomainKeyword, c.Indices));
+                frame.AddIndicator(IndicatorFactory.Create(c.DomainKeyword, c.Indices));
             }
         }
     }

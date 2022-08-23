@@ -126,7 +126,7 @@ namespace StockBox_UnitTests
             var config_targetState = new StateDataModel(7, config_targetWatchList, StockBox.States.Helpers.EStateType.eUserDefined);
 
             // create a setup with a simple rulelist and action
-            var ruleList = new RuleList { new Rule("1 == 1"), };
+            var ruleList = new RuleList { new Rule("1 == 1"), new Rule("1 == 1"), };
             var setup = new Setup(ruleList);
             setup.AddAction(new Move(null, config_targetWatchList));
 
@@ -179,7 +179,7 @@ namespace StockBox_UnitTests
             var config_targetState = new StateDataModel(8, config_targetWatchList, StockBox.States.Helpers.EStateType.eUserDefined);
 
             // create a setup with a simple rulelist and action
-            var ruleList = new RuleList { new Rule("1 == 1"), };
+            var ruleList = new RuleList { new Rule("1 == 1"), new Rule("2 >= 1"), };
             var setup = new Setup(ruleList);
             setup.AddAction(new Move(null, config_targetWatchList));
 
@@ -202,6 +202,7 @@ namespace StockBox_UnitTests
 
             // use the service to turn the rule statements into domain exprs
             setup.Process(service);
+
             // run the interpeter process against the setup
             // note: if the setup contains rules that have domain expressions,
             // i.e., Close, SMA, etc, between these two steps will require us

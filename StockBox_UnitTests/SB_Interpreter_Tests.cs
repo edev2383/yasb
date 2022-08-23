@@ -1,12 +1,16 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using StockBox.Data.Adapters.DataFrame;
-using StockBox.Data.SbFrames;
+using StockBox_UnitTests.Accessors;
 using StockBox_UnitTests.Helpers;
-using StockBox.Interpreter.Expressions;
-using StockBox.Interpreter;
-using StockBox.Interpreter.Scanner;
 using StockBox.Associations.Tokens;
+using StockBox.Data.Adapters.DataFrame;
 using StockBox.Data.Indicators;
+using StockBox.Data.SbFrames;
+using StockBox.Interpreter;
+using StockBox.Interpreter.Expressions;
+using StockBox.Interpreter.Scanner;
+using StockBox.Rules;
+using StockBox.Services;
+using System;
 
 
 namespace StockBox_UnitTests
@@ -113,7 +117,6 @@ namespace StockBox_UnitTests
         public void SB_Interpreter_09_CanInterpretDomainExpressionFromParsedTokens()
         {
             double expected = 89.300003;
-
             var source = "2 days ago Close";
             var scanner = new Scanner(source);
             var parser = new Parser(scanner.ScanTokens());
@@ -130,7 +133,6 @@ namespace StockBox_UnitTests
         [TestMethod, Description("Test the interpreter can properly evaluate more complex Expr types derived from a source statement that is scanned and parsed")]
         public void SB_Interpreter_10_CanInterpretCompoundDomainExpressionFromParsedTokens()
         {
-
             var source = "2 days ago Close > 250";
             var scanner = new Scanner(source);
             var parser = new Parser(scanner.ScanTokens());
@@ -147,7 +149,6 @@ namespace StockBox_UnitTests
         [TestMethod, Description("Test the interpreter can properly evaluate more complex Expr types derived from a source statement that is scanned and parsed")]
         public void SB_Interpreter_11_CanInterpretCompoundDomainExpressionFromParsedTokens()
         {
-
             var source = "2 days ago Close < 250";
             var scanner = new Scanner(source);
             var tokens = scanner.ScanTokens();
@@ -193,6 +194,34 @@ namespace StockBox_UnitTests
             var interpreter = new SbInterpreter(framelist);
             var result = interpreter.Interpret(parser.Parse());
             Assert.IsTrue((bool)result);
+        }
+
+        [TestMethod, Description("Interpreter can handle a missing value, by throwing a general exception and returning false at catch")]
+        public void SB_Interpreter_14_InterpreterCanHandleAMissingIndicatorValue()
+        {
+            // setup the data list to include a single data point, that will
+            // not be enough to satisfy the requirements of the rulelist
+            var adapter = new DataFrameAdapter_Accessor();
+
+            // add a single datapoint with indicator data
+            adapter.CreateAndAddDataPoint(DateTime.Now, 14, 10, 13, 12, 1000, "SMA(5)", 10);
+
+            // init the frame/fraemlist
+            var dailyFrame = new DailyFrame(adapter);
+            var framelist = new SbFrameList() { dailyFrame };
+
+            // create and process the rules
+            var rules = new RuleList() {
+                new Rule("2 Days Ago SMA(5) > 10"),
+            };
+
+            var service = new ActiveService(new Scanner(), new Parser());
+            service.ProcessRules(rules);
+
+            // use the Interpreter to evaluate the rules expressions
+            var result = rules.Evalute(new SbInterpreter(framelist));
+
+            Assert.IsTrue(result.HasFailures);
         }
     }
 }

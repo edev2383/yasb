@@ -7,5 +7,10 @@ namespace StockBox.Data.Adapters.DataFrame
     {
         public DeedleBacktestAdapter() { }
         public DeedleBacktestAdapter(MemoryStream data) : base(data) { }
+
+        public override IDataFrameAdapter Create()
+        {
+            return new DeedleBacktestAdapter();
+        }
     }
 }

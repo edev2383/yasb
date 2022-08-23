@@ -17,6 +17,21 @@ namespace StockBox_UnitTests.Helpers
 
         }
 
+        public MemoryStream GetDaily()
+        {
+            return GetFileStream(EFile.eAmdDaily);
+        }
+
+        public MemoryStream GetWeekly()
+        {
+            return GetFileStream(EFile.eAmdWeekly);
+        }
+
+        public MemoryStream GetMontly()
+        {
+            return GetFileStream(EFile.eAmdMonthly);
+        }
+
         internal object GetFileStream(object eAmdDaily)
         {
             throw new NotImplementedException();
