@@ -129,7 +129,7 @@ namespace StockBox_UnitTests
             Assert.IsNotNull(dailyFrame);
             Assert.IsTrue(dailyFrame.Length > 0);
             Assert.AreEqual(dailyFrame.Inidcators.Count, 2);
-            Assert.IsTrue(dailyFrame.Inidcators.ContainsItem(new SimpleMovingAverage("sma", 25)));
+            Assert.IsTrue(dailyFrame.Inidcators.ContainsItem(new SimpleMovingAverage("sma", 150)));
             Assert.IsTrue(dailyFrame.Inidcators.ContainsItem(new SimpleMovingAverage("sma", 5)));
         }
     }

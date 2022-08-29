@@ -21,7 +21,7 @@ namespace StockBox.Actions
         public EActionType ActionType { get { return _actionType; } }
         private EActionType _actionType;
 
-        public SbActionBase(SbActionBase source) : this(source._adapter.Clone(), source._transitionState.Clone())
+        public SbActionBase(SbActionBase source) : this(source._adapter.Clone(), source._transitionState.Clone(), source._actionType)
         {
         }
 
@@ -63,6 +63,6 @@ namespace StockBox.Actions
         private StateBase _transitionState;
 
         public abstract ActionResponse PerformAction();
-        public abstract SbActionBase Clone();
+        public abstract ISbAction Clone();
     }
 }

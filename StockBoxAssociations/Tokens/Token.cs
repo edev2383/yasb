@@ -1,6 +1,16 @@
 ﻿using System;
+
+
 namespace StockBox.Associations.Tokens
 {
+
+    /// <summary>
+    /// Written rule statements are scanned and broken into Tokens. Each token
+    /// has a TokenType which informs how the Parse class will handle it. The
+    /// lexeme is a string representation of the entry scanned. Literal is the
+    /// entered as the actual *literal* value. Line and Char are integer values
+    /// representing the location of the Token in the provided Statement stirng.
+    /// </summary>
     public class Token
     {
 
@@ -66,24 +76,9 @@ namespace StockBox.Associations.Tokens
             return false;
         }
 
-        public string ErrorMessage_IsDeficient()
-        {
-            return "Token is not yet hyrdated";
-        }
-
-        public string ErrorMessage_IsOfDomainOperatorType()
-        {
-            return $"Token MUST BE of Domain Operator type. {Type.ToString()} given";
-        }
-
         public Token Clone()
         {
             return new Token(this);
-        }
-
-        public bool IsOfSameType(Token item)
-        {
-            return Type == item.Type;
         }
 
         public bool IdentifiesAs(Token item)
@@ -94,6 +89,16 @@ namespace StockBox.Associations.Tokens
             if (Char != item.Char) return false;
             if (Line != item.Line) return false;
             return true;
+        }
+
+        public string ErrorMessage_IsDeficient()
+        {
+            return "Token is not yet hyrdated";
+        }
+
+        public string ErrorMessage_IsOfDomainOperatorType()
+        {
+            return $"Token MUST BE of Domain Operator type. {Type.ToString()} given";
         }
     }
 }

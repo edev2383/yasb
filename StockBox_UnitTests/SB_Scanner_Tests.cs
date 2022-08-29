@@ -374,31 +374,17 @@ namespace StockBox_UnitTests
         }
 
         [TestMethod]
-        public void SnowCrash_01()
+        public void SBC_33_ScannerCanRecognizeBooleanTokens()
         {
-            //using (TextFieldParser parser = new TextFieldParser(new Reader().GetFileSource(Reader.EFile.eAmdDaily)))
-            //{
-            //    parser.TextFieldType = FieldType.Delimited;
-            //    parser.SetDelimiters(",");
-            //    while (!parser.EndOfData)
-            //    {
-            //        string[] fields = parser.ReadFields();
-            //        foreach (string field in fields)
-            //        {
-
-            //        }
-            //    }
-            //}
-            var stream = new Reader().GetFileStream(eAmdDaily);
-            var adapter = new DeedleAdapter(stream);
-            var frame = new SbFrame(adapter, EFrequency.eDaily);
-
-            var column = new DataColumn(DataColumn.EColumns.eClose, 3);
-            object result = frame.GetTargetValue(column, 3);
-
-
-            Assert.IsNotNull(result);
-            Assert.AreEqual(result, 86.989998);
+            var scanner = new Scanner("True != FALSE");
+            var tokens = scanner.ScanTokens();
+            Assert.IsTrue(tokens.Count == 4);
+            Assert.AreEqual(tokens[0].Lexeme, "True");
+            Assert.AreEqual(tokens[0].Literal, true);
+            Assert.AreEqual(tokens[1].Lexeme, "!=");
+            Assert.AreEqual(tokens[2].Lexeme, "FALSE");
+            Assert.AreEqual(tokens[2].Literal, false);
+            Assert.AreEqual(tokens[^1].Type, TokenType.eEOF);
         }
 
         private TokenList GetTokens(EFile target)

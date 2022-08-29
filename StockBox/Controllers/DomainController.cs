@@ -49,13 +49,17 @@ namespace StockBox.Controllers
             {
                 var innerVr = new ValidationResultList();
 
+                // create a local setup clone and add the current SymbolProfile
+                var localSetup = setup.Clone();
+                localSetup.SymbolProfile = sp;
+
                 // create a local statemachine to be used within this block,
                 // for this local transaction only
                 var localSm = _stateMachine.CreateWithStateAndTransitions();
 
                 // apply the current state from the setup (this could also
                 // come from the given SymbolProfile, dealer's choice..)
-                localSm.SetCurrentState(setup.OriginState);
+                localSm.SetCurrentState(localSetup.OriginState);
 
                 // pass the service to the Setup, which will break all of the
                 // rule statements into an Expression list
@@ -63,7 +67,7 @@ namespace StockBox.Controllers
 
                 // analyze the expression list to get details about the needed
                 // dataset
-                var expressionAnalyzer = new ExpressionAnalyzer(setup.Rules.Expressions);
+                var expressionAnalyzer = new ExpressionAnalyzer(localSetup.Rules.Expressions);
                 expressionAnalyzer.Scan();
 
                 // create the desired framelist from the provided context
@@ -71,13 +75,20 @@ namespace StockBox.Controllers
                 var factory = new FrameListFactory(new CallContext(""), new DeedleAdapter());
                 var frameList = factory.Create(expressionAnalyzer.Combos);
 
-                //
-                var evalResult = setup.Evaluate(new SbInterpreter(frameList));
+                // pass the interpreter, injected w/ the created framelist to
+                // the setup and run the evaluation
+                var evalResult = localSetup.Evaluate(new SbInterpreter(frameList));
+
+                // if there are no errors to the evaluation, try to transition
+                // to the newest state
                 if (evalResult.Success)
-                    innerVr.AddRange(localSm.TryNextState(setup.Action.TransitionState));
+                    innerVr.AddRange(localSm.TryNextState(localSetup.Action.TransitionState));
 
                 if (innerVr.Success)
-                    innerVr.AddRange(PerformSetupAction(setup));
+                    innerVr.AddRange(PerformSetupAction(localSetup));
+
+                ret.AddRange(innerVr);
+                ret.AddRange(evalResult);
             }
             return ret;
         }

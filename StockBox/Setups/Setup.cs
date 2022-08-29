@@ -1,5 +1,6 @@
 ﻿using StockBox.Actions;
 using StockBox.Interpreter;
+using StockBox.Models;
 using StockBox.RiskProfiles;
 using StockBox.Rules;
 using StockBox.Services;
@@ -44,12 +45,17 @@ namespace StockBox.Setups
         /// An action is an encapsulation of behavior called when a Setup
         /// process returns true/Success
         /// </summary>
-        public SbActionBase Action { get { return _actions.First; } }
+        public ISbAction Action { get { return _actions.First; } }
 
         /// <summary>
         /// The profile of risk associated with a given setup
         /// </summary>
         public RiskProfile RiskProfile { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public SymbolProfile SymbolProfile { get; set; }
 
         private SbActionList _actions = new SbActionList();
         private readonly RuleList _rules;
@@ -73,6 +79,11 @@ namespace StockBox.Setups
             _rules = rules;
             _originState = originState;
             RiskProfile = profile;
+        }
+
+        public Setup(Setup source) : this(source._rules.Clone(), source._originState.Clone(), source.RiskProfile.Clone())
+        {
+            _actions = source._actions;
         }
 
         /// <summary>
@@ -103,6 +114,11 @@ namespace StockBox.Setups
             if (RiskProfile != null)
                 action.RiskProfile = RiskProfile;
             _actions.Add(action);
+        }
+
+        public Setup Clone()
+        {
+            return new Setup(this);
         }
     }
 }

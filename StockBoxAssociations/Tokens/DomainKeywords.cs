@@ -34,6 +34,9 @@
             Add("ago", TokenType.eAgo);
 
             #endregion
+
+            Add("true", TokenType.eTrue);
+            Add("false", TokenType.eFalse);
         }
     }
 }

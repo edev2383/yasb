@@ -237,6 +237,12 @@ namespace StockBox.Interpreter.Scanner
                         case TokenType.eAgo:
                             // ignore the "ago" string
                             break;
+                        case TokenType.eTrue:
+                            AddToken(TokenType.eTrue, true);
+                            break;
+                        case TokenType.eFalse:
+                            AddToken(TokenType.eTrue, false);
+                            break;
                         default:
                             if (!PeekPrevious().IsOfNumericOrIndexType())
                             {

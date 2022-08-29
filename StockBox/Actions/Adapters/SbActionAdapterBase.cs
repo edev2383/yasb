@@ -9,7 +9,7 @@ namespace StockBox.Actions.Adapters
         {
         }
 
-        public SbManagerBase Manager { get; set; }
+
         public ISbAction ParentAction { get; set; }
 
         public ISbActionAdapter Clone()

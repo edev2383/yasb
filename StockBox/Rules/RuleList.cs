@@ -49,7 +49,8 @@ namespace StockBox.Rules
 
         public RuleList(List<Rule> source)
         {
-            AddRange(source);
+            foreach (Rule item in source)
+                Add(item.Clone());
         }
 
         public ValidationResultList ProcessRules(ISbService service)
@@ -70,6 +71,11 @@ namespace StockBox.Rules
                 if (r.IdentifiesAs(item))
                     return true;
             return false;
+        }
+
+        public RuleList Clone()
+        {
+            return new RuleList(this);
         }
     }
 }

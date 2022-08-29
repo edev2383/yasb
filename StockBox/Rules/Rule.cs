@@ -28,5 +28,10 @@ namespace StockBox.Rules
             if (item.Statement != Statement) return false;
             return true;
         }
+
+        public Rule Clone()
+        {
+            return new Rule(_statement);
+        }
     }
 }

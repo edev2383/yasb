@@ -9,8 +9,8 @@ namespace StockBox.States
     /// valid Transitions are exlicitly defined beforehand to prevent invalid
     /// states. UserDefinedState transitions are Nondeterministic, i.e., any
     /// UserDefinedState can be transitioned into any other UserDefinedState.
-    /// There are application defined states that behave deterministicly. These
-    /// states (ActivePendingState, ActiveState, ActiveErrorState,
+    /// There are application defined states that behave more deterministicly.
+    /// These states (ActivePendingState, ActiveState, ActiveErrorState,
     /// InactivePendingState, InactiveState, InactiveErrorState) specifically
     /// handle the Buy/Sell actions of given setups.
     /// </summary>

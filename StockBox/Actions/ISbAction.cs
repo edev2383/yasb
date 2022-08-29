@@ -19,5 +19,6 @@ namespace StockBox.Actions
          * 
          * */
         ActionResponse PerformAction();
+        ISbAction Clone();
     }
 }

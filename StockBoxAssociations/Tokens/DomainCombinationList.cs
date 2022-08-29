@@ -159,7 +159,7 @@ namespace StockBox.Associations.Tokens
 
             if (this.Count == 0) return ret;
             foreach (var item in this)
-                ret.Add(new ValidationResult(item.IntervalFrequency.IsOfSameType(this.First().IntervalFrequency), "Item is a homogenous match.", item));
+                ret.Add(new ValidationResult(item.IntervalFrequency.Equals(this.First().IntervalFrequency), "Item is a homogenous match.", item));
 
             return ret;
         }

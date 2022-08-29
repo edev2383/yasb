@@ -23,7 +23,7 @@ namespace StockBox.Actions
         {
         }
 
-        public override SbActionBase Clone()
+        public override ISbAction Clone()
         {
             return new Buy(this);
         }
