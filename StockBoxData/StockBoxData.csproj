@@ -17,11 +17,17 @@
 		<None Remove="Npgsql" />
 		<None Remove="Models\" />
 		<None Remove="NHibernate" />
+		<None Remove="Scraper\" />
+		<None Remove="Scraper\Providerws\" />
+		<None Remove="Scraper\Parsers\" />
+		<None Remove="HtmlAgilityPack" />
+		<None Remove="Scraper\Providers\Helpers\" />
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Deedle" Version="2.5.0" />
 		<PackageReference Include="Npgsql" Version="6.0.6" />
 		<PackageReference Include="NHibernate" Version="5.3.12" />
+		<PackageReference Include="HtmlAgilityPack" Version="1.11.45" />
 	</ItemGroup>
 	<ItemGroup>
 		<Folder Include="SBFrames\" />
@@ -33,6 +39,10 @@
 		<Folder Include="Context\" />
 		<Folder Include="Interfaces\" />
 		<Folder Include="Models\" />
+		<Folder Include="Scraper\" />
+		<Folder Include="Scraper\Providers\" />
+		<Folder Include="Scraper\Parsers\" />
+		<Folder Include="Scraper\Providers\Helpers\" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\StockBoxConfiguration\StockBoxConfiguration.csproj" />
