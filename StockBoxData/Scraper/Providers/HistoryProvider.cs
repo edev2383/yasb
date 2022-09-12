@@ -3,24 +3,21 @@ using System.IO;
 using System.Net;
 using StockBox.Data.Scraper.Providers.Helpers;
 
+
 namespace StockBox.Data.Scraper.Providers
 {
 
+    /// <summary>
+    /// Download the the requested history range/frequency and return as a
+    /// MemoryStream. The Adapters will convert the MemoryStream into an SbFrame
+    /// </summary>
     public class HistoryProvider : ScraperProviderBase
     {
 
-        //https://query1.finance.yahoo.com/v7/finance/download/AMD?period1=1631356149&period2=1662892149&interval=1d&events=history&includeAdjustedClose=true
-        //https://query1.finance.yahoo.com/v7/finance/download/AMD?period1=1631374718&period2=1662910718&interval=1wk&events=history&includeAdjustedClose=true
-        //https://query1.finance.yahoo.com/v7/finance/download/AMD?period1=1631374718&period2=1662910718&interval=1mo&events=history&includeAdjustedClose=true
-        // {{Symbol}}
-        // {{StartDateInt}}
-        // {{EndDateInt}}
-        // {{Interval}} == 1d, 1wk, 1mo
-        // 
         public HistoryProvider(HistoryProvider_InType inParams) : base(
             "https://query1.finance.yahoo.com/v7/finance/download/{{Symbol}}?period1={{StartDateInt}}&period2={{EndDateInt}}&interval={{Interval}}&events=history&includeAdjustedClose=true",
             inParams,
-            EProviderType.eString)
+            EProviderType.eMemoryStream)
         {
         }
 
@@ -28,10 +25,17 @@ namespace StockBox.Data.Scraper.Providers
         {
             public string Symbol { get; set; }
             public DateTime StartDate { get; set; }
+            /// <summary>
+            /// The end date of the history request. This date WILL BE included
+            /// in the result set. The additional 23:59:59 is automatically
+            /// added to the provided value
+            /// </summary>
             public DateTime EndDate { get; set; }
             public string Interval { get; set; }
+
+
             public int StartDateInt { get { return ConvertDateTimeToUnixEpoch(StartDate); } }
-            public int EndDateInt { get { return ConvertDateTimeToUnixEpoch(EndDate); } }
+            public int EndDateInt { get { return ConvertDateTimeToUnixEpoch(EndDate.AddHours(23).AddMinutes(59).AddSeconds(59)); } }
 
             private int ConvertDateTimeToUnixEpoch(DateTime? date)
             {
@@ -42,19 +46,19 @@ namespace StockBox.Data.Scraper.Providers
             }
         }
 
-
-        public override string LoadText()
+        public override MemoryStream LoadStream()
         {
             HttpWebRequest req = (HttpWebRequest)WebRequest.Create(Url);
             req.UserAgent = "Mozilla/5.0";
             var res = req.GetResponse();
-            MemoryStream memStream;
             StreamReader sr = new StreamReader(res.GetResponseStream());
-            string results = sr.ReadToEnd();
-            sr.Close();
-
-            return results;
-            //return base.LoadStream();
+            MemoryStream memstream = new MemoryStream();
+            var buffer = new byte[512];
+            var bytesRead = default(int);
+            while ((bytesRead = sr.BaseStream.Read(buffer, 0, buffer.Length)) > 0)
+                memstream.Write(buffer, 0, bytesRead);
+            memstream.Position = 0;
+            return memstream;
         }
     }
 }

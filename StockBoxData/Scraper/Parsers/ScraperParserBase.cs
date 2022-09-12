@@ -6,6 +6,11 @@ using HtmlAgilityPack;
 namespace StockBox.Data.Scraper.Parsers
 {
 
+    /// <summary>
+    /// A parser will receive a payload from a related Provider and will turn
+    /// the payload into a class-specific OutType. In the case of general web-
+    /// scraping, this will be completed via XPath, ex. CurrentParser.
+    /// </summary>
     public abstract class ScraperParserBase : ISbScraperParser
     {
         public string XPath { get { return _xpath; } }

@@ -3,8 +3,6 @@ using StockBox.Data.Scraper;
 using StockBox.Data.Scraper.Parsers;
 using StockBox.Data.Scraper.Providers;
 using System;
-using HtmlAgilityPack;
-using System.Text.RegularExpressions;
 
 namespace StockBox_UnitTests
 {
@@ -26,38 +24,17 @@ namespace StockBox_UnitTests
             var c = new CurrentProvider(cIn);
 
             Assert.AreEqual(c.Url, "https://finance.yahoo.com/quote/AMD/history");
-            //HtmlWeb web = new HtmlWeb();
-            //HtmlDocument doc = web.Load(url);
-            //var nodes = doc.DocumentNode.SelectNodes("//table[@data-test=\"historical-prices\"]//tbody//tr[1]//td//span//text()");
         }
 
         [TestMethod]
-        public void SB_Scraper_03_CurrentProviderReturnsExpectedPayloadAndParserPerformsExpectedMethod()
-        {
-            var cIn = new CurrentProvider.CurrentProvider_InType() { Symbol = "MSFT" };
-            var c = new CurrentProvider(cIn);
-
-            var parser = new CurrentParser();
-            var outpayload = parser.GetPayload(c.GetPayload());
-
-            Assert.IsInstanceOfType(outpayload, typeof(CurrentParser.CurrentProvider_OutType));
-            var castPayload = outpayload as CurrentParser.CurrentProvider_OutType;
-            Assert.IsNotNull(castPayload.Date);
-            Assert.IsNotNull(castPayload.High);
-            Assert.IsNotNull(castPayload.Low);
-            Assert.IsNotNull(castPayload.Open);
-            Assert.IsNotNull(castPayload.Close);
-            Assert.IsNotNull(castPayload.AdjClose);
-            Assert.IsNotNull(castPayload.Volume);
-        }
-
-        [TestMethod]
-        public void SB_Scraper_04_HistoryInTypeAndUrlParserWorksAsExpected()
+        public void SB_Scraper_03_HistoryInTypeAndUrlParserWorksAsExpected()
         {
             var startDate = new DateTime(2022, 8, 1);
             var endDate = new DateTime(2022, 8, 3);
+            // Monday, August 1, 2022 12:00:00 AM GMT-04:00 DST as integer
             var startDateInt = 1659326400;
-            var endDateInt = 1659499200;
+            // Wednesday, August 3, 2022 11:59:59 PM GMT-04:00 DST as integer
+            var endDateInt = 1659585599;
 
             var historyIn = new HistoryProvider.HistoryProvider_InType()
             {
@@ -69,12 +46,9 @@ namespace StockBox_UnitTests
 
             Assert.AreNotEqual(historyIn.EndDateInt, 0);
             Assert.AreNotEqual(historyIn.StartDateInt, 0);
-
             var history = new HistoryProvider(historyIn);
-
-            var historyPayload = history.GetPayload();
             Assert.AreEqual(history.Url, $"https://query1.finance.yahoo.com/v7/finance/download/{historyIn.Symbol}?period1={startDateInt}&period2={endDateInt}&interval={historyIn.Interval}&events=history&includeAdjustedClose=true");
-            Assert.IsTrue(historyPayload is string);
         }
+
     }
 }

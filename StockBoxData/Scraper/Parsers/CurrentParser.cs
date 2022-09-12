@@ -13,6 +13,10 @@ namespace StockBox.Data.Scraper.Parsers
     public class CurrentParser : ScraperParserBase
     {
 
+        /// <summary>
+        /// An enum declaring expected order of indexed information from the
+        /// CurrentProvider payload
+        /// </summary>
         protected enum ECurrentKeyOrder
         {
             eDate = 0,

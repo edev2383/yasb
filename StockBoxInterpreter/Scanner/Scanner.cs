@@ -138,7 +138,8 @@ namespace StockBox.Interpreter.Scanner
             Keyword keyword = _domainKeywords.Find(text);
 
             // if we don't find an actual DomainKeyword, add the type as
-            // a generic eIdentifier
+            // a generic eIdentifier. Currently we are not expecting generic
+            // identifiers and this will probably throw and error in the Parser.
             if (keyword.IsDeficient())
             {
                 AddToken((TokenType)eIdentifier);
