@@ -16,14 +16,14 @@ namespace StockBox_IntegrationTests
         [TestMethod]
         public void SB_Scraper_01_CurrentProviderReturnsExpectedPayloadAndParserPerformsExpectedMethod()
         {
-            var cIn = new CurrentProvider.CurrentProvider_InType() { Symbol = "MSFT" };
-            var c = new CurrentProvider(cIn);
+            var cIn = new CurrentYahooFinanceProvider.CurrentProvider_InType() { Symbol = "MSFT" };
+            var c = new CurrentYahooFinanceProvider(cIn);
 
-            var parser = new CurrentParser();
+            var parser = new CurrentYahooFinanceParser();
             var outpayload = parser.GetPayload(c.GetPayload());
 
-            Assert.IsInstanceOfType(outpayload, typeof(CurrentParser.CurrentProvider_OutType));
-            var castPayload = outpayload as CurrentParser.CurrentProvider_OutType;
+            Assert.IsInstanceOfType(outpayload, typeof(CurrentYahooFinanceParser.CurrentProvider_OutType));
+            var castPayload = outpayload as CurrentYahooFinanceParser.CurrentProvider_OutType;
             Assert.IsNotNull(castPayload.Date);
             Assert.IsNotNull(castPayload.High);
             Assert.IsNotNull(castPayload.Low);
@@ -36,9 +36,9 @@ namespace StockBox_IntegrationTests
         [TestMethod]
         public void SB_Scraper_02_ScraperClassActsAsSuccessfulMediator()
         {
-            var currentInParam = new CurrentProvider.CurrentProvider_InType() { Symbol = "TSLA", };
-            var scraper = new Scraper(new CurrentProvider(currentInParam), new CurrentParser());
-            var payload = scraper.Scrape() as CurrentParser.CurrentProvider_OutType;
+            var currentInParam = new CurrentYahooFinanceProvider.CurrentProvider_InType() { Symbol = "TSLA", };
+            var scraper = new Scraper(new CurrentYahooFinanceProvider(currentInParam), new CurrentYahooFinanceParser());
+            var payload = scraper.Scrape() as CurrentYahooFinanceParser.CurrentProvider_OutType;
             Assert.IsNotNull(payload);
             Assert.IsNotNull(payload.Date);
             Assert.IsNotNull(payload.High);
@@ -55,18 +55,18 @@ namespace StockBox_IntegrationTests
             var startDate = new DateTime(2022, 8, 1);
             var endDate = new DateTime(2022, 8, 3);
 
-            var historyIn = new HistoryProvider.HistoryProvider_InType()
+            var historyIn = new HistoryYahooFinanceProvider.HistoryYahooFinanceProvider_InType()
             {
                 Symbol = "MSFT",
                 StartDate = startDate,
                 EndDate = endDate,
-                Interval = "1d",
+                Interval = HistoryYahooFinanceProvider.EHistoryInterval.eDaily,
             };
 
             Assert.AreNotEqual(historyIn.EndDateInt, 0);
             Assert.AreNotEqual(historyIn.StartDateInt, 0);
 
-            var history = new HistoryProvider(historyIn);
+            var history = new HistoryYahooFinanceProvider(historyIn);
 
             var historyPayload = history.GetPayload();
             Assert.IsTrue(historyPayload is MemoryStream);
@@ -78,16 +78,16 @@ namespace StockBox_IntegrationTests
             var startDate = new DateTime(2022, 8, 1);
             var endDate = new DateTime(2022, 8, 3);
 
-            var historyIn = new HistoryProvider.HistoryProvider_InType()
+            var historyIn = new HistoryYahooFinanceProvider.HistoryYahooFinanceProvider_InType()
             {
                 Symbol = "MSFT",
                 StartDate = startDate,
                 EndDate = endDate,
-                Interval = "1d",
+                Interval = HistoryYahooFinanceProvider.EHistoryInterval.eDaily,
             };
 
-            var scraper = new Scraper(new HistoryProvider(historyIn), new HistoryParser());
-            var payload = scraper.Scrape() as HistoryParser.HistoryParser_OutType;
+            var scraper = new Scraper(new HistoryYahooFinanceProvider(historyIn), new HistoryYahooFinanceParser());
+            var payload = scraper.Scrape() as HistoryYahooFinanceParser.HistoryParser_OutType;
 
             Assert.IsNotNull(payload);
             Assert.IsNotNull(payload.Stream);
@@ -99,16 +99,16 @@ namespace StockBox_IntegrationTests
             var startDate = new DateTime(2022, 8, 1);
             var endDate = new DateTime(2022, 8, 3);
 
-            var historyIn = new HistoryProvider.HistoryProvider_InType()
+            var historyIn = new HistoryYahooFinanceProvider.HistoryYahooFinanceProvider_InType()
             {
                 Symbol = "MSFT",
                 StartDate = startDate,
                 EndDate = endDate,
-                Interval = "1d",
+                Interval = HistoryYahooFinanceProvider.EHistoryInterval.eDaily,
             };
 
-            var scraper = new Scraper(new HistoryProvider(historyIn), new HistoryParser());
-            var payload = scraper.Scrape() as HistoryParser.HistoryParser_OutType;
+            var scraper = new Scraper(new HistoryYahooFinanceProvider(historyIn), new HistoryYahooFinanceParser());
+            var payload = scraper.Scrape() as HistoryYahooFinanceParser.HistoryParser_OutType;
             Assert.IsNotNull(payload);
             Assert.IsNotNull(payload.Stream);
 

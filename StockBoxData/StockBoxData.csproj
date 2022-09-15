@@ -22,6 +22,7 @@
 		<None Remove="Scraper\Parsers\" />
 		<None Remove="HtmlAgilityPack" />
 		<None Remove="Scraper\Providers\Helpers\" />
+		<None Remove="Scraper\Helpers\" />
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Deedle" Version="2.5.0" />
@@ -43,6 +44,7 @@
 		<Folder Include="Scraper\Providers\" />
 		<Folder Include="Scraper\Parsers\" />
 		<Folder Include="Scraper\Providers\Helpers\" />
+		<Folder Include="Scraper\Helpers\" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\StockBoxConfiguration\StockBoxConfiguration.csproj" />

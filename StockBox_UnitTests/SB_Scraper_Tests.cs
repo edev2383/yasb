@@ -13,16 +13,15 @@ namespace StockBox_UnitTests
         [TestMethod]
         public void SB_Scraper_01_ScraperCanBeCreated()
         {
-            var scraper = new Scraper(new CurrentProvider(new CurrentProvider.CurrentProvider_InType()), new HistoryParser());
+            var scraper = new Scraper(new CurrentYahooFinanceProvider(new CurrentYahooFinanceProvider.CurrentProvider_InType()), new HistoryYahooFinanceParser());
             Assert.IsNotNull(scraper);
         }
 
         [TestMethod]
         public void SB_Scraper_02_ProviderUrlInterpolationWorksAsExpected()
         {
-            var cIn = new CurrentProvider.CurrentProvider_InType() { Symbol = "AMD" };
-            var c = new CurrentProvider(cIn);
-
+            var cIn = new CurrentYahooFinanceProvider.CurrentProvider_InType() { Symbol = "AMD" };
+            var c = new CurrentYahooFinanceProvider(cIn);
             Assert.AreEqual(c.Url, "https://finance.yahoo.com/quote/AMD/history");
         }
 
@@ -36,17 +35,18 @@ namespace StockBox_UnitTests
             // Wednesday, August 3, 2022 11:59:59 PM GMT-04:00 DST as integer
             var endDateInt = 1659585599;
 
-            var historyIn = new HistoryProvider.HistoryProvider_InType()
+            var historyIn = new HistoryYahooFinanceProvider.HistoryYahooFinanceProvider_InType()
             {
                 Symbol = "MSFT",
                 StartDate = startDate,
                 EndDate = endDate,
-                Interval = "1d",
+                Interval = HistoryYahooFinanceProvider.EHistoryInterval.eDaily,
             };
 
             Assert.AreNotEqual(historyIn.EndDateInt, 0);
             Assert.AreNotEqual(historyIn.StartDateInt, 0);
-            var history = new HistoryProvider(historyIn);
+
+            var history = new HistoryYahooFinanceProvider(historyIn);
             Assert.AreEqual(history.Url, $"https://query1.finance.yahoo.com/v7/finance/download/{historyIn.Symbol}?period1={startDateInt}&period2={endDateInt}&interval={historyIn.Interval}&events=history&includeAdjustedClose=true");
         }
 

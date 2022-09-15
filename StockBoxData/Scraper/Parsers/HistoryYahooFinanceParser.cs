@@ -9,9 +9,10 @@ namespace StockBox.Data.Scraper.Parsers
     /// No parsing is currently needed in this particular parser, just passing
     /// the provided MemoryStream object back out as an OutType property
     /// </summary>
-    public class HistoryParser : ScraperParserBase
+    public class HistoryYahooFinanceParser : ScraperParserBase
     {
-        public HistoryParser()
+
+        public HistoryYahooFinanceParser()
         {
         }
 
@@ -22,9 +23,10 @@ namespace StockBox.Data.Scraper.Parsers
 
         protected override OutType GetPayload(MemoryStream stream)
         {
-            var ret = new HistoryParser_OutType();
-            ret.Stream = stream;
-            return ret;
+            return new HistoryParser_OutType()
+            {
+                Stream = stream,
+            };
         }
     }
 }

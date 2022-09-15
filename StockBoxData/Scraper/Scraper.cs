@@ -7,7 +7,7 @@ namespace StockBox.Data.Scraper
 {
     /// <summary>
     /// A mediator class that takes a Provider and Parser as arguments. Returns
-    /// the payload Parser.OutType
+    /// the payload Parser.OutType.
     /// </summary>
     public class Scraper
     {

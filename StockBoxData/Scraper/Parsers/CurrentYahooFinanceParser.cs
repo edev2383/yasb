@@ -10,7 +10,7 @@ namespace StockBox.Data.Scraper.Parsers
     /// points to histoy stock data, and the Parser XPath points to the first
     /// row of the found table 
     /// </summary>
-    public class CurrentParser : ScraperParserBase
+    public class CurrentYahooFinanceParser : ScraperParserBase
     {
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace StockBox.Data.Scraper.Parsers
             eVolume
         };
 
-        public CurrentParser() : base("//table[@data-test=\"historical-prices\"]//tbody//tr[1]//td//span//text()")
+        public CurrentYahooFinanceParser() : base("//table[@data-test=\"historical-prices\"]//tbody//tr[1]//td//span//text()")
         {
         }
 

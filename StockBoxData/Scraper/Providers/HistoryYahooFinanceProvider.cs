@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using StockBox.Data.Scraper.Helpers;
 using StockBox.Data.Scraper.Providers.Helpers;
-
 
 namespace StockBox.Data.Scraper.Providers
 {
@@ -11,17 +11,25 @@ namespace StockBox.Data.Scraper.Providers
     /// Download the the requested history range/frequency and return as a
     /// MemoryStream. The Adapters will convert the MemoryStream into an SbFrame
     /// </summary>
-    public class HistoryProvider : ScraperProviderBase
+    public class HistoryYahooFinanceProvider : ScraperProviderBase
     {
 
-        public HistoryProvider(HistoryProvider_InType inParams) : base(
-            "https://query1.finance.yahoo.com/v7/finance/download/{{Symbol}}?period1={{StartDateInt}}&period2={{EndDateInt}}&interval={{Interval}}&events=history&includeAdjustedClose=true",
-            inParams,
-            EProviderType.eMemoryStream)
+        public enum EHistoryInterval
+        {
+            eDaily = 0,
+            eWeekly,
+            eMonthly
+        }
+
+        public HistoryYahooFinanceProvider(HistoryYahooFinanceProvider_InType inParams)
+            : base(
+                ScraperResources.Url_YahooFinance_History,
+                inParams,
+                EProviderType.eMemoryStream)
         {
         }
 
-        public class HistoryProvider_InType : InType
+        public class HistoryYahooFinanceProvider_InType : InType
         {
             public string Symbol { get; set; }
             public DateTime StartDate { get; set; }
@@ -31,8 +39,8 @@ namespace StockBox.Data.Scraper.Providers
             /// added to the provided value
             /// </summary>
             public DateTime EndDate { get; set; }
-            public string Interval { get; set; }
-
+            public EHistoryInterval Interval { get; set; }
+            public string IntervalStr { get { return MapInterval(Interval); } }
 
             public int StartDateInt { get { return ConvertDateTimeToUnixEpoch(StartDate); } }
             public int EndDateInt { get { return ConvertDateTimeToUnixEpoch(EndDate.AddHours(23).AddMinutes(59).AddSeconds(59)); } }
@@ -44,12 +52,25 @@ namespace StockBox.Data.Scraper.Providers
                 TimeSpan diff = ((DateTime)date).ToUniversalTime() - origin;
                 return (int)Math.Floor(diff.TotalSeconds);
             }
+
+            private string MapInterval(EHistoryInterval interval)
+            {
+                switch (interval)
+                {
+                    case EHistoryInterval.eWeekly:
+                        return ScraperResources.Interval_YahooFinance_Weekly;
+                    case EHistoryInterval.eMonthly:
+                        return ScraperResources.Interval_YahooFinance_Monthly;
+                    default:
+                        return ScraperResources.Interval_YahooFinance_Daily;
+                }
+            }
         }
 
         public override MemoryStream LoadStream()
         {
             HttpWebRequest req = (HttpWebRequest)WebRequest.Create(Url);
-            req.UserAgent = "Mozilla/5.0";
+            req.UserAgent = ScraperResources.UserAgent;
             var res = req.GetResponse();
             StreamReader sr = new StreamReader(res.GetResponseStream());
             MemoryStream memstream = new MemoryStream();
