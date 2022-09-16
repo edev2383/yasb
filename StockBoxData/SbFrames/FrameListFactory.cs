@@ -7,6 +7,7 @@ using StockBox.Data.Scraper;
 using StockBox.Data.Scraper.Parsers;
 using StockBox.Data.Scraper.Providers;
 
+
 namespace StockBox.Data.SbFrames
 {
 
@@ -36,17 +37,17 @@ namespace StockBox.Data.SbFrames
         {
             SbFrameList ret = new SbFrameList();
 
-            var daily = CreateDailySbFrame(combos.GetDailyDomainCombos(), symbol);
-            if (daily != null)
-                ret.Add(daily);
+            var dailyCombos = combos.GetDailyDomainCombos();
+            if (dailyCombos.Count > 0)
+                ret.Add(CreateDailySbFrame(dailyCombos, symbol));
 
-            var weekly = CreateWeeklySbFrame(combos.GetWeeklyDomainCombos(), symbol);
-            if (weekly != null)
-                ret.Add(weekly);
+            var weeklyCombos = combos.GetWeeklyDomainCombos();
+            if (weeklyCombos.Count > 0)
+                ret.Add(CreateWeeklySbFrame(weeklyCombos, symbol));
 
-            var monthly = CreateMonthlySbFrame(combos.GetMonthyDomainCombos(), symbol);
-            if (monthly != null)
-                ret.Add(monthly);
+            var monthlyCombos = combos.GetMonthyDomainCombos();
+            if (monthlyCombos.Count > 0)
+                ret.Add(CreateMonthlySbFrame(monthlyCombos, symbol));
 
             return ret;
         }
@@ -79,7 +80,7 @@ namespace StockBox.Data.SbFrames
         {
             var ret = new WeeklyFrame(_adapter.Create());
 
-            var interval = HistoryYahooFinanceProvider.EHistoryInterval.eDaily;
+            var interval = HistoryYahooFinanceProvider.EHistoryInterval.eWeekly;
 
             var inType = new HistoryYahooFinanceProvider.HistoryYahooFinanceProvider_InType()
             {
@@ -103,7 +104,7 @@ namespace StockBox.Data.SbFrames
         {
             var ret = new MonthlyFrame(_adapter.Create());
 
-            var interval = HistoryYahooFinanceProvider.EHistoryInterval.eDaily;
+            var interval = HistoryYahooFinanceProvider.EHistoryInterval.eMonthly;
 
             var inType = new HistoryYahooFinanceProvider.HistoryYahooFinanceProvider_InType()
             {

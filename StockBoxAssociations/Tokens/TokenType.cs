@@ -107,6 +107,9 @@ namespace StockBox.Associations.Tokens
         eBegin,
         eEnd,
 
+        //
+        eLast,
+
         // file
         eEOF,
     }

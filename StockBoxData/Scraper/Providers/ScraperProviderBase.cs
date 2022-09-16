@@ -3,6 +3,7 @@ using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using HtmlAgilityPack;
+using StockBox.Data.Scraper.Helpers;
 using StockBox.Data.Scraper.Providers.Helpers;
 
 
@@ -113,8 +114,7 @@ namespace StockBox.Data.Scraper.Providers
         protected string FormatUrl()
         {
             var ret = _url;
-            var re = "{{(.*?)}}";
-            var allMatches = Regex.Matches(_url, re);
+            var allMatches = Regex.Matches(_url, ScraperResources.UrlFormRegexPattern);
             foreach (Match m in allMatches)
             {
                 var inFoundMatch = m.Groups[0].Value;

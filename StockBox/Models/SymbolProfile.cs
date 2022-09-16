@@ -40,7 +40,7 @@ namespace StockBox.Models
 
         public bool IsRelatedBySetup(Setup setup)
         {
-            return Equals(setup.OriginState);
+            return State.Equals(setup.OriginState);
         }
     }
 }

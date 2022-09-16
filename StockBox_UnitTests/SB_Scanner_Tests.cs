@@ -387,6 +387,21 @@ namespace StockBox_UnitTests
             Assert.AreEqual(tokens[^1].Type, TokenType.eEOF);
         }
 
+        [TestMethod]
+        public void SBC_34_ScannerCanRecogizeKeywordLast()
+        {
+            var scanner = new Scanner("Last week close");
+            var tokens = scanner.ScanTokens();
+            Assert.IsTrue(tokens.Count == 4);
+            Assert.AreEqual(tokens[0].Lexeme, "Last");
+            Assert.AreEqual(tokens[0].Literal, 1);
+            Assert.AreEqual(tokens[1].Type, TokenType.eWeekly);
+            Assert.AreEqual(tokens[2].Type, TokenType.eColumn);
+            Assert.AreEqual(tokens[2].Lexeme, "close");
+            Assert.AreEqual(tokens[2].Literal, "close");
+            Assert.AreEqual(tokens[3].Type, TokenType.eEOF);
+        }
+
         private TokenList GetTokens(EFile target)
         {
             var contents = new Reader().GetFileContents(target);

@@ -158,8 +158,9 @@ namespace StockBox.Associations.Tokens
             var ret = new ValidationResultList();
 
             if (this.Count == 0) return ret;
+            var type = this.First().IntervalFrequency.Type;
             foreach (var item in this)
-                ret.Add(new ValidationResult(item.IntervalFrequency.Equals(this.First().IntervalFrequency), "Item is a homogenous match.", item));
+                ret.Add(new ValidationResult(item.IntervalFrequency.Type == type, "Item is a homogenous match.", item));
 
             return ret;
         }

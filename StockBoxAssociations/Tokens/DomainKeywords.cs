@@ -27,6 +27,8 @@
             Add("months", TokenType.eMonthly);
             Add("monthly", TokenType.eMonthly);
 
+            Add("last", TokenType.eLast);
+
             Add("and", TokenType.eAnd);
 
             #region Ignore Tokens

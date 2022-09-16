@@ -19,7 +19,7 @@ namespace StockBox.Controllers
     /// DomainController runs all provided setups and symbols as a snapshot in
     /// time, with the zero index being the most recent datetime key
     /// </summary>
-    public class DomainController
+    public class DomainController : IValidationResultsListProvider
     {
 
         private readonly ISbService _service;
@@ -65,7 +65,7 @@ namespace StockBox.Controllers
 
                 // pass the service to the Setup, which will break all of the
                 // rule statements into an Expression list
-                setup.Process(_service);
+                localSetup.Process(_service);
 
                 // analyze the expression list to get details about the needed
                 // dataset
@@ -84,10 +84,11 @@ namespace StockBox.Controllers
                 // if there are no errors to the evaluation, try to transition
                 // to the newest state
                 if (evalResult.Success)
+                {
                     innerVr.AddRange(localSm.TryNextState(localSetup.Action.TransitionState));
-
-                if (innerVr.Success)
-                    innerVr.AddRange(PerformSetupAction(localSetup));
+                    if (innerVr.Success)
+                        innerVr.AddRange(PerformSetupAction(localSetup));
+                }
 
                 ret.AddRange(innerVr);
                 ret.AddRange(evalResult);
@@ -97,10 +98,16 @@ namespace StockBox.Controllers
 
         private ValidationResultList PerformSetupAction(Setup setup)
         {
-            var ret = new ValidationResultList();
-            if (setup.Action != null)
+            var vr = new ValidationResultList();
+            vr.Add(new ValidationResult(setup.Action != null, "Setup MUST HAVE an action"));
+            if (vr.Success)
                 setup.Action.PerformAction();
-            return ret;
+            return vr;
+        }
+
+        public ValidationResultList GetResults()
+        {
+            return _results;
         }
     }
 }

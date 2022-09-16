@@ -14,5 +14,7 @@ namespace StockBox.Data.Scraper.Helpers
         public static string Interval_YahooFinance_Monthly = "1mo";
 
         public static string UserAgent = "Mozilla/5.0";
+
+        public static string UrlFormRegexPattern = "{{(.*?)}}";
     }
 }

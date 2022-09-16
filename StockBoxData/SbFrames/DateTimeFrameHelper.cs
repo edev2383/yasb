@@ -9,6 +9,7 @@ namespace StockBox.Data.SbFrames
         public static DateTime Get(DomainCombinationList combos, EHistoryInterval interval)
         {
             var max = combos.GetMaxIndex();
+            if (max == 0) max = 2;
             var multiplier = 1;
             switch (interval)
             {
@@ -21,7 +22,7 @@ namespace StockBox.Data.SbFrames
                 default:
                     break;
             }
-            return DateTime.Now.AddDays((-1) * multiplier * max);
+            return DateTime.Now.AddDays((-2) * multiplier * max);
         }
     }
 }
