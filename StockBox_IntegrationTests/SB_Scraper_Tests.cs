@@ -37,7 +37,7 @@ namespace StockBox_IntegrationTests
         public void SB_Scraper_02_ScraperClassActsAsSuccessfulMediator()
         {
             var currentInParam = new CurrentYahooFinanceProvider.CurrentProvider_InType() { Symbol = "TSLA", };
-            var scraper = new Scraper(new CurrentYahooFinanceProvider(currentInParam), new CurrentYahooFinanceParser());
+            var scraper = new SbScraper(new CurrentYahooFinanceProvider(currentInParam), new CurrentYahooFinanceParser());
             var payload = scraper.Scrape() as CurrentYahooFinanceParser.CurrentProvider_OutType;
             Assert.IsNotNull(payload);
             Assert.IsNotNull(payload.Date);
@@ -86,7 +86,7 @@ namespace StockBox_IntegrationTests
                 Interval = HistoryYahooFinanceProvider.EHistoryInterval.eDaily,
             };
 
-            var scraper = new Scraper(new HistoryYahooFinanceProvider(historyIn), new HistoryYahooFinanceParser());
+            var scraper = new SbScraper(new HistoryYahooFinanceProvider(historyIn), new HistoryYahooFinanceParser());
             var payload = scraper.Scrape() as HistoryYahooFinanceParser.HistoryParser_OutType;
 
             Assert.IsNotNull(payload);
@@ -107,7 +107,7 @@ namespace StockBox_IntegrationTests
                 Interval = HistoryYahooFinanceProvider.EHistoryInterval.eDaily,
             };
 
-            var scraper = new Scraper(new HistoryYahooFinanceProvider(historyIn), new HistoryYahooFinanceParser());
+            var scraper = new SbScraper(new HistoryYahooFinanceProvider(historyIn), new HistoryYahooFinanceParser());
             var payload = scraper.Scrape() as HistoryYahooFinanceParser.HistoryParser_OutType;
             Assert.IsNotNull(payload);
             Assert.IsNotNull(payload.Stream);

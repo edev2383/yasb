@@ -2,6 +2,7 @@
 using StockBox.Data.Adapters.DataFrame;
 using StockBox.Data.Context;
 using StockBox.Data.SbFrames;
+using StockBox.Data.Scraper;
 using StockBox.Interpreter;
 using StockBox.Interpreter.Scanner;
 using StockBox.Models;
@@ -15,7 +16,8 @@ namespace StockBox.Controllers
 {
 
     /// <summary>
-    /// 
+    /// DomainController runs all provided setups and symbols as a snapshot in
+    /// time, with the zero index being the most recent datetime key
     /// </summary>
     public class DomainController
     {
@@ -72,8 +74,8 @@ namespace StockBox.Controllers
 
                 // create the desired framelist from the provided context
                 // provider and the analyzed domain combos
-                var factory = new FrameListFactory(new CallContext(""), new DeedleAdapter());
-                var frameList = factory.Create(expressionAnalyzer.Combos);
+                var factory = new FrameListFactory(new SbScraper(), new DeedleAdapter());
+                var frameList = factory.Create(expressionAnalyzer.Combos, sp.Symbol);
 
                 // pass the interpreter, injected w/ the created framelist to
                 // the setup and run the evaluation
@@ -96,7 +98,8 @@ namespace StockBox.Controllers
         private ValidationResultList PerformSetupAction(Setup setup)
         {
             var ret = new ValidationResultList();
-            var action = setup.Action.PerformAction();
+            if (setup.Action != null)
+                setup.Action.PerformAction();
             return ret;
         }
     }

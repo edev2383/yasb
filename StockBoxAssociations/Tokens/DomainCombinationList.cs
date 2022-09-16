@@ -86,7 +86,7 @@ namespace StockBox.Associations.Tokens
         public DomainCombinationList GetDomainColumns()
         {
             if (IsHomogenousGroup().HasFailures)
-                throw new Exception("The DomainCombinationList being queried contains more than on type of IntervalFrequency Token. Before calling `GetDomainColumns`, request a specific frequency subset of data, i.e., GetDailyDomainCombos()");
+                throw new Exception("The DomainCombinationList being queried contains more than one type of IntervalFrequency Token. Before calling `GetDomainColumns`, request a specific frequency subset of data, i.e., GetDailyDomainCombos()");
 
             var ret = new DomainCombinationList();
             foreach (var item in this)
@@ -102,7 +102,7 @@ namespace StockBox.Associations.Tokens
         public DomainCombinationList GetIndicators()
         {
             if (IsHomogenousGroup().HasFailures)
-                throw new Exception("The DomainCombinationList being queried contains more than on type of IntervalFrequency Token. Before calling `GetIndicators`, request a specific frequency subset of data, i.e., GetDailyDomainCombos()");
+                throw new Exception("The DomainCombinationList being queried contains more than one type of IntervalFrequency Token. Before calling `GetIndicators`, request a specific frequency subset of data, i.e., GetDailyDomainCombos()");
 
             var ret = new DomainCombinationList();
             foreach (var item in this)
@@ -118,7 +118,7 @@ namespace StockBox.Associations.Tokens
         public double GetMaxIndex()
         {
             if (IsHomogenousGroup().HasFailures)
-                throw new Exception("The DomainCombinationList being queried contains more than on type of IntervalFrequency Token. Before calling `GetIndicators`, request a specific frequency subset of data, i.e., GetDailyDomainCombos()");
+                throw new Exception("The DomainCombinationList being queried contains more than one type of IntervalFrequency Token. Before calling `GetIndicators`, request a specific frequency subset of data, i.e., GetDailyDomainCombos()");
 
             return this.Select(x => x.IntervalIndex).Max();
         }

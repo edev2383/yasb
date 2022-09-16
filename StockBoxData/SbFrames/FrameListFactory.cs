@@ -3,6 +3,9 @@ using StockBox.Associations;
 using StockBox.Associations.Tokens;
 using StockBox.Data.Adapters.DataFrame;
 using StockBox.Data.Indicators;
+using StockBox.Data.Scraper;
+using StockBox.Data.Scraper.Parsers;
+using StockBox.Data.Scraper.Providers;
 
 namespace StockBox.Data.SbFrames
 {
@@ -29,45 +32,93 @@ namespace StockBox.Data.SbFrames
             _adapter = adapter;
         }
 
-        public SbFrameList Create(DomainCombinationList combos)
+        public SbFrameList Create(DomainCombinationList combos, ISymbolProvider symbol)
         {
             SbFrameList ret = new SbFrameList();
 
-            var daily = CreateDailySbFrame(combos.GetDailyDomainCombos());
+            var daily = CreateDailySbFrame(combos.GetDailyDomainCombos(), symbol);
             if (daily != null)
                 ret.Add(daily);
 
-            var weekly = CreateWeeklySbFrame(combos.GetWeeklyDomainCombos());
+            var weekly = CreateWeeklySbFrame(combos.GetWeeklyDomainCombos(), symbol);
             if (weekly != null)
                 ret.Add(weekly);
 
-            var monthly = CreateMonthlySbFrame(combos.GetMonthyDomainCombos());
+            var monthly = CreateMonthlySbFrame(combos.GetMonthyDomainCombos(), symbol);
             if (monthly != null)
                 ret.Add(monthly);
 
             return ret;
         }
 
-        public SbFrame CreateDailySbFrame(DomainCombinationList dailyCombos)
+        public SbFrame CreateDailySbFrame(DomainCombinationList dailyCombos, ISymbolProvider symbol)
         {
             var ret = new DailyFrame(_adapter.Create());
-            ret.AddData(_ctx.GetDaily());
+
+            var interval = HistoryYahooFinanceProvider.EHistoryInterval.eDaily;
+
+            var inType = new HistoryYahooFinanceProvider.HistoryYahooFinanceProvider_InType()
+            {
+                Symbol = symbol.Name,
+                Interval = interval,
+                EndDate = DateTime.Now,
+                StartDate = DateTimeFrameHelper.Get(dailyCombos, interval),
+            };
+
+            var scraperProvider = new HistoryYahooFinanceProvider(inType);
+            var scraperParser = new HistoryYahooFinanceParser();
+            var scraper = new SbScraper(scraperProvider, scraperParser);
+            var payload = scraper.Scrape() as HistoryYahooFinanceParser.HistoryParser_OutType;
+
+            ret.AddData(payload.Stream);
             MapIndicators(ret, dailyCombos);
             return ret;
         }
 
-        public SbFrame CreateWeeklySbFrame(DomainCombinationList weeklyCombos)
+        public SbFrame CreateWeeklySbFrame(DomainCombinationList weeklyCombos, ISymbolProvider symbol)
         {
             var ret = new WeeklyFrame(_adapter.Create());
-            ret.AddData(_ctx.GetWeekly());
+
+            var interval = HistoryYahooFinanceProvider.EHistoryInterval.eDaily;
+
+            var inType = new HistoryYahooFinanceProvider.HistoryYahooFinanceProvider_InType()
+            {
+                Symbol = symbol.Name,
+                Interval = interval,
+                EndDate = DateTime.Now,
+                StartDate = DateTimeFrameHelper.Get(weeklyCombos, interval),
+            };
+
+            var scraperProvider = new HistoryYahooFinanceProvider(inType);
+            var scraperParser = new HistoryYahooFinanceParser();
+            var scraper = new SbScraper(scraperProvider, scraperParser);
+            var payload = scraper.Scrape() as HistoryYahooFinanceParser.HistoryParser_OutType;
+
+            ret.AddData(payload.Stream);
             MapIndicators(ret, weeklyCombos);
             return ret;
         }
 
-        public SbFrame CreateMonthlySbFrame(DomainCombinationList monthlyCombos)
+        public SbFrame CreateMonthlySbFrame(DomainCombinationList monthlyCombos, ISymbolProvider symbol)
         {
             var ret = new MonthlyFrame(_adapter.Create());
-            ret.AddData(_ctx.GetMontly());
+
+            var interval = HistoryYahooFinanceProvider.EHistoryInterval.eDaily;
+
+            var inType = new HistoryYahooFinanceProvider.HistoryYahooFinanceProvider_InType()
+            {
+                Symbol = symbol.Name,
+                Interval = interval,
+                EndDate = DateTime.Now,
+                StartDate = DateTimeFrameHelper.Get(monthlyCombos, interval),
+            };
+
+            var scraperProvider = new HistoryYahooFinanceProvider(inType);
+            var scraperParser = new HistoryYahooFinanceParser();
+            var scraper = new SbScraper(scraperProvider, scraperParser);
+            var payload = scraper.Scrape() as HistoryYahooFinanceParser.HistoryParser_OutType;
+
+            ret.AddData(payload.Stream);
             MapIndicators(ret, monthlyCombos);
             return ret;
         }

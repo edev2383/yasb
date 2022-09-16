@@ -13,7 +13,7 @@ namespace StockBox_UnitTests
         [TestMethod]
         public void SB_Scraper_01_ScraperCanBeCreated()
         {
-            var scraper = new Scraper(new CurrentYahooFinanceProvider(new CurrentYahooFinanceProvider.CurrentProvider_InType()), new HistoryYahooFinanceParser());
+            var scraper = new SbScraper(new CurrentYahooFinanceProvider(new CurrentYahooFinanceProvider.CurrentProvider_InType()), new HistoryYahooFinanceParser());
             Assert.IsNotNull(scraper);
         }
 

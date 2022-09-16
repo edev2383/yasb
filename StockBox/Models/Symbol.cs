@@ -1,5 +1,5 @@
 ﻿using System;
-
+using StockBox.Associations;
 
 namespace StockBox.Models
 {
@@ -7,7 +7,7 @@ namespace StockBox.Models
     /// <summary>
     /// 
     /// </summary>
-    public class Symbol
+    public class Symbol : ISymbolProvider
     {
 
         public Guid? Token { get; set; }

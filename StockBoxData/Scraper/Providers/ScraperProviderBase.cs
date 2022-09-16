@@ -28,10 +28,14 @@ namespace StockBox.Data.Scraper.Providers
         /// </summary>
         private readonly EProviderType _type;
 
-        public ScraperProviderBase(string url, InType inParams, EProviderType type)
+        public ScraperProviderBase(string url, InType inParams, EProviderType type) : this(url, type)
+        {
+            In = inParams;
+        }
+
+        public ScraperProviderBase(string url, EProviderType type)
         {
             _url = url;
-            In = inParams;
             _type = type;
         }
 
