@@ -73,8 +73,6 @@ namespace StockBox_UnitTests
 
             // this results list will be an aggregate of all scanner and parser
             // actions
-            var results = service.GetResults();
-
             var exprResults = rulelist.Evalute(new SbInterpreter());
 
             Assert.AreEqual(rulelist.Expressions.Count, 4);

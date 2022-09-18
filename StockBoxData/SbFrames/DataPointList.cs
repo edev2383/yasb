@@ -21,7 +21,7 @@ namespace StockBox.Data.SbFrames
             get
             {
                 if (Count == 0) return new DataPoint();
-                return this[Count - 1];
+                return this[^1];
             }
         }
 
@@ -70,12 +70,26 @@ namespace StockBox.Data.SbFrames
                 case EIndicatorType.eSma:
                     MapIndicator((SimpleMovingAverage)indicator);
                     break;
+                case EIndicatorType.eVolume:
+                    MapIndicator((Volume)indicator);
+                    break;
                 default:
                     break;
             }
         }
 
         private void MapIndicator(SimpleMovingAverage sma)
+        {
+            var payload = (Dictionary<DateTime, double>)sma.Payload;
+            foreach (KeyValuePair<DateTime, double> item in payload)
+            {
+                var foundDataPoint = FindByDate(item.Key);
+                if (foundDataPoint != null)
+                    foundDataPoint.AddIndicatorValue(sma.Name, item.Value);
+            }
+        }
+
+        private void MapIndicator(Volume sma)
         {
             var payload = (Dictionary<DateTime, double>)sma.Payload;
             foreach (KeyValuePair<DateTime, double> item in payload)

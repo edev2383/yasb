@@ -56,13 +56,18 @@ namespace StockBox.Data.SbFrames
         {
             var ret = new DailyFrame(_adapter.Create());
 
+            // for now, we're creating the scraper directly in here,
+            // we need to break that out into a respository of some
+            // sort so we can create/account for different source
+            // providers. All we care about at this point is that the
+            // final object returned provides a Memory stream
             var interval = HistoryYahooFinanceProvider.EHistoryInterval.eDaily;
 
             var inType = new HistoryYahooFinanceProvider.HistoryYahooFinanceProvider_InType()
             {
                 Symbol = symbol.Name,
                 Interval = interval,
-                EndDate = DateTime.Now,
+                EndDate = DateTimeFrameHelper.GetOrigin(),
                 StartDate = DateTimeFrameHelper.Get(dailyCombos, interval),
             };
 
@@ -86,7 +91,7 @@ namespace StockBox.Data.SbFrames
             {
                 Symbol = symbol.Name,
                 Interval = interval,
-                EndDate = DateTime.Now,
+                EndDate = DateTimeFrameHelper.GetOrigin(),
                 StartDate = DateTimeFrameHelper.Get(weeklyCombos, interval),
             };
 
@@ -110,7 +115,7 @@ namespace StockBox.Data.SbFrames
             {
                 Symbol = symbol.Name,
                 Interval = interval,
-                EndDate = DateTime.Now,
+                EndDate = DateTimeFrameHelper.GetOrigin(),
                 StartDate = DateTimeFrameHelper.Get(monthlyCombos, interval),
             };
 

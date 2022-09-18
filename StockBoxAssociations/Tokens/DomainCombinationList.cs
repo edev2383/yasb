@@ -123,6 +123,16 @@ namespace StockBox.Associations.Tokens
             return this.Select(x => x.IntervalIndex).Max();
         }
 
+        public double GetMaxIndicatorIndex()
+        {
+            if (IsHomogenousGroup().HasFailures)
+                throw new Exception("The DomainCombinationList being queried contains more than one type of IntervalFrequency Token. Before calling `GetIndicators`, request a specific frequency subset of data, i.e., GetDailyDomainCombos()");
+            var grp = new List<int>();
+            foreach (var item in GetIndicators())
+                grp.AddRange(item.Indices);
+            return grp.Count > 0 ? (double)grp.Max() : 0;
+        }
+
         /// <summary>
         /// 
         /// </summary>

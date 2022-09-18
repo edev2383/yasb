@@ -16,6 +16,7 @@ namespace StockBox.Associations.Tokens
         eSemicolon,
         eSlash,
         eStar,
+        ePercent,
 
         // one, or two char related tokens
         eBang,

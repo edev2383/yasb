@@ -402,6 +402,21 @@ namespace StockBox_UnitTests
             Assert.AreEqual(tokens[3].Type, TokenType.eEOF);
         }
 
+        [TestMethod]
+        public void SBC_34_ScannerCanRecognizeCharPercent()
+        {
+            var scanner = new Scanner("20%");
+            var tokens = scanner.ScanTokens();
+            Assert.IsTrue(tokens.Count == 4);
+            Assert.AreEqual(tokens[0].Lexeme, "20");
+            Assert.AreEqual(tokens[0].Literal, 20d);
+            Assert.AreEqual(tokens[0].Type, TokenType.eNumber);
+            Assert.AreEqual(tokens[1].Type, TokenType.eSlash);
+            Assert.AreEqual(tokens[2].Type, TokenType.eNumber);
+            Assert.AreEqual(tokens[2].Literal, 100);
+            Assert.AreEqual(tokens[^1].Type, TokenType.eEOF);
+        }
+
         private TokenList GetTokens(EFile target)
         {
             var contents = new Reader().GetFileContents(target);

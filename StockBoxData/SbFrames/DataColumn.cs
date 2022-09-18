@@ -19,6 +19,7 @@ namespace StockBox.Data.SbFrames
 
             // indicator columns
             eSma,
+            eVolumeSma,
             eEma,
             eSloSto,
             eBBandsLower,
@@ -78,6 +79,9 @@ namespace StockBox.Data.SbFrames
                 case EColumns.eSloSto:
                     ret = $"SlowSto({string.Join(",", _indices)})";
                     break;
+                case EColumns.eVolumeSma:
+                    ret = $"Volume({string.Join(",", _indices)})";
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException($"Unknown column value provided {_column}");
             }
@@ -104,6 +108,8 @@ namespace StockBox.Data.SbFrames
                     return EColumns.eClose;
                 case "sma":
                     return EColumns.eSma;
+                case "volume":
+                    return EColumns.eVolumeSma;
                 default:
                     throw new ArgumentOutOfRangeException();
             }

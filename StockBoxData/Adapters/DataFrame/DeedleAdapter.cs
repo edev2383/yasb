@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using Deedle;
 using StockBox.Data.SbFrames;
 
 namespace StockBox.Data.Adapters.DataFrame
@@ -16,6 +18,16 @@ namespace StockBox.Data.Adapters.DataFrame
         public override IDataFrameAdapter Create()
         {
             return new DeedleAdapter();
+        }
+
+        /// <summary>
+        /// Override so we can reverse the data chronologically
+        /// </summary>
+        /// <param name="data"></param>
+        public override void AddData(MemoryStream data)
+        {
+            base.AddData(data);
+            _data = _data.Reversed;
         }
     }
 }

@@ -103,6 +103,12 @@ namespace StockBox.Interpreter.Scanner
                     if (Match('&'))
                         AddToken(eAnd);
                     break;
+                case '%':
+                    {
+                        AddToken(TokenType.eSlash);
+                        AddToken(TokenType.eNumber, 100);
+                        break;
+                    }
                 case ' ':
                 case '\r':
                 case '\t':

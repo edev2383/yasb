@@ -14,7 +14,7 @@ namespace StockBox.Data.SbFrames
             IndicatorDataPoint ret = null;
 
             foreach (var item in this)
-                if (item.Key == key)
+                if (item.Key.ToLower() == key.ToLower())
                     ret = item;
 
             return ret;

@@ -67,6 +67,17 @@ namespace StockBox_UnitTests
             Assert.IsInstanceOfType(left.Right, typeof(DomainLiteral));
         }
 
+        [TestMethod]
+        public void SB_Parser_05_PercentExprParsedCorrectly()
+        {
+            var p = GetParserWithSource("20%");
+            var expression = p.Parse();
+            Assert.IsInstanceOfType(expression, typeof(Binary));
+            Assert.IsInstanceOfType(expression.Left, typeof(Literal));
+            Assert.IsInstanceOfType(expression.Operator, typeof(Token));
+            Assert.IsInstanceOfType(expression.Right, typeof(Literal));
+        }
+
         private Parser GetParserWithSource(string source)
         {
             var s = new Scanner(source);

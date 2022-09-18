@@ -43,7 +43,7 @@ namespace StockBox.Data.Adapters.DataFrame
             AddData(data);
         }
 
-        public void AddData(MemoryStream data)
+        public virtual void AddData(MemoryStream data)
         {
             var rawData = Frame.ReadCsv(data);
             _sourceData = rawData.IndexRows<DateTime>("Date").SortRowsByKey();
