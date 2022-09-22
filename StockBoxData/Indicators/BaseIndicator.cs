@@ -1,8 +1,11 @@
 ﻿using System.Linq;
 using StockBox.Data.Adapters.DataFrame;
 
+
 namespace StockBox.Data.Indicators
 {
+
+
     public abstract class BaseIndicator : IIndicator
     {
         public BaseIndicator(string column, EIndicatorType type, params int[] indices)

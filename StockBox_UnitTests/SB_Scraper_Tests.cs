@@ -40,7 +40,7 @@ namespace StockBox_UnitTests
                 Symbol = "MSFT",
                 StartDate = startDate,
                 EndDate = endDate,
-                Interval = HistoryYahooFinanceProvider.EHistoryInterval.eDaily,
+                Interval = StockBox.Associations.Enums.EFrequency.eDaily,
             };
 
             Assert.AreNotEqual(historyIn.EndDateInt, 0);

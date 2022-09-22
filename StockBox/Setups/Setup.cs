@@ -14,7 +14,7 @@ namespace StockBox.Setups
     /// <summary>
     /// Setup tracks the provided RuleList and related Actions/Risk Profile
     /// </summary>
-    public class Setup
+    public class Setup : IValidationResultsListProvider
     {
 
         /// <summary>
@@ -104,9 +104,9 @@ namespace StockBox.Setups
         /// </summary>
         /// <param name="service"></param>
         /// <returns></returns>
-        public ValidationResultList Process(ISbService service)
+        public void Process(ISbService service)
         {
-            return _rules.ProcessRules(service);
+            _rules.ProcessRules(service);
         }
 
         public void AddAction(SbActionBase action)
@@ -119,6 +119,11 @@ namespace StockBox.Setups
         public Setup Clone()
         {
             return new Setup(this);
+        }
+
+        public ValidationResultList GetResults()
+        {
+            return _rules.GetResults();
         }
     }
 }

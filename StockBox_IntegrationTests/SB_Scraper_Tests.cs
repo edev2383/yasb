@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using StockBox.Associations.Enums;
 using StockBox.Data.Adapters.DataFrame;
 using StockBox.Data.Scraper;
 using StockBox.Data.Scraper.Parsers;
@@ -60,7 +61,7 @@ namespace StockBox_IntegrationTests
                 Symbol = "MSFT",
                 StartDate = startDate,
                 EndDate = endDate,
-                Interval = HistoryYahooFinanceProvider.EHistoryInterval.eDaily,
+                Interval = EFrequency.eDaily,
             };
 
             Assert.AreNotEqual(historyIn.EndDateInt, 0);
@@ -83,7 +84,7 @@ namespace StockBox_IntegrationTests
                 Symbol = "MSFT",
                 StartDate = startDate,
                 EndDate = endDate,
-                Interval = HistoryYahooFinanceProvider.EHistoryInterval.eDaily,
+                Interval = EFrequency.eDaily,
             };
 
             var scraper = new SbScraper(new HistoryYahooFinanceProvider(historyIn), new HistoryYahooFinanceParser());
@@ -104,7 +105,7 @@ namespace StockBox_IntegrationTests
                 Symbol = "MSFT",
                 StartDate = startDate,
                 EndDate = endDate,
-                Interval = HistoryYahooFinanceProvider.EHistoryInterval.eDaily,
+                Interval = EFrequency.eDaily,
             };
 
             var scraper = new SbScraper(new HistoryYahooFinanceProvider(historyIn), new HistoryYahooFinanceParser());

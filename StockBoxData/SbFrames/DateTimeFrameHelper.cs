@@ -1,13 +1,20 @@
 ﻿using System;
+using StockBox.Associations.Enums;
 using StockBox.Associations.Tokens;
-using static StockBox.Data.Scraper.Providers.HistoryYahooFinanceProvider;
+
 
 namespace StockBox.Data.SbFrames
 {
+
     public class DateTimeFrameHelper
     {
-        public static DateTime Get(DomainCombinationList combos, EHistoryInterval interval)
+        public static DateTime Get(DomainCombinationList combos, EFrequency interval)
         {
+            // To ensure we get a sufficient dataset, we want to get more than
+            // what is requested. This can be adjusted as we get more usage
+            // details
+            var marginMultiplier = -2;
+
             // Always take the max between direct index and indicators indices
             var max = Math.Max(combos.GetMaxIndex(), combos.GetMaxIndicatorIndex());
 
@@ -15,23 +22,25 @@ namespace StockBox.Data.SbFrames
             if (max == 0) max = 2;
 
             // set a minimal multiplier coef of 1 (daily)
-            var multiplier = 1;
+            var frequencyMultiplier = 1;
             switch (interval)
             {
-                // account for offset of weekend/holidays
-                case EHistoryInterval.eDaily:
+                // account for offset of weekend/holidays.
+                // Note: using a 2 wasn't quite enough to guarantee total
+                // expected coverage, so to err on the side of caution, use 3.
+                case EFrequency.eDaily:
                     max += Math.Ceiling(max / 7) * 3;
                     break;
-                case EHistoryInterval.eWeekly:
-                    multiplier = 7;
+                case EFrequency.eWeekly:
+                    frequencyMultiplier = 7;
                     break;
-                case EHistoryInterval.eMonthly:
-                    multiplier = 31;
+                case EFrequency.eMonthly:
+                    frequencyMultiplier = 31;
                     break;
                 default:
                     break;
             }
-            return GetOrigin().AddDays((-2) * multiplier * max);
+            return GetOrigin().AddDays((marginMultiplier) * frequencyMultiplier * max);
         }
 
         /// <summary>

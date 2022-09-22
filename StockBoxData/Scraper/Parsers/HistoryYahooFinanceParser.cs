@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-
+using StockBox.Associations;
 
 namespace StockBox.Data.Scraper.Parsers
 {
@@ -16,7 +16,7 @@ namespace StockBox.Data.Scraper.Parsers
         {
         }
 
-        public class HistoryParser_OutType : OutType
+        public class HistoryParser_OutType : OutType, IStreamProvider
         {
             public MemoryStream Stream { get; set; }
         }

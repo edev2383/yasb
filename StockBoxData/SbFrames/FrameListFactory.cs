@@ -1,11 +1,9 @@
-﻿using System;
-using StockBox.Associations;
+﻿using StockBox.Associations;
+using StockBox.Associations.Enums;
 using StockBox.Associations.Tokens;
 using StockBox.Data.Adapters.DataFrame;
+using StockBox.Data.Context;
 using StockBox.Data.Indicators;
-using StockBox.Data.Scraper;
-using StockBox.Data.Scraper.Parsers;
-using StockBox.Data.Scraper.Providers;
 
 
 namespace StockBox.Data.SbFrames
@@ -56,25 +54,9 @@ namespace StockBox.Data.SbFrames
         {
             var ret = new DailyFrame(_adapter.Create());
 
-            // for now, we're creating the scraper directly in here,
-            // we need to break that out into a respository of some
-            // sort so we can create/account for different source
-            // providers. All we care about at this point is that the
-            // final object returned provides a Memory stream
-            var interval = HistoryYahooFinanceProvider.EHistoryInterval.eDaily;
-
-            var inType = new HistoryYahooFinanceProvider.HistoryYahooFinanceProvider_InType()
-            {
-                Symbol = symbol.Name,
-                Interval = interval,
-                EndDate = DateTimeFrameHelper.GetOrigin(),
-                StartDate = DateTimeFrameHelper.Get(dailyCombos, interval),
-            };
-
-            var scraperProvider = new HistoryYahooFinanceProvider(inType);
-            var scraperParser = new HistoryYahooFinanceParser();
-            var scraper = new SbScraper(scraperProvider, scraperParser);
-            var payload = scraper.Scrape() as HistoryYahooFinanceParser.HistoryParser_OutType;
+            var startDate = DateTimeFrameHelper.Get(dailyCombos, EFrequency.eDaily);
+            var endDate = DateTimeFrameHelper.GetOrigin();
+            var payload = StreamFactory.Create(symbol.Name, EFrequency.eDaily, startDate, endDate);
 
             ret.AddData(payload.Stream);
             MapIndicators(ret, dailyCombos);
@@ -85,20 +67,9 @@ namespace StockBox.Data.SbFrames
         {
             var ret = new WeeklyFrame(_adapter.Create());
 
-            var interval = HistoryYahooFinanceProvider.EHistoryInterval.eWeekly;
-
-            var inType = new HistoryYahooFinanceProvider.HistoryYahooFinanceProvider_InType()
-            {
-                Symbol = symbol.Name,
-                Interval = interval,
-                EndDate = DateTimeFrameHelper.GetOrigin(),
-                StartDate = DateTimeFrameHelper.Get(weeklyCombos, interval),
-            };
-
-            var scraperProvider = new HistoryYahooFinanceProvider(inType);
-            var scraperParser = new HistoryYahooFinanceParser();
-            var scraper = new SbScraper(scraperProvider, scraperParser);
-            var payload = scraper.Scrape() as HistoryYahooFinanceParser.HistoryParser_OutType;
+            var startDate = DateTimeFrameHelper.Get(weeklyCombos, EFrequency.eWeekly);
+            var endDate = DateTimeFrameHelper.GetOrigin();
+            var payload = StreamFactory.Create(symbol.Name, EFrequency.eWeekly, startDate, endDate);
 
             ret.AddData(payload.Stream);
             MapIndicators(ret, weeklyCombos);
@@ -109,20 +80,9 @@ namespace StockBox.Data.SbFrames
         {
             var ret = new MonthlyFrame(_adapter.Create());
 
-            var interval = HistoryYahooFinanceProvider.EHistoryInterval.eMonthly;
-
-            var inType = new HistoryYahooFinanceProvider.HistoryYahooFinanceProvider_InType()
-            {
-                Symbol = symbol.Name,
-                Interval = interval,
-                EndDate = DateTimeFrameHelper.GetOrigin(),
-                StartDate = DateTimeFrameHelper.Get(monthlyCombos, interval),
-            };
-
-            var scraperProvider = new HistoryYahooFinanceProvider(inType);
-            var scraperParser = new HistoryYahooFinanceParser();
-            var scraper = new SbScraper(scraperProvider, scraperParser);
-            var payload = scraper.Scrape() as HistoryYahooFinanceParser.HistoryParser_OutType;
+            var startDate = DateTimeFrameHelper.Get(monthlyCombos, EFrequency.eMonthly);
+            var endDate = DateTimeFrameHelper.GetOrigin();
+            var payload = StreamFactory.Create(symbol.Name, EFrequency.eMonthly, startDate, endDate);
 
             ret.AddData(payload.Stream);
             MapIndicators(ret, monthlyCombos);

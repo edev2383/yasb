@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using StockBox.Associations.Enums;
 using StockBox.Data.Scraper.Helpers;
 using StockBox.Data.Scraper.Providers.Helpers;
 
@@ -44,7 +45,7 @@ namespace StockBox.Data.Scraper.Providers
             /// added to the provided value
             /// </summary>
             public DateTime EndDate { get; set; }
-            public EHistoryInterval Interval { get; set; }
+            public EFrequency Interval { get; set; }
             public string IntervalStr { get { return MapInterval(Interval); } }
 
             public int StartDateInt { get { return ConvertDateTimeToUnixEpoch(StartDate); } }
@@ -67,13 +68,13 @@ namespace StockBox.Data.Scraper.Providers
             /// </summary>
             /// <param name="interval"></param>
             /// <returns></returns>
-            private string MapInterval(EHistoryInterval interval)
+            private string MapInterval(EFrequency interval)
             {
                 switch (interval)
                 {
-                    case EHistoryInterval.eWeekly:
+                    case EFrequency.eWeekly:
                         return ScraperResources.Interval_YahooFinance_Weekly;
-                    case EHistoryInterval.eMonthly:
+                    case EFrequency.eMonthly:
                         return ScraperResources.Interval_YahooFinance_Monthly;
                     default:
                         return ScraperResources.Interval_YahooFinance_Daily;

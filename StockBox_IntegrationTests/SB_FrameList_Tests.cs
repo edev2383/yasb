@@ -140,6 +140,10 @@ namespace StockBox_IntegrationTests
         [TestMethod]
         public void SB_FrameList_04_FrameListFactoryCreatesLargeEnoughDataSetFromRulesInput_Indicators()
         {
+            // indicators with indices require double the data to ensure that
+            // we are able to compute the full range of data.
+            // The DateTimeRangeHelper takes the max of Column-Index vs Indicator
+            // Indices, but there are probably edge-cases we need to account for
             var rules = new RuleList() {
                 new Rule("Close > SMA(25)"),
             };
@@ -160,8 +164,6 @@ namespace StockBox_IntegrationTests
             // find the daily framelist
             var daily = frameList.FindByFrequency(StockBox.Associations.Enums.EFrequency.eDaily);
 
-            // depending on time of day, we might get 4 OR 5?
-            // TODO - Needs additional testing.
             Assert.IsTrue(daily.Length >= 50);
         }
     }

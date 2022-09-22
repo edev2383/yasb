@@ -5,12 +5,17 @@ using StockBox.Interpreter.Expressions;
 using StockBox.Services;
 using StockBox.Validation;
 
+
 namespace StockBox.Rules
 {
-    public class RuleList : List<Rule>
-    {
-        private readonly ValidationResultList _results = new ValidationResultList();
 
+    /// <summary>
+    /// Class <c>RuleList</c> aggregates the Rules for a particular setup.
+    /// </summary>
+    public class RuleList : List<Rule>, IValidationResultsListProvider
+    {
+
+        private readonly ValidationResultList _results = new ValidationResultList();
         public bool Success { get { return _results.Success; } }
         public bool HasFailures { get { return _results.HasFailures; } }
 
@@ -53,10 +58,9 @@ namespace StockBox.Rules
                 Add(item.Clone());
         }
 
-        public ValidationResultList ProcessRules(ISbService service)
+        public void ProcessRules(ISbService service)
         {
             _results.AddRange(service.ProcessRules(this));
-            return _results;
         }
 
         public void AddExpr(Expr e, string statement)
@@ -76,6 +80,11 @@ namespace StockBox.Rules
         public RuleList Clone()
         {
             return new RuleList(this);
+        }
+
+        public ValidationResultList GetResults()
+        {
+            return _results;
         }
     }
 }
