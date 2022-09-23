@@ -1,11 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+
 
 namespace StockBox.Data.SbFrames
 {
+
+    /// <summary>
+    /// Class <c>DataColumn</c> encapsulates and describes a column and
+    /// potential indices 
+    /// </summary>
     public class DataColumn
     {
+
         public enum EColumns
         {
             // Core columns
@@ -29,8 +35,8 @@ namespace StockBox.Data.SbFrames
 
         public string Column { get { return MapToColumnString(); } }
         private EColumns _column;
-
         private List<int> _indices = new List<int>();
+
 
         public DataColumn(string column, params int[] indices)
         {
@@ -42,6 +48,7 @@ namespace StockBox.Data.SbFrames
             }
         }
 
+
         public DataColumn(EColumns column, params int[] indices)
         {
             _column = column;
@@ -49,6 +56,19 @@ namespace StockBox.Data.SbFrames
                 _indices.Add(item);
         }
 
+        /// <summary>
+        /// Return the enum for the targeted column
+        /// </summary>
+        /// <returns></returns>
+        public EColumns GetColumnKey()
+        {
+            return _column;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         private string MapToColumnString()
         {
             var ret = string.Empty;
@@ -82,6 +102,16 @@ namespace StockBox.Data.SbFrames
                 case EColumns.eVolumeSma:
                     ret = $"Volume({string.Join(",", _indices)})";
                     break;
+                case EColumns.eVolume:
+                    break;
+                case EColumns.eEma:
+                    break;
+                case EColumns.eBBandsLower:
+                    break;
+                case EColumns.eBBandsHigher:
+                    break;
+                case EColumns.eBBandsCenter:
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException($"Unknown column value provided {_column}");
             }
@@ -89,11 +119,11 @@ namespace StockBox.Data.SbFrames
             return ret;
         }
 
-        public EColumns GetColumnKey()
-        {
-            return _column;
-        }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="column"></param>
+        /// <returns></returns>
         private EColumns SanitizeRawStringColumn(string column)
         {
             switch (column.ToLower())

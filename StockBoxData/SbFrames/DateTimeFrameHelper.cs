@@ -6,8 +6,13 @@ using StockBox.Associations.Tokens;
 namespace StockBox.Data.SbFrames
 {
 
+    /// <summary>
+    /// Class <c>DateTimeFrameHelper</c> converts CombinationList and EFrequency
+    /// into a DateTime origin for a data range
+    /// </summary>
     public class DateTimeFrameHelper
     {
+
         public static DateTime Get(DomainCombinationList combos, EFrequency interval)
         {
             // To ensure we get a sufficient dataset, we want to get more than
@@ -40,6 +45,7 @@ namespace StockBox.Data.SbFrames
                 default:
                     break;
             }
+
             return GetOrigin().AddDays((marginMultiplier) * frequencyMultiplier * max);
         }
 

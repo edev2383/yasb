@@ -2,6 +2,7 @@
 using System.IO;
 using StockBox.Associations;
 
+
 namespace StockBox.Data.Scraper.Parsers
 {
 

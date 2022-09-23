@@ -9,7 +9,7 @@ namespace StockBox.Services
 {
 
     /// <summary>
-    /// ActiveService is the forward looking testing service use to track
+    /// Class <c>ActiveService</c> is the forward looking testing service use to track
     /// the states of YTD setups
     /// </summary>
     public class ActiveService : SbServiceBase, IValidationResultsListProvider

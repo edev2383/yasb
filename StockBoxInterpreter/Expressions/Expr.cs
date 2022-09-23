@@ -6,6 +6,17 @@ using StockBox.Associations.Tokens;
 namespace StockBox.Interpreter.Expressions
 {
 
+    /// <summary>
+    /// Class <c>Expr</c> is the base Expression. All Rule.Statements are
+    /// scanned and then parsed down into appropriate Expressions
+    ///
+    /// Binary
+    /// Unary
+    /// Literal
+    /// Grouping
+    /// DomainLiteral
+    /// DomainExpr
+    /// </summary>
     public abstract class Expr
     {
         public Expr Left { get { return _left; } }

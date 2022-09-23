@@ -2,8 +2,13 @@
 using System.Collections.Generic;
 using StockBox.Data.Indicators;
 
+
 namespace StockBox.Data.SbFrames
 {
+
+    /// <summary>
+    /// 
+    /// </summary>
     public class DataPointList : List<DataPoint>
     {
         public DataPointList Reversed { get { return GetReversed(); } }
@@ -34,11 +39,21 @@ namespace StockBox.Data.SbFrames
             }
         }
 
+        /// <summary>
+        /// Return a targeted DataPoint object by index from zero
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
         public DataPoint FindByIndex(int index)
         {
             return FindByDate(GetKeys()[index]);
         }
 
+        /// <summary>
+        /// Return a targeted DataPoint object by DateTime key
+        /// </summary>
+        /// <param name="date"></param>
+        /// <returns></returns>
         public DataPoint FindByDate(DateTime date)
         {
             DataPoint ret = null;
@@ -48,6 +63,10 @@ namespace StockBox.Data.SbFrames
             return ret;
         }
 
+        /// <summary>
+        /// Create a clone of this object and all contained items
+        /// </summary>
+        /// <returns></returns>
         public DataPointList Clone()
         {
             var ret = new DataPointList();
@@ -56,6 +75,12 @@ namespace StockBox.Data.SbFrames
             return ret;
         }
 
+        /// <summary>
+        /// Clone and return the whole dataset and return the new object
+        ///
+        /// Note: Not an in-place reversal
+        /// </summary>
+        /// <returns></returns>
         public DataPointList GetReversed()
         {
             var retSrc = Clone();
@@ -63,6 +88,11 @@ namespace StockBox.Data.SbFrames
             return new DataPointList(retSrc);
         }
 
+        /// <summary>
+        /// Accept a general indicator and map it to the DataPoints by DateTime
+        /// key
+        /// </summary>
+        /// <param name="indicator"></param>
         public void MapIndicator(IIndicator indicator)
         {
             switch (indicator.Type)

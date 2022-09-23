@@ -1,10 +1,13 @@
-﻿using System;
-using System.IO;
-using Deedle;
-using StockBox.Data.SbFrames;
+﻿using System.IO;
+
 
 namespace StockBox.Data.Adapters.DataFrame
 {
+
+    /// <summary>
+    /// Class <c>DeedleAdapter</c> reverses the data set so DateTime keys are in
+    /// reverse chronological order
+    /// </summary>
     public class DeedleAdapter : BaseDataFrameAdapter
     {
 
@@ -15,6 +18,10 @@ namespace StockBox.Data.Adapters.DataFrame
             _data = _data.Reversed;
         }
 
+        /// <summary>
+        /// Create a new DeedleAdapter object
+        /// </summary>
+        /// <returns></returns>
         public override IDataFrameAdapter Create()
         {
             return new DeedleAdapter();

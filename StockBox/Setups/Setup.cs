@@ -12,7 +12,7 @@ namespace StockBox.Setups
 {
 
     /// <summary>
-    /// Setup tracks the provided RuleList and related Actions/Risk Profile
+    /// Class <c>Setup</c> tracks the provided RuleList and related Actions/Risk Profile
     /// </summary>
     public class Setup : IValidationResultsListProvider
     {

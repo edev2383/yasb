@@ -5,8 +5,15 @@ using StockBox.Data.SbFrames;
 using System.Linq;
 using StockBox.Data.Indicators;
 
+
 namespace StockBox.Data.Adapters.DataFrame
 {
+
+    /// <summary>
+    /// Class <c>BaseDataFrameAdapter</c> accepts a dataset, currently only a
+    /// MemoryStream, but that may expand to other types of data, using Deedle
+    /// to read the stream as a CSV and then map that data to a DataPointList
+    /// </summary>
     public abstract class BaseDataFrameAdapter : IDataFrameAdapter
     {
 
@@ -43,6 +50,10 @@ namespace StockBox.Data.Adapters.DataFrame
             AddData(data);
         }
 
+        /// <summary>
+        /// Add data from a MemoryStream after the object has been created
+        /// </summary>
+        /// <param name="data"></param>
         public virtual void AddData(MemoryStream data)
         {
             var rawData = Frame.ReadCsv(data);
@@ -73,6 +84,10 @@ namespace StockBox.Data.Adapters.DataFrame
             return ret;
         }
 
+        /// <summary>
+        /// Map an Indicator's payload into the DataPointList
+        /// </summary>
+        /// <param name="indicator"></param>
         public void MapIndicator(IIndicator indicator)
         {
             if (_data != null)
@@ -116,6 +131,10 @@ namespace StockBox.Data.Adapters.DataFrame
             };
         }
 
+        /// <summary>
+        /// Create a new IDataFrameAdapter object, without preexisting data
+        /// </summary>
+        /// <returns></returns>
         public abstract IDataFrameAdapter Create();
     }
 }

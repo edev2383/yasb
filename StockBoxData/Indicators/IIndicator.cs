@@ -1,11 +1,12 @@
-﻿using System;
-using System.Data;
-using Deedle;
-using StockBox.Data.Adapters.DataFrame;
-using StockBox.Data.SbFrames;
+﻿using StockBox.Data.Adapters.DataFrame;
+
 
 namespace StockBox.Data.Indicators
 {
+
+    /// <summary>
+    /// 
+    /// </summary>
     public interface IIndicator
     {
         EIndicatorType Type { get; }
