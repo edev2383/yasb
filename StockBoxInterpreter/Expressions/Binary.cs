@@ -18,9 +18,5 @@ namespace StockBox.Interpreter.Expressions
             return visitor.VisitBinaryExpr(this);
         }
 
-        public override object AcceptAnalyzer(IVisitor visitor)
-        {
-            return visitor.VisitBinaryExpr(this);
-        }
     }
 }

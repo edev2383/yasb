@@ -16,9 +16,5 @@ namespace StockBox.Interpreter.Expressions
             return visitor.VisitDomainLiteral(this);
         }
 
-        public override object AcceptAnalyzer(IVisitor visitor)
-        {
-            return visitor.VisitDomainLiteral(this);
-        }
     }
 }

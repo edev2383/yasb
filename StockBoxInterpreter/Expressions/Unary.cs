@@ -15,10 +15,5 @@ namespace StockBox.Interpreter.Expressions
         {
             return visitor.VisitUnaryExpr(this);
         }
-
-        public override object AcceptAnalyzer(IVisitor visitor)
-        {
-            return visitor.VisitUnaryExpr(this);
-        }
     }
 }

@@ -28,7 +28,8 @@ namespace StockBox.Actions
         public SbActionBase(ISbActionAdapter adapter, StateBase transitionState, EActionType actionType)
         {
             _adapter = adapter;
-            _adapter.ParentAction = this;
+            if (_adapter != null)
+                _adapter.ParentAction = this;
             _transitionState = transitionState;
             _actionType = actionType;
         }

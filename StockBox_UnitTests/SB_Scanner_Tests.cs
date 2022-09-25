@@ -386,7 +386,9 @@ namespace StockBox_UnitTests
             Assert.AreEqual(tokens[2].Literal, false);
             Assert.AreEqual(tokens[^1].Type, TokenType.eEOF);
         }
-
+        //Assert.AreEqual failed.
+        //pected:<https://query1.finance.yahoo.com/v7/finance/download/MSFT?period1=1659326400&period2=1659585599&interval=1d&events=history&includeAdjustedClose=true>.
+        //Actual:<https://query1.finance.yahoo.com/v7/finance/download/MSFT?period1=1659326400&period2=1659585599&interval=eDaily&events=history&includeAdjustedClose=true>. 
         [TestMethod]
         public void SBC_34_ScannerCanRecogizeKeywordLast()
         {
@@ -398,7 +400,6 @@ namespace StockBox_UnitTests
             Assert.AreEqual(tokens[1].Type, TokenType.eWeekly);
             Assert.AreEqual(tokens[2].Type, TokenType.eColumn);
             Assert.AreEqual(tokens[2].Lexeme, "close");
-            Assert.AreEqual(tokens[2].Literal, "close");
             Assert.AreEqual(tokens[3].Type, TokenType.eEOF);
         }
 

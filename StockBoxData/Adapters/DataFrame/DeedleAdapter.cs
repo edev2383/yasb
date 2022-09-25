@@ -15,7 +15,6 @@ namespace StockBox.Data.Adapters.DataFrame
         public DeedleAdapter(MemoryStream data) : base(data)
         {
             // forward testing requires a descending ordered data set
-            _data = _data.Reversed;
         }
 
         /// <summary>

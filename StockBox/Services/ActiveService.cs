@@ -9,8 +9,24 @@ namespace StockBox.Services
 {
 
     /// <summary>
-    /// Class <c>ActiveService</c> is the forward looking testing service use to track
-    /// the states of YTD setups
+    /// Class <c>ActiveService</c> accepts a Scanner and Parser to reduce a
+    /// RuleList down to a series of expressions.
+    /// 
+    /// Note: Use of this class has changed since original inception. It was
+    /// originally going to scan, parse, and evaluate the statements, however,
+    /// it began to be clear that it was doing too much, and attempting to get
+    /// all of the related behavior in this one class was not wise.
+    ///
+    /// In addition, we introduce the analyzing step between Parsing and
+    /// Evaluation, which further complicated the original intent.
+    ///
+    /// It NOW merely acts as a results repository for the scanning/parsing
+    /// process of a given RuleSet. The DI of the Scanner/Parser allows us to
+    /// extend the Scanners/Parsers as other needs arise, i.e., we see a future
+    /// need for a parser that evalutes to different expressions when the data
+    /// target is a database, rather than a scraped API. 
+    ///
+    /// TODO: Rename this class to something more appropriate
     /// </summary>
     public class ActiveService : SbServiceBase, IValidationResultsListProvider
     {
@@ -34,7 +50,6 @@ namespace StockBox.Services
         {
             return _results;
         }
-
 
         /// <summary>
         /// Iterate through the rules in the RuleList and parse the statement

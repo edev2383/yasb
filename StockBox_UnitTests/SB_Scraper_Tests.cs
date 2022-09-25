@@ -47,7 +47,7 @@ namespace StockBox_UnitTests
             Assert.AreNotEqual(historyIn.StartDateInt, 0);
 
             var history = new HistoryYahooFinanceProvider(historyIn);
-            Assert.AreEqual(history.Url, $"https://query1.finance.yahoo.com/v7/finance/download/{historyIn.Symbol}?period1={startDateInt}&period2={endDateInt}&interval={historyIn.Interval}&events=history&includeAdjustedClose=true");
+            Assert.AreEqual(history.Url, $"https://query1.finance.yahoo.com/v7/finance/download/{historyIn.Symbol}?period1={startDateInt}&period2={endDateInt}&interval=1d&events=history&includeAdjustedClose=true");
         }
 
     }

@@ -8,8 +8,10 @@ namespace StockBox.Interpreter.Scanner
 {
 
     /// <summary>
-    /// This needs work. The analyzer will take an expression returned by the
-    /// Parser and build the DomainCombinationList. 
+    /// Class <c>ExpressionAnalyzer</c> builds a DomainCombinationList from a
+    /// provided List of Expr(essions). 
+    ///
+    /// This needs work. 
     /// </summary>
     public class ExpressionAnalyzer : IVisitor
     {
@@ -89,7 +91,7 @@ namespace StockBox.Interpreter.Scanner
 
         public object Scan(Expr expression)
         {
-            return expression.AcceptAnalyzer(this);
+            return expression.Accept(this);
         }
     }
 }

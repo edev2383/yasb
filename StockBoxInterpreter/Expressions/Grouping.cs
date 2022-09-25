@@ -16,9 +16,5 @@ namespace StockBox.Interpreter.Expressions
             return visitor.VisitGroupingExpr(this);
         }
 
-        public override object AcceptAnalyzer(IVisitor visitor)
-        {
-            return visitor.VisitGroupingExpr(this);
-        }
     }
 }
