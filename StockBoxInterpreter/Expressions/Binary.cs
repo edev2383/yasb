@@ -5,7 +5,8 @@ namespace StockBox.Interpreter.Expressions
 {
 
     /// <summary>
-    /// 
+    /// Class <c>Binary</c> is a simple expression of two values with an
+    /// operator, i.e., `2 == 4`, `1 + 2`, etc.
     /// </summary>
     public class Binary : Expr
     {

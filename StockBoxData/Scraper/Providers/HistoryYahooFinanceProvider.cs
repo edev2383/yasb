@@ -5,11 +5,12 @@ using StockBox.Associations.Enums;
 using StockBox.Data.Scraper.Helpers;
 using StockBox.Data.Scraper.Providers.Helpers;
 
+
 namespace StockBox.Data.Scraper.Providers
 {
 
     /// <summary>
-    /// Download the the requested history range/frequency and return as a
+    /// Download the requested history range/frequency and return as a
     /// MemoryStream. The Adapters will convert the MemoryStream into an SbFrame
     /// </summary>
     public class HistoryYahooFinanceProvider : ScraperProviderBase
@@ -39,6 +40,7 @@ namespace StockBox.Data.Scraper.Providers
             /// </summary>
             public string Symbol { get; set; }
             public DateTime StartDate { get; set; }
+
             /// <summary>
             /// The end date of the history request. This date WILL BE included
             /// in the result set. The additional 23:59:59 is automatically

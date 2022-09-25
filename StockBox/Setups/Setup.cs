@@ -12,7 +12,8 @@ namespace StockBox.Setups
 {
 
     /// <summary>
-    /// Class <c>Setup</c> tracks the provided RuleList and related Actions/Risk Profile
+    /// Class <c>Setup</c> tracks the provided RuleList and related Actions/Risk
+    /// Profile
     /// </summary>
     public class Setup : IValidationResultsListProvider
     {
@@ -29,7 +30,10 @@ namespace StockBox.Setups
         private readonly StateBase _originState;
 
         /// <summary>
-        /// All actions associated with a setup
+        /// All actions associated with a setup. The general assumption is that
+        /// there will be a single action, but it's more likely that there will
+        /// be multiple. Example: User's setup evaluates to `true` and performs
+        /// an Move and an Alert. 
         /// </summary>
         public SbActionList Actions
         {

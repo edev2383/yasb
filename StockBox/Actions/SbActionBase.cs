@@ -28,7 +28,7 @@ namespace StockBox.Actions
         public SbActionBase(ISbActionAdapter adapter, StateBase transitionState, EActionType actionType)
         {
             _adapter = adapter;
-            if (_adapter != null)
+            if (_adapter != null) // adapter is null for some unit tests (for now)
                 _adapter.ParentAction = this;
             _transitionState = transitionState;
             _actionType = actionType;

@@ -4,8 +4,10 @@ using StockBox.Data.Adapters.DataFrame;
 using static StockBox_UnitTests.Helpers.EFile;
 using StockBox_UnitTests.Helpers;
 
+
 namespace StockBox_UnitTests
 {
+
     [TestClass]
     public class SB_DataFrameAdapter_Tests
     {

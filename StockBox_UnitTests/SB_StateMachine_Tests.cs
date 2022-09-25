@@ -121,7 +121,7 @@ namespace StockBox_UnitTests
         [TestMethod, Description("Confirm that our Setup, Rules, Actions, and StateMachine all integrate properly")]
         public void SB_StateMachine_10_StateMachineSetupIntegration_TransitionSuccessful()
         {
-            // user-defined states are defined by store string values, for now
+            // user-defined states are defined by stored string values, for now
             const string config_targetWatchList = "TargetWatchlist";
             var config_targetState = new StateDataModel(7, config_targetWatchList, StockBox.States.Helpers.EStateType.eUserDefined);
 

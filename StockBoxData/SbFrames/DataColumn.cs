@@ -103,6 +103,7 @@ namespace StockBox.Data.SbFrames
                     ret = $"Volume({string.Join(",", _indices)})";
                     break;
                 case EColumns.eVolume:
+                    ret = "Volume";
                     break;
                 case EColumns.eEma:
                     break;

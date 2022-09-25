@@ -37,9 +37,14 @@ namespace StockBox.Rules
         public ValidationResultList Evalute(SbInterpreter interpreter)
         {
             var ret = new ValidationResultList();
+
             foreach (var e in Expressions)
             {
+                // set a default to fail. Don't be too optimistic
                 var thisResult = EResult.eFail;
+
+                // interpreter will evaluate down to a boolean value, exceptions
+                // thrown, return false for now as well. 
                 var exprResult = interpreter.Interpret(e) as bool?;
                 if (exprResult != null)
                     thisResult = (bool)exprResult ? EResult.eSuccess : EResult.eFail;

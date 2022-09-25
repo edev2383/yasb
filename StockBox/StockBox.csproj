@@ -29,6 +29,8 @@
     <None Remove="Users\" />
     <None Remove="Users\Permissions\" />
     <None Remove="Users\Permissions\Helpers\" />
+    <None Remove="Positions\" />
+    <None Remove="Positions\Helpers\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Deedle" Version="2.5.0" />
@@ -55,6 +57,8 @@
     <Folder Include="Users\" />
     <Folder Include="Users\Permissions\" />
     <Folder Include="Users\Permissions\Helpers\" />
+    <Folder Include="Positions\" />
+    <Folder Include="Positions\Helpers\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\StockBoxValidation\StockBoxValidation.csproj" />
