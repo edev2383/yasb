@@ -2,7 +2,7 @@
 using StockBox.Data.Adapters.DataFrame;
 using StockBox.Data.Indicators;
 using StockBox.Associations.Enums;
-
+using StockBox.Associations;
 
 namespace StockBox.Data.SbFrames
 {
@@ -15,6 +15,8 @@ namespace StockBox.Data.SbFrames
     /// </summary>
     public class SbFrame
     {
+
+        public ISymbolProvider Symbol { get { return _symbol; } }
         public EFrequency Frequency { get { return _frequency; } }
 
         /// <summary>
@@ -38,16 +40,18 @@ namespace StockBox.Data.SbFrames
 
         private IDataFrameAdapter _adapter;
         private readonly EFrequency _frequency;
+        private readonly ISymbolProvider _symbol;
         private readonly IndicatorList _indicators = new IndicatorList();
 
         public SbFrame() { }
 
-        public SbFrame(EFrequency frequency)
+        public SbFrame(EFrequency frequency, ISymbolProvider symbol)
         {
             _frequency = frequency;
+            _symbol = symbol;
         }
 
-        public SbFrame(IDataFrameAdapter adapter, EFrequency frequency) : this(frequency)
+        public SbFrame(IDataFrameAdapter adapter, EFrequency frequency, ISymbolProvider symbol) : this(frequency, symbol)
         {
             _adapter = adapter;
         }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using StockBox.Associations;
 using StockBox.Associations.Enums;
 
 
@@ -28,6 +29,17 @@ namespace StockBox.Data.SbFrames
                 if (frame.Frequency == frequency)
                     ret = frame;
             }
+            return ret;
+        }
+
+
+
+        public SbFrameList FindAllBySymbolProvider(ISymbolProvider symbol)
+        {
+            var ret = new SbFrameList();
+            foreach (SbFrame item in this)
+                if (item.Symbol.Equals(symbol))
+                    ret.Add(item);
             return ret;
         }
     }

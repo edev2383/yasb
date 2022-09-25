@@ -74,6 +74,22 @@ namespace StockBox.Controllers
         private ValidationResultList ProcessSetup(Setup setup, SymbolProfileList relatedProfiles)
         {
             var ret = new ValidationResultList();
+
+            setup.Process(_service);
+            // analyze the expression list to get details about the needed
+            // dataset
+            var expressionAnalyzer = new ExpressionAnalyzer(setup.Rules.Expressions);
+            expressionAnalyzer.Scan();
+
+            var factory = new FrameListFactory(new SbScraper(), new DeedleAdapter());
+            var masterFrameList = new SbFrameList();
+
+            // Aggregate all SbFrames for all found SymbolProfiles
+            foreach (SymbolProfile sp in relatedProfiles)
+            {
+                masterFrameList.AddRange(factory.Create(expressionAnalyzer.Combos, sp.Symbol));
+            }
+
             foreach (SymbolProfile sp in relatedProfiles)
             {
                 var innerVr = new ValidationResultList();
@@ -90,23 +106,10 @@ namespace StockBox.Controllers
                 // come from the given SymbolProfile, dealer's choice..)
                 localSm.SetCurrentState(localSetup.OriginState);
 
-                // pass the service to the Setup, which will break all of the
-                // rule statements into an Expression list
-                localSetup.Process(_service);
-
-                // analyze the expression list to get details about the needed
-                // dataset
-                var expressionAnalyzer = new ExpressionAnalyzer(localSetup.Rules.Expressions);
-                expressionAnalyzer.Scan();
-
-                // create the desired framelist from the provided context
-                // provider and the analyzed domain combos
-                var factory = new FrameListFactory(new SbScraper(), new DeedleAdapter());
-                var frameList = factory.Create(expressionAnalyzer.Combos, sp.Symbol);
-
+                var localFrameList = masterFrameList.FindAllBySymbolProvider(sp.Symbol);
                 // pass the interpreter, injected w/ the created framelist to
                 // the setup and run the evaluation
-                var evalResult = localSetup.Evaluate(new SbInterpreter(frameList));
+                var evalResult = localSetup.Evaluate(new SbInterpreter(localFrameList));
 
                 // if there are no errors to the evaluation, try to transition
                 // to the newest state

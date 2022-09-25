@@ -1,6 +1,6 @@
 ﻿using System;
 using HtmlAgilityPack;
-
+using StockBox.Data.Scraper.Helpers;
 
 namespace StockBox.Data.Scraper.Parsers
 {
@@ -28,7 +28,7 @@ namespace StockBox.Data.Scraper.Parsers
             eVolume
         };
 
-        public CurrentYahooFinanceParser() : base("//table[@data-test=\"historical-prices\"]//tbody//tr[1]//td//span//text()")
+        public CurrentYahooFinanceParser() : base(ScraperResources.XPath_YahooFinance_Current)
         {
         }
 

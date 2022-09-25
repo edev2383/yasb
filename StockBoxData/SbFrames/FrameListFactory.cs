@@ -52,7 +52,7 @@ namespace StockBox.Data.SbFrames
 
         public SbFrame CreateDailySbFrame(DomainCombinationList dailyCombos, ISymbolProvider symbol)
         {
-            var ret = new DailyFrame(_adapter.Create());
+            var ret = new DailyFrame(_adapter.Create(), symbol);
 
             var startDate = DateTimeFrameHelper.Get(dailyCombos, EFrequency.eDaily);
             var endDate = DateTimeFrameHelper.GetOrigin();
@@ -65,7 +65,7 @@ namespace StockBox.Data.SbFrames
 
         public SbFrame CreateWeeklySbFrame(DomainCombinationList weeklyCombos, ISymbolProvider symbol)
         {
-            var ret = new WeeklyFrame(_adapter.Create());
+            var ret = new WeeklyFrame(_adapter.Create(), symbol);
 
             var startDate = DateTimeFrameHelper.Get(weeklyCombos, EFrequency.eWeekly);
             var endDate = DateTimeFrameHelper.GetOrigin();
@@ -78,7 +78,7 @@ namespace StockBox.Data.SbFrames
 
         public SbFrame CreateMonthlySbFrame(DomainCombinationList monthlyCombos, ISymbolProvider symbol)
         {
-            var ret = new MonthlyFrame(_adapter.Create());
+            var ret = new MonthlyFrame(_adapter.Create(), symbol);
 
             var startDate = DateTimeFrameHelper.Get(monthlyCombos, EFrequency.eMonthly);
             var endDate = DateTimeFrameHelper.GetOrigin();

@@ -14,6 +14,8 @@ namespace StockBox.Positions
         public SymbolProfile Symbol { get { return _symbol; } }
         public TransactionList Transactions { get { return _transactions; } }
         public RiskProfile RiskProfile { get { return _riskProfile; } }
+
+
         public int? TotalShares { get; set; }
         // this value can differ from TotalShares when the user opts to sell
         // half their stake at a given target

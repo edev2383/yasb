@@ -57,6 +57,13 @@ namespace StockBox.Rules
         {
         }
 
+        public RuleList(RuleList source)
+        {
+            Expressions.AddRange(source.Expressions);
+            foreach (Rule item in source)
+                Add(item.Clone());
+        }
+
         public RuleList(List<Rule> source)
         {
             foreach (Rule item in source)

@@ -34,7 +34,9 @@ namespace StockBox.Actions
         /// </summary>
         public override ActionResponse PerformAction()
         {
-            return null;
+            var ret = new ActionResponse();
+
+            return ret;
         }
     }
 }

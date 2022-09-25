@@ -1,5 +1,5 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using StockBox.Actions;
 using StockBox.Controllers;
 using StockBox.Interpreter.Scanner;
 using StockBox.Models;
@@ -18,15 +18,17 @@ namespace StockBox_IntegrationTests
         public void SB_DomainController_01_Tests()
         {
             var rules = new RuleList() {
-                new Rule("close > open"),
+                new Rule("close < open"),
                 new Rule("CLOSE > 60")
             };
 
             var setup = new Setup(rules, new UserDefinedState("start"), new StockBox.RiskProfiles.RiskProfile());
-
+            setup.AddAction(new Move(null, "end"));
             var profiles = new SymbolProfileList()
             {
                 new SymbolProfile(new Symbol("MSFT"), new UserDefinedState("start")),
+                new SymbolProfile(new Symbol("TSLA"), new UserDefinedState("start")),
+                new SymbolProfile(new Symbol("AMD"), new UserDefinedState("start")),
             };
 
             var activeService = new ActiveService(new Scanner(), new Parser());
@@ -44,6 +46,15 @@ namespace StockBox_IntegrationTests
 
             controller.ScanSetup(setup, profiles);
 
+            // This test is incomplete. Since it relies on actual scraped data,
+            // and we currently don't have a way to query the scraped data
+            // independant of the controller, it will fail sometimes. What we
+            // need to do is create an accessor class that will allow us to know
+            // the results and then situationally change the assertion
+
+            // The end goal with controller.GetResults(), is to actually get
+            // all of the ValidationObjects from the results and from those
+            // determine the outcome of our evaluations
             Assert.IsTrue(controller.GetResults().Success);
         }
     }
