@@ -106,13 +106,15 @@ namespace StockBox.Controllers
                 // come from the given SymbolProfile, dealer's choice..)
                 localSm.SetCurrentState(localSetup.OriginState);
 
+                // get the frames specific to the current Symbol
                 var localFrameList = masterFrameList.FindAllBySymbolProvider(sp.Symbol);
+
                 // pass the interpreter, injected w/ the created framelist to
                 // the setup and run the evaluation
                 var evalResult = localSetup.Evaluate(new SbInterpreter(localFrameList));
 
-                // if there are no errors to the evaluation, try to transition
-                // to the newest state
+                // For evalResult.Success to be true, EVERY Rule in the setup
+                // had to have been true.
                 if (evalResult.Success)
                 {
                     innerVr.AddRange(localSm.TryNextState(localSetup.Action.TransitionState));

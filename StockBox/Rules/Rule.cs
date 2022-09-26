@@ -12,10 +12,16 @@ namespace StockBox.Rules
     ///
     /// The statement will be later scanned and parsed by the interpreter using
     /// a Deedle.Frame of stock data
+    ///
+    /// Todo: Rules have an implicit "And". We want to add the ability to use
+    ///       "Or"
+    /// Todo: experiment with WeightedRules that allow for varying emphasis
     /// </summary>
     public class Rule
     {
+
         public string Statement { get { return _statement; } }
+
         private readonly string _statement;
 
         public Rule(string statement)

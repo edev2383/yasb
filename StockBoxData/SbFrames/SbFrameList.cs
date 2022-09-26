@@ -32,8 +32,6 @@ namespace StockBox.Data.SbFrames
             return ret;
         }
 
-
-
         public SbFrameList FindAllBySymbolProvider(ISymbolProvider symbol)
         {
             var ret = new SbFrameList();
