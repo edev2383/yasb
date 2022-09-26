@@ -81,3 +81,14 @@ setup.AddAction(new Buy());
 ```
 ... and if this pattern has been executed, we'll see a `Buy` action. 
 
+Assuming the `Buy` action was successful, our "AMD" stock is in the "BuyActive" state. We need to tell the application when to sell. 
+
+```c#
+var rules = new RuleList() {
+   new Rule("80 x SlowSto(14,3)"),
+};
+
+var setup = new Setup(rules, new UserDefinedState("BuyActive"));
+setup.AddAction(new Sell());
+```
+In this `Sell` example, we swap the left and right expressions to watch for the Slow Stochastic indicator to cross below the 80% threshold. 
