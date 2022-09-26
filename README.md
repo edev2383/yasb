@@ -18,6 +18,7 @@ The way to trade this would be to enter the position when the Slow Stochastic in
 ![sc](https://user-images.githubusercontent.com/47084492/192391615-276eb632-87e0-4dce-8383-17d66fd28397.png)
 
 Below is detail of the Slow Stochastic (bottom indicator) and the RSI (indicator on the very top), with the entry point highlighted in green.
+
 ![stockexample](https://user-images.githubusercontent.com/47084492/192392438-33ddc5ee-b7c0-4008-b082-5ce3ab91d6cd.png)
 
 There are multiple places to leave this trade with a profit, as the full price move was about $25 from $75-100+. Typically, most people trading this pattern, or something similar that is Stochastic-based, will exit when the black line of the indicator crosses back below the top line (80%).
