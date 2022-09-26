@@ -14,6 +14,7 @@ Here is an example pattern that we are interested in trading. After the backgrou
 In the below chart, we can see the stock prices reverse around July 1st in a pattern that repeats all over the markets. By watching two indicators, the [Slow Stochastic indicator](https://www.fidelity.com/learning-center/trading-investing/technical-analysis/technical-indicator-guide/slow-stochastic) and the [Relative Strength Index](https://www.investopedia.com/terms/r/rsi.asp).
 
 The way to trade this would be to enter the position when the Slow Stochastic indicator crosses above the 20-value line, provided the Relative Strength Index is at or above 40. 
+
 ![sc](https://user-images.githubusercontent.com/47084492/192391615-276eb632-87e0-4dce-8383-17d66fd28397.png)
 
 Below is detail of the Slow Stochastic (bottom indicator) and the RSI (indicator on the very top), with the entry point highlighted in green.
