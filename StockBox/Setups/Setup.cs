@@ -129,5 +129,16 @@ namespace StockBox.Setups
         {
             return _rules.GetResults();
         }
+
+        public bool IdentifiesAs(Setup item)
+        {
+            foreach (var rule in Rules)
+            {
+                if (!item.Rules.ContainsItem(rule))
+                    return false;
+            }
+            if (!OriginState.Equals(item.OriginState)) return false;
+            return true;
+        }
     }
 }

@@ -95,6 +95,10 @@ namespace StockBox_UnitTests.Helpers
                     ret = "AMD_MONTHLY";
                     ext = EExt.eCsv;
                     break;
+                case EFile.eAmdDailySmallDataset:
+                    ret = "AMD_DAILY_SMALL_DATASET";
+                    ext = EExt.eCsv;
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }

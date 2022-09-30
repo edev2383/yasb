@@ -1,5 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using StockBox.Associations.Tokens;
 using StockBox.Data.Adapters.DataFrame;
+using StockBox.Data.Indicators;
 using StockBox.Data.SbFrames;
 using StockBox.Data.Scraper;
 using StockBox.Interpreter.Scanner;
@@ -165,6 +167,55 @@ namespace StockBox_IntegrationTests
             var daily = frameList.FindByFrequency(StockBox.Associations.Enums.EFrequency.eDaily);
 
             Assert.IsTrue(daily.Length >= 50);
+        }
+
+        [TestMethod]
+        public void SB_FrameList_05_FrameListFactoryCreateHistoricalData()
+        {
+            var symbol = new Symbol("AMD");
+
+            var factory = new FrameListFactory(new SbScraper(), new DeedleAdapter());
+            var framelist = factory.CreateBacktestData(symbol);
+
+            var foundDaily = framelist.FindByFrequency(StockBox.Associations.Enums.EFrequency.eDaily);
+            var foundWeekly = framelist.FindByFrequency(StockBox.Associations.Enums.EFrequency.eWeekly);
+            var foundMonthly = framelist.FindByFrequency(StockBox.Associations.Enums.EFrequency.eMonthly);
+
+            Assert.IsNotNull(foundDaily);
+            Assert.IsTrue(foundDaily.Length > 0);
+            Assert.IsNotNull(foundWeekly);
+            Assert.IsTrue(foundWeekly.Length > 0);
+            Assert.IsNotNull(foundMonthly);
+            Assert.IsTrue(foundMonthly.Length > 0);
+        }
+
+        [TestMethod]
+        public void SB_FrameList_06_FrameListFactoryCreateHistoricalData_AddIndicatorsByDomainCombos()
+        {
+            var framelist = CreateBacktestDataFrameList();
+            var combos = new DomainCombinationList();
+            combos.Add(new DomainCombination(2, new Token(TokenType.eDaily, "", null, 0, 0), "SMA", new int[1] { 25 }));
+            combos.Add(new DomainCombination(2, new Token(TokenType.eWeekly, "", null, 0, 0), "SMA", new int[1] { 25 }));
+            combos.Add(new DomainCombination(2, new Token(TokenType.eMonthly, "", null, 0, 0), "SMA", new int[1] { 25 }));
+
+            var factory = new FrameListFactory(new SbScraper(), new DeedleAdapter());
+            factory.AddIndicators(framelist, combos);
+
+            var foundDaily = framelist.FindByFrequency(StockBox.Associations.Enums.EFrequency.eDaily);
+            var foundWeekly = framelist.FindByFrequency(StockBox.Associations.Enums.EFrequency.eWeekly);
+            var foundMonthly = framelist.FindByFrequency(StockBox.Associations.Enums.EFrequency.eMonthly);
+
+            Assert.IsTrue(foundDaily.Inidcators.ContainsItem(new SimpleMovingAverage("SMA", 25)));
+            Assert.IsTrue(foundWeekly.Inidcators.ContainsItem(new SimpleMovingAverage("SMA", 25)));
+            Assert.IsTrue(foundMonthly.Inidcators.ContainsItem(new SimpleMovingAverage("SMA", 25)));
+        }
+
+        private SbFrameList CreateBacktestDataFrameList(string symbol = "AMD")
+        {
+            var sym = new Symbol(symbol);
+            var factory = new FrameListFactory(new SbScraper(), new DeedleAdapter());
+            var framelist = factory.CreateBacktestData(sym);
+            return framelist;
         }
     }
 }

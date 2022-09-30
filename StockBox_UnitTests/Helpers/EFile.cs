@@ -9,6 +9,7 @@ namespace StockBox_UnitTests.Helpers
         eAmdDaily,
         eAmdWeekly,
         eAmdMonthly,
+        eAmdDailySmallDataset,
     }
 
     public enum EExt

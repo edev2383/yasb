@@ -3,9 +3,6 @@ using StockBox.Interpreter.Scanner;
 using StockBox.Associations.Tokens;
 using StockBox_UnitTests.Helpers;
 using static StockBox_UnitTests.Helpers.EFile;
-using StockBox.Data.Adapters.DataFrame;
-using StockBox.Data.SbFrames;
-using StockBox.Associations.Enums;
 
 
 namespace StockBox_UnitTests

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using StockBox.Data.Adapters.DataFrame;
 using StockBox.Data.SbFrames;
 
@@ -9,6 +10,10 @@ namespace StockBox_UnitTests.Accessors
         public DataFrameAdapter_Accessor()
         {
             _data = new DataPointList();
+        }
+
+        public DataFrameAdapter_Accessor(MemoryStream data) : base(data)
+        {
         }
 
         public override IDataFrameAdapter Create()
@@ -29,6 +34,11 @@ namespace StockBox_UnitTests.Accessors
                 ret.Indicators.Add(new IndicatorDataPoint(indicatorKey, indicatorValue));
             }
             return ret;
+        }
+
+        protected override DataPointList GetData()
+        {
+            return _data;
         }
     }
 }

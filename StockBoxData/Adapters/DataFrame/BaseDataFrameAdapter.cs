@@ -4,7 +4,7 @@ using Deedle;
 using StockBox.Data.SbFrames;
 using System.Linq;
 using StockBox.Data.Indicators;
-
+using StockBox.Validation;
 
 namespace StockBox.Data.Adapters.DataFrame
 {
@@ -50,6 +50,8 @@ namespace StockBox.Data.Adapters.DataFrame
             AddData(data);
         }
 
+        protected abstract DataPointList GetData();
+
         /// <summary>
         /// Add data from a MemoryStream after the object has been created
         /// </summary>
@@ -58,7 +60,7 @@ namespace StockBox.Data.Adapters.DataFrame
         {
             var rawData = Frame.ReadCsv(data);
             _sourceData = rawData.IndexRows<DateTime>("Date").SortRowsByKey();
-            _data = Map(_sourceData);
+            _data = Map(_sourceData).Reversed;
         }
 
         /// <summary>
@@ -68,7 +70,7 @@ namespace StockBox.Data.Adapters.DataFrame
         /// <returns></returns>
         public DataPoint GetDataPoint(int indexFromZero)
         {
-            return _data.FindByIndex(indexFromZero);
+            return GetData().FindByIndex(indexFromZero);
         }
 
         /// <summary>
@@ -101,6 +103,9 @@ namespace StockBox.Data.Adapters.DataFrame
         /// <returns></returns>
         private DataPointList Map(Frame<DateTime, string> data)
         {
+            // fill missing in with a placeholder value. We can do some
+            // post-processing to fill in missing values w/ averages
+            data = data.FillMissing(-1);
             DataPointList ret = new DataPointList();
             for (var idx = 0; idx < data.RowCount; idx++)
             {

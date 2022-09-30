@@ -17,41 +17,14 @@ namespace StockBox.Controllers
     /// Class <c>DomainController</c> runs all provided setups and symbols as a
     /// snapshot in time, with the zero index being the most recent datetime key
     /// </summary>
-    public class DomainController : IValidationResultsListProvider
+    public class DomainController : SbControllerBase
     {
 
-        /// <summary>
-        /// The ISbService is responsible for Scanning and Parsing the rule
-        /// statements into Expressions
-        /// </summary>
-        private readonly ISbService _service;
-
-        /// <summary>
-        /// The StateMachine defines all valid user transitions and will confirm
-        /// the new state of any SymbolProfile
-        /// </summary>
-        private readonly StateMachine _stateMachine;
-
-        /// <summary>
-        /// Aggregated results of all actions
-        /// </summary>
-        private ValidationResultList _results = new ValidationResultList();
-
-        public DomainController(ISbService service, StateMachine stateMachine)
+        public DomainController(ISbService service, StateMachine stateMachine) : base(service, stateMachine)
         {
-            _service = service;
-            _stateMachine = stateMachine;
+
         }
 
-        /// <summary>
-        /// Test the given Setup against the provided SymbolProfileList
-        /// </summary>
-        /// <param name="setup"></param>
-        /// <param name="profiles"></param>
-        public void ScanSetup(Setup setup, SymbolProfileList profiles)
-        {
-            ScanSetup(new SetupList(setup), profiles);
-        }
 
         /// <summary>
         /// Accepts a List of Setups to test against the profile List. Setups
@@ -59,7 +32,7 @@ namespace StockBox.Controllers
         /// </summary>
         /// <param name="setups"></param>
         /// <param name="profiles"></param>
-        public void ScanSetup(SetupList setups, SymbolProfileList profiles)
+        public override void ScanSetup(SetupList setups, SymbolProfileList profiles)
         {
             foreach (Setup s in setups)
                 _results.AddRange(ProcessSetup(s, profiles.FindBySetup(s)));
@@ -71,7 +44,7 @@ namespace StockBox.Controllers
         /// <param name="setup"></param>
         /// <param name="relatedProfiles"></param>
         /// <returns></returns>
-        private ValidationResultList ProcessSetup(Setup setup, SymbolProfileList relatedProfiles)
+        protected override ValidationResultList ProcessSetup(Setup setup, SymbolProfileList relatedProfiles)
         {
             var ret = new ValidationResultList();
 
@@ -132,14 +105,13 @@ namespace StockBox.Controllers
             return ret;
         }
 
-
         /// <summary>
         /// Perform the action contained within the Setup. This includes, but
         /// is not limited to Move(), Buy(), Sell() actions. 
         /// </summary>
         /// <param name="setup"></param>
         /// <returns></returns>
-        private ValidationResultList PerformSetupAction(Setup setup)
+        protected override ValidationResultList PerformSetupAction(Setup setup)
         {
             var vr = new ValidationResultList();
             vr.Add(new ValidationResult(setup.Action != null, "Setup MUST HAVE an action"));
@@ -151,9 +123,5 @@ namespace StockBox.Controllers
             return vr;
         }
 
-        public ValidationResultList GetResults()
-        {
-            return _results;
-        }
     }
 }

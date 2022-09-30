@@ -11,7 +11,7 @@ using StockBox.Interpreter.Scanner;
 using StockBox.Rules;
 using StockBox.Services;
 using System;
-
+using StockBox.Models;
 
 namespace StockBox_UnitTests
 {
@@ -103,7 +103,7 @@ namespace StockBox_UnitTests
             var expr = new DomainExpr(index, op, literal);
             var stream = new Reader().GetFileStream(EFile.eAmdDaily);
             var adapter = new DeedleAdapter(stream);
-            var dailyFrame = new DailyFrame(adapter);
+            var dailyFrame = new DailyFrame(adapter, new Symbol(string.Empty));
             var framelist = new SbFrameList();
             framelist.Add(dailyFrame);
             var interpreter = new SbInterpreter(framelist);
@@ -122,7 +122,7 @@ namespace StockBox_UnitTests
             var parser = new Parser(scanner.ScanTokens());
             var stream = new Reader().GetFileStream(EFile.eAmdDaily);
             var adapter = new DeedleAdapter(stream);
-            var dailyFrame = new DailyFrame(adapter);
+            var dailyFrame = new DailyFrame(adapter, new Symbol(string.Empty));
             var framelist = new SbFrameList();
             framelist.Add(dailyFrame);
             var interpreter = new SbInterpreter(framelist);
@@ -138,7 +138,7 @@ namespace StockBox_UnitTests
             var parser = new Parser(scanner.ScanTokens());
             var stream = new Reader().GetFileStream(EFile.eAmdDaily);
             var adapter = new DeedleAdapter(stream);
-            var dailyFrame = new DailyFrame(adapter);
+            var dailyFrame = new DailyFrame(adapter, new Symbol(string.Empty));
             var framelist = new SbFrameList();
             framelist.Add(dailyFrame);
             var interpreter = new SbInterpreter(framelist);
@@ -155,7 +155,7 @@ namespace StockBox_UnitTests
             var parser = new Parser(tokens);
             var stream = new Reader().GetFileStream(EFile.eAmdDaily);
             var adapter = new DeedleAdapter(stream);
-            var dailyFrame = new DailyFrame(adapter);
+            var dailyFrame = new DailyFrame(adapter, new Symbol(string.Empty));
             var framelist = new SbFrameList() { dailyFrame };
             var interpreter = new SbInterpreter(framelist);
             var result = interpreter.Interpret(parser.Parse());
@@ -171,7 +171,7 @@ namespace StockBox_UnitTests
             var parser = new Parser(tokens);
             var stream = new Reader().GetFileStream(EFile.eAmdDaily);
             var adapter = new DeedleAdapter(stream);
-            var dailyFrame = new DailyFrame(adapter);
+            var dailyFrame = new DailyFrame(adapter, new Symbol(string.Empty));
             var framelist = new SbFrameList() { dailyFrame };
             var interpreter = new SbInterpreter(framelist);
             var result = interpreter.Interpret(parser.Parse());
@@ -188,7 +188,7 @@ namespace StockBox_UnitTests
             var stream = new Reader().GetFileStream(EFile.eAmdDaily);
             var adapter = new DeedleAdapter(stream);
             var sma = new SimpleMovingAverage("SMA", 25);
-            var dailyFrame = new DailyFrame(adapter);
+            var dailyFrame = new DailyFrame(adapter, new Symbol(string.Empty));
             dailyFrame.AddIndicator(sma);
             var framelist = new SbFrameList() { dailyFrame };
             var interpreter = new SbInterpreter(framelist);
@@ -207,7 +207,7 @@ namespace StockBox_UnitTests
             adapter.CreateAndAddDataPoint(DateTime.Now, 14, 10, 13, 12, 1000, "SMA(5)", 10);
 
             // init the frame/fraemlist
-            var dailyFrame = new DailyFrame(adapter);
+            var dailyFrame = new DailyFrame(adapter, new Symbol(string.Empty));
             var framelist = new SbFrameList() { dailyFrame };
 
             // create and process the rules

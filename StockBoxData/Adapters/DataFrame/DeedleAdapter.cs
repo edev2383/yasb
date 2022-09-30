@@ -1,5 +1,5 @@
 ﻿using System.IO;
-
+using StockBox.Data.SbFrames;
 
 namespace StockBox.Data.Adapters.DataFrame
 {
@@ -26,13 +26,12 @@ namespace StockBox.Data.Adapters.DataFrame
         }
 
         /// <summary>
-        /// Override so we can reverse the data chronologically
+        /// Return the whole DataPointList
         /// </summary>
-        /// <param name="data"></param>
-        public override void AddData(MemoryStream data)
+        /// <returns></returns>
+        protected override DataPointList GetData()
         {
-            base.AddData(data);
-            _data = _data.Reversed;
+            return _data;
         }
     }
 }

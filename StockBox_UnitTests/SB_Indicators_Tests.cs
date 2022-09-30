@@ -8,7 +8,7 @@ using static StockBox_UnitTests.Helpers.EFile;
 using System.Collections.Generic;
 using System.Linq;
 using StockBox.Associations.Enums;
-
+using StockBox.Models;
 
 namespace StockBox_UnitTests
 {
@@ -22,7 +22,7 @@ namespace StockBox_UnitTests
             var expectedLastValue = 96.38;
             var stream = new Reader().GetFileStream(eAmdDaily);
             var adapter = new DeedleAdapter(stream);
-            var frame = new SbFrame(adapter, EFrequency.eDaily);
+            var frame = new SbFrame(adapter, EFrequency.eDaily, new Symbol(string.Empty));
             var sma = IndicatorFactory.Create("SMA", 25);
             frame.AddIndicator(sma);
 
@@ -60,7 +60,7 @@ namespace StockBox_UnitTests
             var expectedLastValue = 115648348;
             var stream = new Reader().GetFileStream(eAmdDaily);
             var adapter = new DeedleAdapter(stream);
-            var frame = new SbFrame(adapter, EFrequency.eDaily);
+            var frame = new SbFrame(adapter, EFrequency.eDaily, new Symbol(string.Empty));
             var sma = IndicatorFactory.Create("VOLUME", 25);
             frame.AddIndicator(sma);
 
