@@ -8,7 +8,7 @@ namespace StockBox.Data.Indicators
         {
         }
 
-        public bool ContainsItem(BaseIndicator item)
+        public bool ContainsItem(IIndicator item)
         {
             foreach (var ind in this)
                 if (ind.IdentifiesAs(item))

@@ -15,7 +15,7 @@ namespace StockBox.Data.Indicators
         int[] Indices { get; }
         object Payload { get; }
 
-        bool IdentifiesAs(BaseIndicator item);
+        bool IdentifiesAs(IIndicator item);
         void Calculate(IDataFrameAdapter frame);
     }
 }

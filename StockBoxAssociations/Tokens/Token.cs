@@ -6,10 +6,10 @@ namespace StockBox.Associations.Tokens
 
     /// <summary>
     /// Written rule statements are scanned and broken into Tokens. Each token
-    /// has a TokenType which informs how the Parse class will handle it. The
+    /// has a TokenType which informs how the Parser class will handle it. The
     /// lexeme is a string representation of the entry scanned. Literal is the
     /// entered as the actual *literal* value. Line and Char are integer values
-    /// representing the location of the Token in the provided Statement stirng.
+    /// representing the location of the Token in the provided Statement string.
     /// </summary>
     public class Token
     {

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using StockBox.Associations;
 using StockBox.Associations.Enums;
-
+using StockBox.Associations.Tokens;
 
 namespace StockBox.Data.SbFrames
 {
@@ -39,6 +39,11 @@ namespace StockBox.Data.SbFrames
                 if (item.Symbol.Equals(symbol))
                     ret.Add(item);
             return ret;
+        }
+
+        public void Normalize()
+        {
+
         }
     }
 }

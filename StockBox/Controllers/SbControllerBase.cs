@@ -48,6 +48,7 @@ namespace StockBox.Controllers
 
         public abstract void ScanSetup(SetupList setups, SymbolProfileList profiles);
         protected abstract ValidationResultList ProcessSetup(Setup setup, SymbolProfileList relatedProfiles);
+        protected abstract ValidationResultList ProcessSetups(SetupList setups, SymbolProfile symbol);
         protected abstract ValidationResultList PerformSetupAction(Setup setup);
 
         public ValidationResultList GetResults()

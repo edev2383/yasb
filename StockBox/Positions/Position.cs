@@ -18,7 +18,7 @@ namespace StockBox.Positions
 
         public int? TotalShares { get; set; }
         // this value can differ from TotalShares when the user opts to sell
-        // half their stake at a given target
+        // a portion their stake at a given target
         public int? ActiveShares { get; set; }
         public double? TotalDollars { get; set; }
         public double? EntryPrice { get; set; }

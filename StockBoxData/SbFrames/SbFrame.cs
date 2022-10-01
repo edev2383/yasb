@@ -111,9 +111,12 @@ namespace StockBox.Data.SbFrames
 
         public void AddIndicator(IIndicator indicator)
         {
+            // simple guard in case the indicator already exists
+            if (_indicators.ContainsItem(indicator)) return;
+
             // indicator calculates own values based on the data in the adapter
             // it receives
-            indicator.Calculate(this._adapter);
+            indicator.Calculate(_adapter);
 
             // the indicator payload is then mapped to the adapters data
             _adapter.MapIndicator(indicator);
@@ -125,6 +128,12 @@ namespace StockBox.Data.SbFrames
         public void AddData(MemoryStream data)
         {
             _adapter.AddData(data);
+        }
+
+
+        public IDataFrameAdapter GetAdapter()
+        {
+            return _adapter;
         }
     }
 }

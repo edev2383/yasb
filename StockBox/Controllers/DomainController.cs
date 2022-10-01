@@ -123,5 +123,9 @@ namespace StockBox.Controllers
             return vr;
         }
 
+        protected override ValidationResultList ProcessSetups(SetupList setups, SymbolProfile symbol)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

@@ -16,7 +16,6 @@ namespace StockBox.Data.Adapters.DataFrame
         public DeedleBacktestAdapter() { }
         public DeedleBacktestAdapter(MemoryStream data) : base(data) { }
 
-        private DataPointList _window;
         private int? _windowIndex;
 
         /// <summary>
@@ -54,7 +53,7 @@ namespace StockBox.Data.Adapters.DataFrame
         /// <summary>
         /// Create a subset of the data by cloning the original list and getting
         /// the range of the current _windowIndex until the end of the list.
-        /// This essentually return a slice of the origin data list
+        /// This returns a slice of the origin data list
         /// </summary>
         /// <returns></returns>
         protected override DataPointList GetData()
