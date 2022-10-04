@@ -60,7 +60,15 @@ namespace StockBox.Data.Adapters.DataFrame
         {
             var rawData = Frame.ReadCsv(data);
             _sourceData = rawData.IndexRows<DateTime>("Date").SortRowsByKey();
-            _data = Map(_sourceData).Reversed;
+            _data = Map(_sourceData);
+            if (!_data.IsDesc)
+                _data = _data.Reversed;
+        }
+
+
+        public virtual void AddData(DataPointList data)
+        {
+            _data = data;
         }
 
         /// <summary>
@@ -111,7 +119,12 @@ namespace StockBox.Data.Adapters.DataFrame
             {
                 var key = data.RowKeys.ToArray()[idx];
                 var curr = data.Rows[key];
-                ret.Add(MapDeedleObjectSeries(key, curr));
+                var vr = ValidateObjectSeries(curr);
+                // ignore any series that are missing data, the vr contains the
+                // series as a ValidationObject so we could further examine for
+                // additional data
+                if (vr.Success)
+                    ret.Add(MapDeedleObjectSeries(key, curr));
             }
             return ret;
         }
@@ -136,10 +149,28 @@ namespace StockBox.Data.Adapters.DataFrame
             };
         }
 
+        protected ValidationResultList ValidateObjectSeries(ObjectSeries<string> obj)
+        {
+            var ret = new ValidationResultList();
+            ret.Add(new ValidationResult(obj.ValueCount > 1, "ObjectSeries has more than one value"));
+            if (ret.HasFailures)
+                return ret;
+            ret.Add(new ValidationResult(obj.TryGet("High").Value.ToString() != "null", "ObjectSeries(`High`) is not null"));
+            ret.Add(new ValidationResult(obj.TryGet("Low").Value.ToString() != "null", "ObjectSeries(`Low`) is not null"));
+            ret.Add(new ValidationResult(obj.TryGet("Open").Value.ToString() != "null", "ObjectSeries(`Open`) is not null"));
+            ret.Add(new ValidationResult(obj.TryGet("Close").Value.ToString() != "null", "ObjectSeries(`Close`) is not null"));
+            ret.Add(new ValidationResult(obj.TryGet("Adj Close").Value.ToString() != "null", "ObjectSeries(`Adj Close`) is not null"));
+            ret.Add(new ValidationResult(obj.TryGet("Volume").Value.ToString() != "null", "ObjectSeries(`Volume`) is not null"));
+            if (ret.HasFailures)
+                ret.Add(new ValidationResult(EResult.eFail, "ObjectSeries is missing data", obj));
+            return ret;
+        }
+
         /// <summary>
         /// Create a new IDataFrameAdapter object, without preexisting data
         /// </summary>
         /// <returns></returns>
         public abstract IDataFrameAdapter Create();
+
     }
 }

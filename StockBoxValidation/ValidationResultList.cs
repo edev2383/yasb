@@ -40,6 +40,15 @@ namespace StockBox.Validation
             Add(new ValidationResult(result, message, aux));
         }
 
+        public ValidationResultList GetHasValidationObjectsOfType<T>()
+        {
+            var ret = new ValidationResultList();
+            foreach (var item in this)
+                if (item.ValidationObject != null && item.ValidationObject is T)
+                    ret.Add(item);
+            return ret;
+        }
+
         public ValidationResultList GetHasValidationObjects()
         {
             var ret = new ValidationResultList();

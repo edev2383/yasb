@@ -1,8 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using StockBox.Interpreter.Scanner;
 using StockBox.Associations.Tokens;
-using StockBox_UnitTests.Helpers;
-using static StockBox_UnitTests.Helpers.EFile;
+using StockBox_TestArtifacts.Helpers;
+using static StockBox_TestArtifacts.Helpers.EFile;
 
 
 namespace StockBox_UnitTests
@@ -410,6 +410,28 @@ namespace StockBox_UnitTests
             Assert.AreEqual(tokens[1].Type, TokenType.eSlash);
             Assert.AreEqual(tokens[2].Type, TokenType.eNumber);
             Assert.AreEqual(tokens[2].Literal, 100);
+            Assert.AreEqual(tokens[^1].Type, TokenType.eEOF);
+        }
+
+        [TestMethod]
+        public void SBC_35_ScannerCanRecognizeYesterdayDomainKeyword()
+        {
+            var scanner = new Scanner("Yesterday Close");
+            var tokens = scanner.ScanTokens();
+            Assert.IsTrue(tokens.Count == 4);
+            Assert.AreEqual(tokens[0].Lexeme, "1");
+            Assert.AreEqual(tokens[0].Type, TokenType.eNumber);
+            Assert.AreEqual(tokens[1].Lexeme, "day");
+            Assert.AreEqual(tokens[1].Type, TokenType.eDaily);
+            Assert.AreEqual(tokens[^1].Type, TokenType.eEOF);
+        }
+
+        [TestMethod]
+        public void SBC_36_ScannerCanRecognizeYesterdayDomainKeyword()
+        {
+            var scanner = new Scanner("High < Yesterday's High");
+            var tokens = scanner.ScanTokens();
+            Assert.IsTrue(tokens.Count == 8);
             Assert.AreEqual(tokens[^1].Type, TokenType.eEOF);
         }
 

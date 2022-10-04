@@ -1,7 +1,7 @@
 ﻿using System;
 
 
-namespace StockBox.Actions
+namespace StockBox.Actions.Responses
 {
 
     /// <summary>
@@ -17,9 +17,13 @@ namespace StockBox.Actions
         /// repsonse
         /// </summary>
         public object Source { get; set; }
+        public string Message { get; set; }
 
-        public ActionResponse()
+        public ActionResponse(bool isSuccess, string message = "", object source = null)
         {
+            IsSuccess = isSuccess;
+            Message = message;
+            Source = source;
         }
     }
 }

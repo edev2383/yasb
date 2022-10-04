@@ -1,4 +1,5 @@
 ﻿using System;
+using StockBox.Associations;
 using StockBox.Associations.Enums;
 using StockBox.Associations.Tokens;
 
@@ -13,7 +14,7 @@ namespace StockBox.Data.SbFrames
     public class DateTimeFrameHelper
     {
 
-        public static DateTime Get(DomainCombinationList combos, EFrequency interval)
+        public static DateTime Get(IDomainCombinationsProvider combos, EFrequency interval)
         {
             // To ensure we get a sufficient dataset, we want to get more than
             // what is requested. This can be adjusted as we get more usage

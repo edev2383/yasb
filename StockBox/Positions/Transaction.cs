@@ -1,6 +1,7 @@
 ﻿using System;
 using StockBox.Positions.Helpers;
 
+
 namespace StockBox.Positions
 {
 
@@ -11,11 +12,25 @@ namespace StockBox.Positions
     /// </summary>
     public class Transaction
     {
+
+        /**
+         * Need to reconcile multi-buy/multi-sell positions somehow
+         * 
+         * */
         public ETransactionType Type { get; set; }
         public Guid? PositionToken { get; set; }
         public Guid? Token { get; set; }
+        public int? ShareCount { get; set; }
+        public double SharePrice { get; set; }
+
         public Transaction()
         {
+        }
+
+        public Transaction(int shareCount, double sharePrice)
+        {
+            ShareCount = shareCount;
+            SharePrice = sharePrice;
         }
     }
 }

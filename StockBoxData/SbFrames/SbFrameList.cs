@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using StockBox.Associations;
 using StockBox.Associations.Enums;
-using StockBox.Associations.Tokens;
 
 namespace StockBox.Data.SbFrames
 {
@@ -9,8 +8,18 @@ namespace StockBox.Data.SbFrames
     /// <summary>
     /// 
     /// </summary>
-    public class SbFrameList : List<SbFrame>
+    public class SbFrameList : List<ISbFrame>
     {
+
+        public DataPoint Current
+        {
+            get
+            {
+                var daily = FindByFrequency(EFrequency.eWeekly);
+                if (daily == null) return new DataPoint();
+                return daily.FirstDataPoint();
+            }
+        }
 
         public SbFrameList()
         {
@@ -27,7 +36,7 @@ namespace StockBox.Data.SbFrames
             foreach (var frame in this)
             {
                 if (frame.Frequency == frequency)
-                    ret = frame;
+                    ret = (SbFrame)frame;
             }
             return ret;
         }
@@ -41,6 +50,10 @@ namespace StockBox.Data.SbFrames
             return ret;
         }
 
+        /// <summary>
+        /// Redraw the Weekly and Monthly windows based on the iterations of the
+        /// Daily. 
+        /// </summary>
         public void Normalize()
         {
 

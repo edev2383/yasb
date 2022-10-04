@@ -15,6 +15,7 @@ namespace StockBox.Positions
         public TransactionList Transactions { get { return _transactions; } }
         public RiskProfile RiskProfile { get { return _riskProfile; } }
 
+        public bool? IsOpen { get { return _transactions.HasOpenTransaction(); } }
 
         public int? TotalShares { get; set; }
         // this value can differ from TotalShares when the user opts to sell
@@ -26,19 +27,37 @@ namespace StockBox.Positions
         public double? ProfitLoss { get { return CalculateProfitLoss(); } }
 
         public int? PositionId { get; set; }
-        public Guid? Token { get; set; }
+        public Guid? Token { get { return _token; } }
 
         private TransactionList _transactions = new TransactionList();
         private SymbolProfile _symbol;
         private RiskProfile _riskProfile;
+        private Guid _token;
 
-        public Position()
+        public Position(Guid? token)
         {
+            _token = token != null ? (Guid)token : Guid.NewGuid();
         }
 
         public double CalculateProfitLoss()
         {
             return 0;
+        }
+
+        public void AddBuy(Transaction transaction)
+        {
+            TotalShares = transaction.ShareCount;
+            ActiveShares = transaction.ShareCount;
+            EntryPrice = transaction.SharePrice;
+            transaction.PositionToken = _token;
+            _transactions.Add(transaction);
+        }
+
+        public void AddSell(Transaction transaction)
+        {
+            ActiveShares -= transaction.ShareCount;
+            transaction.PositionToken = _token;
+            _transactions.Add(transaction);
         }
     }
 }

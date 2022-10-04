@@ -28,6 +28,9 @@
             Add("monthly", TokenType.eMonthly);
 
             Add("last", TokenType.eLast);
+            Add("yesterday", TokenType.eYesterday);
+            Add("yesterdays", TokenType.eYesterday);
+            Add("yesterday's", TokenType.eYesterday);
 
             Add("and", TokenType.eAnd);
 

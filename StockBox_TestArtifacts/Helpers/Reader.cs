@@ -2,12 +2,12 @@
 using System.IO;
 using StockBox.Associations;
 
-namespace StockBox_UnitTests.Helpers
+namespace StockBox_TestArtifacts.Helpers
 {
     public class Reader : ICallContextProvider
     {
 
-        private string _root = "/Users/jefferyedick/Projects/StockBox/StockBox_UnitTests/Files/";
+        private string _root = "/Users/jefferyedick/Projects/StockBox/StockBox_TestArtifacts/Files/";
 
         public string Text { get { return _text; } }
         private string _text;
@@ -102,10 +102,10 @@ namespace StockBox_UnitTests.Helpers
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-            return $"{_root}{ret}.{GetFIleExtension(ext)}";
+            return $"{_root}{ret}.{GetFileExtension(ext)}";
         }
 
-        private string GetFIleExtension(EExt ext)
+        private string GetFileExtension(EExt ext)
         {
             switch (ext)
             {

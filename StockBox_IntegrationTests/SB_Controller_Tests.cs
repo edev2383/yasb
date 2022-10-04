@@ -1,12 +1,17 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using StockBox.Actions;
 using StockBox.Controllers;
+using StockBox.Data.Adapters.DataFrame;
+using StockBox.Data.SbFrames;
+using StockBox.Data.Scraper;
 using StockBox.Interpreter.Scanner;
 using StockBox.Models;
+using StockBox.RiskProfiles;
 using StockBox.Rules;
 using StockBox.Services;
 using StockBox.Setups;
 using StockBox.States;
+using StockBox_TestArtifacts.Mocks;
 
 namespace StockBox_IntegrationTests
 {
@@ -22,8 +27,8 @@ namespace StockBox_IntegrationTests
                 new Rule("CLOSE > 60")
             };
 
-            var setup = new Setup(rules, new UserDefinedState("start"), new StockBox.RiskProfiles.RiskProfile());
-            setup.AddAction(new Move(null, "end"));
+            var setup = new Setup(rules, new UserDefinedState("start"), new RiskProfile());
+            setup.AddAction(new Move(new BackTestMoveActionAdapter(), "end"));
             var profiles = new SymbolProfileList()
             {
                 new SymbolProfile(new Symbol("MSFT"), new UserDefinedState("start")),
@@ -42,7 +47,7 @@ namespace StockBox_IntegrationTests
             var stateMachine = new StateMachine(stateLists, new UserDefinedState("start"));
             stateMachine.AddTransition(new Transition(new UserDefinedState("start"), new UserDefinedState("end")));
 
-            var controller = new DomainController(activeService, stateMachine);
+            var controller = new DomainController(activeService, stateMachine, new FrameListFactory(new SbScraper(), new DeedleAdapter()));
 
             controller.ScanSetup(setup, profiles);
 

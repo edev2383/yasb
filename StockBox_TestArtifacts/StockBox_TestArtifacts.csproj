@@ -1,0 +1,46 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Mocks\" />
+    <None Remove="Files\" />
+    <None Remove="Helpers\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Mocks\" />
+    <Folder Include="Files\" />
+    <Folder Include="Helpers\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\StockBox\StockBox.csproj" />
+    <ProjectReference Include="..\StockBoxAccess\StockBoxAccess.csproj" />
+    <ProjectReference Include="..\StockBoxAssociations\StockBoxAssociations.csproj" />
+    <ProjectReference Include="..\StockBoxConfiguration\StockBoxConfiguration.csproj" />
+    <ProjectReference Include="..\StockBoxData\StockBoxData.csproj" />
+    <ProjectReference Include="..\StockBoxInterpreter\StockBoxInterpreter.csproj" />
+    <ProjectReference Include="..\StockBoxValidation\StockBoxValidation.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Files\AMD_DAILY.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Files\AMD_MONTHLY.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Files\AMD_WEEKLY.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Files\BasicDouble.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Files\BasicInt.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Files\BasicString.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+</Project>

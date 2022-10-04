@@ -133,7 +133,7 @@ namespace StockBox.Interpreter.Scanner
         {
             return (c >= 'a' && c <= 'z') ||
                 (c >= 'A' && c <= 'Z') ||
-                c == '_';
+                c == '_' || c == '\'';
         }
 
         private void Identifier()
@@ -252,6 +252,10 @@ namespace StockBox.Interpreter.Scanner
                             break;
                         case TokenType.eFalse:
                             AddToken(TokenType.eTrue, false);
+                            break;
+                        case TokenType.eYesterday:
+                            InjectUnsourcedToken(TokenType.eNumber, "1", 1, line, current);
+                            InjectUnsourcedToken(TokenType.eDaily, "day", "Yesterday", line, current);
                             break;
                         default:
                             if (!PeekPrevious().IsOfNumericOrIndexType())

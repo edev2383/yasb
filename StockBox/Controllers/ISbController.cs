@@ -9,6 +9,6 @@ namespace StockBox.Controllers
     public interface ISbController
     {
         void ScanSetup(Setup setup, SymbolProfileList profiles);
-        void ScanSetup(SetupList setups, SymbolProfileList profiles);
+        void ScanSetups(SetupList setups, SymbolProfileList profiles);
     }
 }

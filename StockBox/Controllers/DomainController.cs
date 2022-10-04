@@ -1,6 +1,6 @@
-﻿using StockBox.Data.Adapters.DataFrame;
+﻿using System;
+using StockBox.Associations;
 using StockBox.Data.SbFrames;
-using StockBox.Data.Scraper;
 using StockBox.Interpreter;
 using StockBox.Interpreter.Scanner;
 using StockBox.Models;
@@ -20,7 +20,7 @@ namespace StockBox.Controllers
     public class DomainController : SbControllerBase
     {
 
-        public DomainController(ISbService service, StateMachine stateMachine) : base(service, stateMachine)
+        public DomainController(ISbService service, StateMachine stateMachine, ISbFrameListProvider frameListProvider) : base(service, stateMachine, frameListProvider)
         {
 
         }
@@ -32,7 +32,7 @@ namespace StockBox.Controllers
         /// </summary>
         /// <param name="setups"></param>
         /// <param name="profiles"></param>
-        public override void ScanSetup(SetupList setups, SymbolProfileList profiles)
+        public override void ScanSetups(SetupList setups, SymbolProfileList profiles)
         {
             foreach (Setup s in setups)
                 _results.AddRange(ProcessSetup(s, profiles.FindBySetup(s)));
@@ -54,13 +54,12 @@ namespace StockBox.Controllers
             var expressionAnalyzer = new ExpressionAnalyzer(setup.Rules.Expressions);
             expressionAnalyzer.Scan();
 
-            var factory = new FrameListFactory(new SbScraper(), new DeedleAdapter());
             var masterFrameList = new SbFrameList();
 
             // Aggregate all SbFrames for all found SymbolProfiles
             foreach (SymbolProfile sp in relatedProfiles)
             {
-                masterFrameList.AddRange(factory.Create(expressionAnalyzer.Combos, sp.Symbol));
+                masterFrameList.AddRange(_frameListProvider.Create(expressionAnalyzer.Combos, sp.Symbol));
             }
 
             foreach (SymbolProfile sp in relatedProfiles)
@@ -69,7 +68,7 @@ namespace StockBox.Controllers
 
                 // create a local setup clone and add the current SymbolProfile
                 var localSetup = setup.Clone();
-                localSetup.SymbolProfile = sp;
+                localSetup.AddSymbol(sp);
 
                 // create a local statemachine to be used within this block,
                 // for this local transaction only
@@ -94,7 +93,10 @@ namespace StockBox.Controllers
                     // if the the StateMachine allows the transition, we can
                     // perform the action contained within the Setup
                     if (innerVr.Success)
-                        innerVr.AddRange(PerformSetupAction(localSetup));
+                    {
+                        var dailyFrame = localFrameList.FindByFrequency(Associations.Enums.EFrequency.eDaily);
+                        innerVr.AddRange(PerformSetupAction(localSetup, dailyFrame.FirstDataPoint()));
+                    }
                 }
 
                 // add our results to the aggregate. This return object can be
@@ -105,27 +107,11 @@ namespace StockBox.Controllers
             return ret;
         }
 
-        /// <summary>
-        /// Perform the action contained within the Setup. This includes, but
-        /// is not limited to Move(), Buy(), Sell() actions. 
-        /// </summary>
-        /// <param name="setup"></param>
-        /// <returns></returns>
-        protected override ValidationResultList PerformSetupAction(Setup setup)
-        {
-            var vr = new ValidationResultList();
-            vr.Add(new ValidationResult(setup.Action != null, "Setup MUST HAVE an action"));
-            if (vr.Success)
-            {
-                var actionResponse = setup.Action.PerformAction();
-                vr.Add(new ValidationResult(actionResponse.IsSuccess, setup.ToString(), actionResponse));
-            }
-            return vr;
-        }
+
 
         protected override ValidationResultList ProcessSetups(SetupList setups, SymbolProfile symbol)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }

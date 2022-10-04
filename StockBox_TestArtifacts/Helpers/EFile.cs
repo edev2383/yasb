@@ -1,5 +1,5 @@
 ﻿using System;
-namespace StockBox_UnitTests.Helpers
+namespace StockBox_TestArtifacts.Helpers
 {
     public enum EFile
     {

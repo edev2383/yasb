@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using StockBox_UnitTests.Accessors;
-using StockBox_UnitTests.Helpers;
+using StockBox_TestArtifacts.Helpers;
 using StockBox.Associations.Tokens;
 using StockBox.Data.Adapters.DataFrame;
 using StockBox.Data.Indicators;

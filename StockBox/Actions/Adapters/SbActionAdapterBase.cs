@@ -1,20 +1,22 @@
 ﻿using System;
-using StockBox.Data.Managers;
+using StockBox.Actions.Responses;
+using StockBox.Data.SbFrames;
 
 namespace StockBox.Actions.Adapters
 {
-    public class SbActionAdapterBase : ISbActionAdapter
+
+    /// <summary>
+    /// Class <c>SbActionAdapterBase</c> 
+    /// </summary>
+    public abstract class SbActionAdapterBase : ISbActionAdapter
     {
-        public SbActionAdapterBase()
-        {
-        }
-
-
         public ISbAction ParentAction { get; set; }
 
         public ISbActionAdapter Clone()
         {
             throw new NotImplementedException();
         }
+
+        public abstract ActionResponse PerformAction(DataPoint dataPoint);
     }
 }

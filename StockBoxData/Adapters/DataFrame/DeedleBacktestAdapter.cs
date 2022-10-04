@@ -13,11 +13,21 @@ namespace StockBox.Data.Adapters.DataFrame
     /// </summary>
     public class DeedleBacktestAdapter : BaseDataFrameAdapter
     {
-        public DeedleBacktestAdapter() { }
-        public DeedleBacktestAdapter(MemoryStream data) : base(data) { }
+        public DeedleBacktestAdapter()
+        {
+        }
+        public DeedleBacktestAdapter(MemoryStream data) : base(data)
+        {
+        }
+        public DeedleBacktestAdapter(DataPointList data)
+        {
+            if (!data.IsDesc)
+                data = data.Reversed;
+            AddData(data);
+        }
 
         private int? _windowIndex;
-
+        private DataPointList _viewData { get { return GetData(); } }
         /// <summary>
         /// Decrease the _windowIndex integer value by 1, increasing the actual
         /// window of data by 1.
@@ -28,7 +38,7 @@ namespace StockBox.Data.Adapters.DataFrame
                 throw new System.Exception("No data found");
             if (_windowIndex == null)
                 _windowIndex = Length - 1;
-            if (_windowIndex > 0)
+            if (!IsAtEnd())
                 _windowIndex--;
         }
 

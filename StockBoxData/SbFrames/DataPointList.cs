@@ -21,6 +21,15 @@ namespace StockBox.Data.SbFrames
                 Add(item.Clone());
         }
 
+        public bool IsDesc
+        {
+            get
+            {
+                if (Count <= 1) return true;
+                return FirstValue.Date > LastValue.Date;
+            }
+        }
+
         public DataPoint LastValue
         {
             get

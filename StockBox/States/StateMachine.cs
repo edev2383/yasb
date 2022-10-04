@@ -5,14 +5,15 @@ using StockBox.Validation;
 namespace StockBox.States
 {
     /// <summary>
-    /// Contains and controls all State transitions. All available States and
-    /// valid Transitions are exlicitly defined beforehand to prevent invalid
-    /// states. UserDefinedState transitions are Nondeterministic, i.e., any
-    /// UserDefinedState can be transitioned into any other UserDefinedState.
-    /// There are application defined states that behave more deterministicly.
-    /// These states (ActivePendingState, ActiveState, ActiveErrorState,
-    /// InactivePendingState, InactiveState, InactiveErrorState) specifically
-    /// handle the Buy/Sell actions of given setups.
+    /// Class <c>StateMachine</c> contains and controls all State transitions.
+    /// All available States and valid Transitions are exlicitly defined
+    /// beforehand to prevent invalid states. UserDefinedState transitions are
+    /// nondeterministic, i.e., any UserDefinedState can be transitioned into
+    /// any other UserDefinedState. There are application defined states that
+    /// behave more deterministicly. These states (ActivePendingState,
+    /// ActiveState, ActiveErrorState, InactivePendingState, InactiveState,
+    /// InactiveErrorState) specifically handle the Buy/Sell actions of given
+    /// setups.
     /// </summary>
     public class StateMachine
     {
@@ -85,6 +86,8 @@ namespace StockBox.States
         /// <param name="state"></param>
         public void SetCurrentState(StateBase state)
         {
+            if (_currentState != null)
+                _history.Add(_currentState.Clone());
             _currentState = state;
         }
 
@@ -163,8 +166,7 @@ namespace StockBox.States
         /// <returns></returns>
         protected void PerformTransition(StateBase nextState)
         {
-            _history.Add(_currentState.Clone());
-            _currentState = nextState;
+            SetCurrentState(nextState);
         }
     }
 }

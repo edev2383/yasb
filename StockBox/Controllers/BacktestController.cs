@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using StockBox.Associations;
 using StockBox.Data.Adapters.DataFrame;
 using StockBox.Data.SbFrames;
 using StockBox.Data.Scraper;
 using StockBox.Interpreter;
 using StockBox.Interpreter.Scanner;
 using StockBox.Models;
+using StockBox.Positions;
 using StockBox.Services;
 using StockBox.Setups;
 using StockBox.States;
@@ -16,11 +19,16 @@ namespace StockBox.Controllers
 {
 
     /// <summary>
-    /// 
+    /// Class <c>BacktestController</c> analyzes setups against a single Symbol
+    /// over historical data, resulting in a ValidationResultList _results
+    /// object that can be further analyzed for specific outcomes.
     /// </summary>
     public class BacktestController : SbControllerBase
     {
-        public BacktestController(ISbService service, StateMachine stateMachine) : base(service, stateMachine)
+
+        public PositionList Positions { get; set; } = new PositionList();
+
+        public BacktestController(ISbService service, StateMachine stateMachine, ISbFrameListProvider frameListProvider) : base(service, stateMachine, frameListProvider)
         {
 
         }
@@ -30,22 +38,9 @@ namespace StockBox.Controllers
         /// </summary>
         /// <param name="setups"></param>
         /// <param name="profiles"></param>
-        public override void ScanSetup(SetupList setups, SymbolProfileList profiles)
+        public override void ScanSetups(SetupList setups, SymbolProfileList profiles)
         {
-
-
-            // need to get a deep set of data
-
-            // and iterate through the keys of that dataset
-
-            // window..?
-            foreach (Setup setup in setups)
-                _results.AddRange(ProcessSetup(setup, profiles.FindBySetup(setup)));
-        }
-
-        protected override ValidationResultList PerformSetupAction(Setup setup)
-        {
-            throw new NotImplementedException();
+            _results.AddRange(ProcessSetups(setups, profiles.First()));
         }
 
         protected override ValidationResultList ProcessSetups(SetupList setups, SymbolProfile symbol)
@@ -56,15 +51,13 @@ namespace StockBox.Controllers
             // current state of the profile
 
             // when a setup has been processed, push it here and when we pull
-            // a setup from the primary list to test agains the symbol, we can
-            // check if it is in here already, so we don't have to both running
+            // a setup from the primary list to test against the symbol, we can
+            // check if it is in here already, so we don't have to bother to run
             // it through again.
             SetupList cachedSetups = new SetupList();
 
-            var factory = new FrameListFactory(new SbScraper(), new DeedleBacktestAdapter());
-
             // create the range dataset, and add indicators as needed
-            var backtestDataFrames = factory.CreateBacktestData(symbol.Symbol);
+            var backtestDataFrames = _frameListProvider.CreateBacktestData(symbol.Symbol) as SbFrameList;
 
             // we always iterate against the daily, but we need to normalize the
             // weekly and monthly as we traverse the list
@@ -72,6 +65,12 @@ namespace StockBox.Controllers
 
             // expose the adapter and create the while loop
             var adapter = daily.GetAdapter() as DeedleBacktestAdapter;
+
+            ret.Add(new ValidationResult(adapter != null, "Adapter is not null - is of type 'DeedleBacktestAdapter'"));
+            if (ret.HasFailures) return ret;
+
+            adapter.IterateWindow();
+
             while (!adapter.IsAtEnd())
             {
                 // create a local VRL
@@ -86,13 +85,17 @@ namespace StockBox.Controllers
                 // loop because the symbol cannot transition if it cannot find
                 // a related setup for actions
                 innerVr.Add(new ValidationResult(foundSetups.Count > 0, "A Setup was found in the provided list"));
-                if (innerVr.HasFailures) break;
+                if (innerVr.HasFailures)
+                {
+                    ret.AddRange(innerVr);
+                    break;
+                }
 
                 // Backtesting should be relatively focused and specific, so
                 // setups with overlapping states will be ignored and only the
                 // first found will be used for the back testing
                 var currSetup = foundSetups.First();
-
+                currSetup.AddSymbol(symbol);
                 // as we process setups and get the expressions from their rules
                 // we cache them in a separate list, so we can know which setups
                 // have been processed. We don't need the rules again (for the
@@ -108,7 +111,7 @@ namespace StockBox.Controllers
 
                     // add indicators to the SbFrameList based on the combos
                     // found by the analyzer
-                    factory.AddIndicators(backtestDataFrames, expressionAnalyzer.Combos);
+                    _frameListProvider.AddIndicators(backtestDataFrames, expressionAnalyzer.Combos);
 
                     // toss a clone of the setup in the cache
                     cachedSetups.Add(currSetup.Clone());
@@ -127,11 +130,16 @@ namespace StockBox.Controllers
 
                     // if successful, perform the action within the setup
                     if (innerVr.Success)
-                        innerVr.AddRange(PerformSetupAction(currSetup));
+                    {
+                        // if there is a state transition, it will be handled
+                        // by the Action's adapter
+                        var dailyFrame = backtestDataFrames.FindByFrequency(Associations.Enums.EFrequency.eDaily);
+                        //symbol.TransitionState(currSetup.Action.TransitionState);
+                        innerVr.AddRange(PerformSetupAction(currSetup, dailyFrame.FirstDataPoint()));
+                    }
                 }
 
-                // Add all data to the return object, which will be analyzed
-                // later
+                // Add all data to the return object, to be analyzed later
                 ret.AddRange(evalResult);
                 ret.AddRange(innerVr);
 

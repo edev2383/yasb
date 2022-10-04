@@ -38,7 +38,7 @@ namespace StockBox_IntegrationTests
 
             // create the factory and give it the analyzed combinations
             var factory = new FrameListFactory(new SbScraper(), new DeedleAdapter());
-            var frameList = factory.Create(expAnalyzer.Combos, new Symbol("MSFT"));
+            var frameList = factory.Create(expAnalyzer.Combos, new Symbol("MSFT")) as SbFrameList;
 
             // find the daily framelist
             var daily = frameList.FindByFrequency(StockBox.Associations.Enums.EFrequency.eDaily);
@@ -67,7 +67,7 @@ namespace StockBox_IntegrationTests
 
             // create the factory and give it the analyzed combinations
             var factory = new FrameListFactory(new SbScraper(), new DeedleAdapter());
-            var frameList = factory.Create(expAnalyzer.Combos, new Symbol("MSFT"));
+            var frameList = factory.Create(expAnalyzer.Combos, new Symbol("MSFT")) as SbFrameList;
 
             // find the daily framelist
             var weekly = frameList.FindByFrequency(StockBox.Associations.Enums.EFrequency.eWeekly);
@@ -96,7 +96,7 @@ namespace StockBox_IntegrationTests
 
             // create the factory and give it the analyzed combinations
             var factory = new FrameListFactory(new SbScraper(), new DeedleAdapter());
-            var frameList = factory.Create(expAnalyzer.Combos, new Symbol("MSFT"));
+            var frameList = factory.Create(expAnalyzer.Combos, new Symbol("MSFT")) as SbFrameList;
 
             // find the daily framelist
             var monthly = frameList.FindByFrequency(StockBox.Associations.Enums.EFrequency.eMonthly);
@@ -125,7 +125,7 @@ namespace StockBox_IntegrationTests
 
             // create the factory and give it the analyzed combinations
             var factory = new FrameListFactory(new SbScraper(), new DeedleAdapter());
-            var frameList = factory.Create(expAnalyzer.Combos, new Symbol("MSFT"));
+            var frameList = factory.Create(expAnalyzer.Combos, new Symbol("MSFT")) as SbFrameList;
 
             // find the daily framelist
             var monthly = frameList.FindByFrequency(StockBox.Associations.Enums.EFrequency.eMonthly);
@@ -161,7 +161,7 @@ namespace StockBox_IntegrationTests
 
             // create the factory and give it the analyzed combinations
             var factory = new FrameListFactory(new SbScraper(), new DeedleAdapter());
-            var frameList = factory.Create(expAnalyzer.Combos, new Symbol("MSFT"));
+            var frameList = factory.Create(expAnalyzer.Combos, new Symbol("MSFT")) as SbFrameList;
 
             // find the daily framelist
             var daily = frameList.FindByFrequency(StockBox.Associations.Enums.EFrequency.eDaily);
@@ -175,7 +175,7 @@ namespace StockBox_IntegrationTests
             var symbol = new Symbol("AMD");
 
             var factory = new FrameListFactory(new SbScraper(), new DeedleAdapter());
-            var framelist = factory.CreateBacktestData(symbol);
+            var framelist = factory.CreateBacktestData(symbol) as SbFrameList;
 
             var foundDaily = framelist.FindByFrequency(StockBox.Associations.Enums.EFrequency.eDaily);
             var foundWeekly = framelist.FindByFrequency(StockBox.Associations.Enums.EFrequency.eWeekly);
@@ -214,7 +214,7 @@ namespace StockBox_IntegrationTests
         {
             var sym = new Symbol(symbol);
             var factory = new FrameListFactory(new SbScraper(), new DeedleAdapter());
-            var framelist = factory.CreateBacktestData(sym);
+            var framelist = factory.CreateBacktestData(sym) as SbFrameList;
             return framelist;
         }
     }

@@ -13,7 +13,7 @@ namespace StockBox.Data.SbFrames
     /// this Frame class and the actual Deedle library. This will allow us to
     /// swap data libraries as needed, provided we have the proper adapter
     /// </summary>
-    public class SbFrame
+    public class SbFrame : ISbFrame
     {
 
         public ISymbolProvider Symbol { get { return _symbol; } }
@@ -70,7 +70,7 @@ namespace StockBox.Data.SbFrames
         }
 
         /// <summary>
-        /// return the first row in the data list
+        /// return the first row in the data list, i.e., the "current" datapoint
         /// </summary>
         /// <returns></returns>
         public DataPoint FirstDataPoint()

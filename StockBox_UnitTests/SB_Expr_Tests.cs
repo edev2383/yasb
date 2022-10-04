@@ -77,7 +77,7 @@ namespace StockBox_UnitTests
                 new DomainCombination(5, new Token_Accessor(TokenType.eWeekly), "Close")
             };
 
-            var daily = dcl.GetDailyDomainCombos();
+            var daily = dcl.GetDailyDomainCombos() as DomainCombinationList;
             var maxIndex = daily.GetMaxIndex();
 
             Assert.AreEqual(daily.First().IntervalFrequency.Type, TokenType.eDaily);
@@ -114,7 +114,7 @@ namespace StockBox_UnitTests
                 new DomainCombination(5, new Token_Accessor(TokenType.eWeekly), "Close")
             };
 
-            var weekly = dcl.GetWeeklyDomainCombos();
+            var weekly = dcl.GetWeeklyDomainCombos() as DomainCombinationList;
             var maxIndex = weekly.GetMaxIndex();
 
             Assert.AreEqual(weekly.First().IntervalFrequency.Type, TokenType.eWeekly);
@@ -133,7 +133,7 @@ namespace StockBox_UnitTests
                 new DomainCombination(5, new Token_Accessor(TokenType.eWeekly), "Close")
             };
 
-            var monthly = dcl.GetMonthyDomainCombos();
+            var monthly = dcl.GetMonthyDomainCombos() as DomainCombinationList;
 
             Assert.AreEqual(monthly.First().IntervalFrequency.Type, TokenType.eMonthly);
             Assert.AreEqual(25, monthly.First().Indices.First());

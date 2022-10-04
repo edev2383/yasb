@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using StockBox.Associations;
 using StockBox.Associations.Enums;
 using StockBox.Associations.Tokens;
@@ -16,7 +17,7 @@ namespace StockBox.Data.SbFrames
     /// and resulting expression needs to be analyzed to get a full Domain
     /// Combination List
     /// </summary>
-    public class FrameListFactory
+    public class FrameListFactory : ISbFrameListProvider
     {
 
         private DateTime _historicalStart = new DateTime(2000, 1, 1);
@@ -34,26 +35,7 @@ namespace StockBox.Data.SbFrames
             _adapter = adapter;
         }
 
-        public SbFrameList Create(DomainCombinationList combos, ISymbolProvider symbol)
-        {
-            SbFrameList ret = new SbFrameList();
-
-            var dailyCombos = combos.GetDailyDomainCombos();
-            if (dailyCombos.Count > 0)
-                ret.Add(CreateDailySbFrame(dailyCombos, symbol));
-
-            var weeklyCombos = combos.GetWeeklyDomainCombos();
-            if (weeklyCombos.Count > 0)
-                ret.Add(CreateWeeklySbFrame(weeklyCombos, symbol));
-
-            var monthlyCombos = combos.GetMonthyDomainCombos();
-            if (monthlyCombos.Count > 0)
-                ret.Add(CreateMonthlySbFrame(monthlyCombos, symbol));
-
-            return ret;
-        }
-
-        public SbFrame CreateDailySbFrame(DomainCombinationList dailyCombos, ISymbolProvider symbol)
+        public SbFrame CreateDailySbFrame(IDomainCombinationsProvider dailyCombos, ISymbolProvider symbol)
         {
             var ret = new DailyFrame(_adapter.Create(), symbol);
 
@@ -66,7 +48,7 @@ namespace StockBox.Data.SbFrames
             return ret;
         }
 
-        public SbFrame CreateWeeklySbFrame(DomainCombinationList weeklyCombos, ISymbolProvider symbol)
+        public SbFrame CreateWeeklySbFrame(IDomainCombinationsProvider weeklyCombos, ISymbolProvider symbol)
         {
             var ret = new WeeklyFrame(_adapter.Create(), symbol);
 
@@ -79,7 +61,7 @@ namespace StockBox.Data.SbFrames
             return ret;
         }
 
-        public SbFrame CreateMonthlySbFrame(DomainCombinationList monthlyCombos, ISymbolProvider symbol)
+        public SbFrame CreateMonthlySbFrame(IDomainCombinationsProvider monthlyCombos, ISymbolProvider symbol)
         {
             var ret = new MonthlyFrame(_adapter.Create(), symbol);
 
@@ -119,32 +101,51 @@ namespace StockBox.Data.SbFrames
             return ret;
         }
 
-
-        private void MapIndicators(SbFrame frame, DomainCombinationList combos)
+        private void MapIndicators(SbFrame frame, IDomainCombinationsProvider combos)
         {
-            foreach (var c in combos.GetIndicators())
+            foreach (var c in (combos as DomainCombinationList).GetIndicators())
             {
                 frame.AddIndicator(IndicatorFactory.Create(c.DomainKeyword, c.Indices));
             }
         }
 
-        public void AddIndicators(SbFrameList framelist, DomainCombinationList combos)
+        public List<ISbFrame> Create(IDomainCombinationsProvider combos, ISymbolProvider symbol)
         {
-            var dailyFrameList = framelist.FindByFrequency(EFrequency.eDaily);
-            MapIndicators(dailyFrameList, combos.GetDailyDomainCombos());
-            var weeklyFrameList = framelist.FindByFrequency(EFrequency.eWeekly);
-            MapIndicators(weeklyFrameList, combos.GetWeeklyDomainCombos());
-            var montlyFrameList = framelist.FindByFrequency(EFrequency.eMonthly);
-            MapIndicators(montlyFrameList, combos.GetMonthyDomainCombos());
+            SbFrameList ret = new SbFrameList();
+
+            var dailyCombos = combos.GetDailyDomainCombos() as DomainCombinationList;
+            if (dailyCombos.Count > 0)
+                ret.Add(CreateDailySbFrame(dailyCombos, symbol));
+
+            var weeklyCombos = combos.GetWeeklyDomainCombos() as DomainCombinationList;
+            if (weeklyCombos.Count > 0)
+                ret.Add(CreateWeeklySbFrame(weeklyCombos, symbol));
+
+            var monthlyCombos = combos.GetMonthyDomainCombos() as DomainCombinationList;
+            if (monthlyCombos.Count > 0)
+                ret.Add(CreateMonthlySbFrame(monthlyCombos, symbol));
+
+            return ret;
         }
 
-        public SbFrameList CreateBacktestData(ISymbolProvider symbol)
+        public List<ISbFrame> CreateBacktestData(ISymbolProvider symbol)
         {
             var ret = new SbFrameList();
             ret.Add(CreateDailySbFrame(symbol));
             ret.Add(CreateWeeklySbFrame(symbol));
             ret.Add(CreateMonthlySbFrame(symbol));
             return ret;
+        }
+
+        public void AddIndicators(List<ISbFrame> framelist, IDomainCombinationsProvider domainCombinations)
+        {
+            var fl = framelist as SbFrameList;
+            var dailyFrameList = fl.FindByFrequency(EFrequency.eDaily);
+            MapIndicators(dailyFrameList, domainCombinations.GetDailyDomainCombos());
+            var weeklyFrameList = fl.FindByFrequency(EFrequency.eWeekly);
+            MapIndicators(weeklyFrameList, domainCombinations.GetWeeklyDomainCombos());
+            var montlyFrameList = fl.FindByFrequency(EFrequency.eMonthly);
+            MapIndicators(montlyFrameList, domainCombinations.GetMonthyDomainCombos());
         }
     }
 }

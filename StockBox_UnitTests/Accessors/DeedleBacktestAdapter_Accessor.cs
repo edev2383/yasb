@@ -11,6 +11,10 @@ namespace StockBox_UnitTests.Accessors
         {
         }
 
+        public DeedleBacktestAdapter_Accessor(DataPointList data) : base(data)
+        {
+        }
+
         public DeedleBacktestAdapter_Accessor(MemoryStream data) : base(data)
         {
         }
@@ -18,6 +22,19 @@ namespace StockBox_UnitTests.Accessors
         public DataPointList Access_GetData()
         {
             return GetData();
+        }
+
+        public DeedleBacktestAdapter_Accessor CloneWithSubsetOfData(DateTime startDate, DateTime? endDate = null)
+        {
+            var datapoints = GetData();
+            var startIndex = datapoints.FindIndex(x => x.Date == startDate);
+            var count = datapoints.Count - startIndex;
+            if (endDate != null)
+            {
+                var endIndex = datapoints.FindIndex(x => x.Date == (DateTime)endDate);
+                count = datapoints.Count - endIndex;
+            }
+            return new DeedleBacktestAdapter_Accessor(new DataPointList(datapoints.GetRange(startIndex, count)));
         }
     }
 }

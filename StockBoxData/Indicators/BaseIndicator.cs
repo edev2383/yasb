@@ -44,7 +44,7 @@ namespace StockBox.Data.Indicators
             _payload = CalculateIndicator(adapter);
         }
 
-        public bool IdentifiesAs(BaseIndicator item)
+        public bool IdentifiesAs(IIndicator item)
         {
             if (item.Name.ToLower() != Name.ToLower()) return false;
             if (item.Type != Type) return false;

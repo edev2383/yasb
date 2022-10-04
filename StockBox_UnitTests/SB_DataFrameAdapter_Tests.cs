@@ -1,8 +1,8 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using StockBox.Data.Adapters.DataFrame;
-using static StockBox_UnitTests.Helpers.EFile;
-using StockBox_UnitTests.Helpers;
+using static StockBox_TestArtifacts.Helpers.EFile;
+using StockBox_TestArtifacts.Helpers;
 using StockBox_UnitTests.Accessors;
 
 namespace StockBox_UnitTests

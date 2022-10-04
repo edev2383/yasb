@@ -50,6 +50,7 @@ namespace StockBox.Associations.Tokens
         eMonthly,
         eDaily,
 
+        eYesterday,
         eAgo,
 
         // Numeric keywords

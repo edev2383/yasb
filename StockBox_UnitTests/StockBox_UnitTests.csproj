@@ -16,31 +16,12 @@
   <ItemGroup>
     <ProjectReference Include="..\StockBox\StockBox.csproj" />
     <ProjectReference Include="..\StockBoxInterpreter\StockBoxInterpreter.csproj" />
+    <ProjectReference Include="..\StockBox_TestArtifacts\StockBox_TestArtifacts.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove="Accesors\" />
+    <None Remove="Mocks\" />
   </ItemGroup>
   <ItemGroup>
-    <None Update="Files\AMD_DAILY.csv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Files\AMD_MONTHLY.csv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Files\AMD_WEEKLY.csv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Files\BasicDouble.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Files\BasicInt.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Files\BasicString.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Accesors\" />
+    <Folder Include="Mocks\" />
   </ItemGroup>
 </Project>

@@ -1,4 +1,7 @@
-﻿using StockBox.Models;
+﻿using StockBox.Associations;
+using StockBox.Data.Context;
+using StockBox.Data.SbFrames;
+using StockBox.Models;
 using StockBox.Services;
 using StockBox.Setups;
 using StockBox.States;
@@ -24,15 +27,18 @@ namespace StockBox.Controllers
         /// the new state of any SymbolProfile
         /// </summary>
         protected readonly StateMachine _stateMachine;
+
+        protected readonly ISbFrameListProvider _frameListProvider;
         /// <summary>
         /// Aggregated results of all actions
         /// </summary>
         protected ValidationResultList _results = new ValidationResultList();
 
-        public SbControllerBase(ISbService service, StateMachine stateMachine)
+        public SbControllerBase(ISbService service, StateMachine stateMachine, ISbFrameListProvider frameListProvider)
         {
             _service = service;
             _stateMachine = stateMachine;
+            _frameListProvider = frameListProvider;
         }
 
         /// <summary>
@@ -42,14 +48,31 @@ namespace StockBox.Controllers
         /// <param name="profiles"></param>
         public void ScanSetup(Setup setup, SymbolProfileList profiles)
         {
-            ScanSetup(new SetupList(setup), profiles);
+            ScanSetups(new SetupList(setup), profiles);
 
         }
 
-        public abstract void ScanSetup(SetupList setups, SymbolProfileList profiles);
+        public abstract void ScanSetups(SetupList setups, SymbolProfileList profiles);
         protected abstract ValidationResultList ProcessSetup(Setup setup, SymbolProfileList relatedProfiles);
         protected abstract ValidationResultList ProcessSetups(SetupList setups, SymbolProfile symbol);
-        protected abstract ValidationResultList PerformSetupAction(Setup setup);
+
+        /// <summary>
+        /// Perform the action contained within the Setup. This includes, but
+        /// is not limited to Move(), Buy(), Sell() actions. 
+        /// </summary>
+        /// <param name="setup"></param>
+        /// <returns></returns>
+        protected virtual ValidationResultList PerformSetupAction(Setup setup, DataPoint dataPoint)
+        {
+            var vr = new ValidationResultList();
+            vr.Add(new ValidationResult(setup.Action != null, "Setup MUST HAVE an action"));
+            if (vr.Success)
+            {
+                var actionResponse = setup.Action.PerformAction(dataPoint);
+                vr.Add(new ValidationResult(actionResponse.IsSuccess, setup.ToString(), actionResponse));
+            }
+            return vr;
+        }
 
         public ValidationResultList GetResults()
         {

@@ -21,5 +21,6 @@
     <ProjectReference Include="..\StockBoxConfiguration\StockBoxConfiguration.csproj" />
     <ProjectReference Include="..\StockBoxValidation\StockBoxValidation.csproj" />
     <ProjectReference Include="..\StockBoxInterpreter\StockBoxInterpreter.csproj" />
+    <ProjectReference Include="..\StockBox_TestArtifacts\StockBox_TestArtifacts.csproj" />
   </ItemGroup>
 </Project>

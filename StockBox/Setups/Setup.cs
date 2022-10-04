@@ -113,6 +113,13 @@ namespace StockBox.Setups
             _rules.ProcessRules(service);
         }
 
+        public void AddSymbol(SymbolProfile symbol)
+        {
+            SymbolProfile = symbol;
+            foreach (var action in _actions)
+                action.Symbol = symbol;
+        }
+
         public void AddAction(SbActionBase action)
         {
             if (RiskProfile != null)

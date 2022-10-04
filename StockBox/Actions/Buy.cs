@@ -2,7 +2,8 @@
 using StockBox.Validation;
 using StockBox.Actions.Adapters;
 using StockBox.Actions.Helpers;
-
+using StockBox.Actions.Responses;
+using StockBox.Data.SbFrames;
 
 namespace StockBox.Actions
 {
@@ -27,22 +28,9 @@ namespace StockBox.Actions
             return new Buy(this);
         }
 
-        public override ActionResponse PerformAction()
+        public override ActionResponse PerformAction(DataPoint dataPoint)
         {
-            var vr = new ValidationResultList();
-
-            // perform action
-            if (vr.Success)
-            {
-                //var successAction = new BuySuccess(moveAdapter, new ActiveState());
-                //
-            }
-            else
-            {
-                //var failAction = new BuyError(moveAdapter, new ActiveErrorState());
-            }
-
-            return null;
+            return Adapter.PerformAction(dataPoint);
         }
     }
 }

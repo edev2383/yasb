@@ -19,6 +19,11 @@ namespace StockBox.Data.Context
     {
         public static IStreamProvider Create(string symbol, EFrequency frequency, DateTime startDate, DateTime? endDate = null)
         {
+            return CreateYahooFinanceStream(symbol, frequency, startDate, endDate);
+        }
+
+        private static IStreamProvider CreateYahooFinanceStream(string symbol, EFrequency frequency, DateTime startDate, DateTime? endDate = null)
+        {
             var inType = new HistoryYahooFinanceProvider_InType()
             {
                 Symbol = symbol,

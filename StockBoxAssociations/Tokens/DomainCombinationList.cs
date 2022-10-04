@@ -10,24 +10,24 @@ namespace StockBox.Associations.Tokens
     /// <summary>
     /// 
     /// </summary>
-    public class DomainCombinationList : List<DomainCombination>
+    public class DomainCombinationList : List<DomainCombination>, IDomainCombinationsProvider
     {
 
         public DomainCombinationList()
         {
         }
 
-        public DomainCombinationList GetDailyDomainCombos()
+        public IDomainCombinationsProvider GetDailyDomainCombos()
         {
             return GetDomainCombosByInterval(TokenType.eDaily);
         }
 
-        public DomainCombinationList GetWeeklyDomainCombos()
+        public IDomainCombinationsProvider GetWeeklyDomainCombos()
         {
             return GetDomainCombosByInterval(TokenType.eWeekly);
         }
 
-        public DomainCombinationList GetMonthyDomainCombos()
+        public IDomainCombinationsProvider GetMonthyDomainCombos()
         {
             return GetDomainCombosByInterval(TokenType.eMonthly);
         }

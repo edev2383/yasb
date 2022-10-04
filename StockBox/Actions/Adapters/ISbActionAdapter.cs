@@ -1,6 +1,6 @@
 ﻿using System;
-using StockBox.Associations;
-using StockBox.Data.Managers;
+using StockBox.Actions.Responses;
+using StockBox.Data.SbFrames;
 
 namespace StockBox.Actions.Adapters
 {
@@ -14,5 +14,6 @@ namespace StockBox.Actions.Adapters
     {
         ISbAction ParentAction { get; set; }
         ISbActionAdapter Clone();
+        ActionResponse PerformAction(DataPoint dataPoint);
     }
 }

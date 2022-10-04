@@ -1,4 +1,5 @@
-﻿using StockBox.Setups;
+﻿using StockBox.Data.SbFrames;
+using StockBox.Setups;
 using StockBox.States;
 
 
@@ -18,6 +19,20 @@ namespace StockBox.Models
         /// </summary>
         public StateBase State { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public DataPoint DataPoint { get; set; }
+
+        /// <summary>
+        /// A list to hold onto previous state objects. It's unlikely that this
+        /// will ever contain more than one state, as we most likely want to
+        /// prevent multiple state transitions for a single symbol
+        /// </summary>
+        private StateList _stateCache = new StateList();
+
+        public bool IsDirty { get; set; } = false;
+
         public SymbolProfile(Symbol symbol, StateBase state)
         {
             Symbol = symbol;
@@ -25,6 +40,20 @@ namespace StockBox.Models
         }
 
         public SymbolProfile() { }
+
+        /// <summary>
+        /// Transition the profile to a new state, keeping the old state
+        /// cached and marking the profile dirty. Dirty profiles cannot be
+        /// transitioned again, preventing a symbol from triggering a second
+        /// action
+        /// </summary>
+        /// <param name="nextState"></param>
+        public void TransitionState(StateBase nextState)
+        {
+            _stateCache.Add(State.Clone());
+            State = nextState;
+            IsDirty = true;
+        }
 
         public override string ToString()
         {

@@ -19,6 +19,7 @@ namespace StockBox.Configuration.App
 
         public EEnvironment Environment { get { return MapEnvironment(); } }
 
+
         public static StockboxConfiguration GetInstance()
         {
             if (_instance == null)
@@ -32,7 +33,7 @@ namespace StockBox.Configuration.App
 
                 _instance = new StockboxConfiguration(configuration);
             }
-            
+
             return _instance;
         }
 
