@@ -96,7 +96,8 @@ namespace StockBox_UnitTests
             sm.AddTransition(new Transition(new InactiveState(), new ActiveState()));
             Assert.IsTrue(sm.CurrentState.Equals(new UserDefinedState("Start")));
 
-            sm.TryNextState(new InactiveState());
+            var symbolRef = new SymbolProfile(new Symbol(string.Empty), new InactiveState());
+            sm.TryNextState(new InactiveState(), ref symbolRef);
             Assert.IsTrue(sm.CurrentState.Equals(new InactiveState()));
         }
 
@@ -114,7 +115,8 @@ namespace StockBox_UnitTests
             sm.AddTransition(new Transition(new InactiveState(), new ActiveState()));
             Assert.IsTrue(sm.CurrentState.Equals(new UserDefinedState("Start")));
 
-            sm.TryNextState(new ActiveState());
+            var symbolRef = new SymbolProfile(new Symbol(string.Empty), new InactiveState());
+            sm.TryNextState(new ActiveState(), ref symbolRef);
             Assert.IsFalse(sm.CurrentState.Equals(new ActiveState()));
         }
 
@@ -160,7 +162,10 @@ namespace StockBox_UnitTests
             // if the interpreter response is successful, try the next state
             // of the statemachine, based on the action returned by the setup
             if (result.Success)
-                sm.TryNextState(setup.Action.TransitionState);
+            {
+                var symbolRef = new SymbolProfile(new Symbol(string.Empty), new InactiveState());
+                sm.TryNextState(setup.Action.TransitionState, ref symbolRef);
+            }
 
             // Assert that we are now in a state identical to the one expected
             Assert.AreEqual(sm.CurrentState, new UserDefinedState(config_targetState));
@@ -216,8 +221,13 @@ namespace StockBox_UnitTests
             // if the interpreter response is successful, try the next state
             // of the statemachine, based on the action returned by the setup
             if (result.Success)
+            {
+
+                var symbolRef = new SymbolProfile(new Symbol(string.Empty), new InactiveState());
+
                 // attempt to transition the the setup next state
-                sm.TryNextState(setup.Action.TransitionState);
+                sm.TryNextState(setup.Action.TransitionState, ref symbolRef);
+            }
 
             // Assert that we did not transition to the action state
             Assert.AreNotEqual(sm.CurrentState, setup.Action.TransitionState);

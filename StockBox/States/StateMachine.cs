@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using StockBox.Associations;
+using StockBox.Models;
 using StockBox.Validation;
 
 namespace StockBox.States
@@ -146,7 +148,7 @@ namespace StockBox.States
         /// </summary>
         /// <param name="tryState"></param>
         /// <returns></returns>
-        public ValidationResultList TryNextState(StateBase tryState)
+        public ValidationResultList TryNextState(StateBase tryState, ref SymbolProfile symbol)
         {
             var vr = new ValidationResultList();
 
@@ -155,7 +157,10 @@ namespace StockBox.States
             // the requested transition
             vr.Add(TransitionExists(new Transition(_currentState, tryState)), $"Provided state {tryState.ToString()} is valid target from {_currentState.ToString()}");
             if (vr.Success)
+            {
                 PerformTransition(tryState);
+                symbol.TransitionState(tryState);
+            }
             return vr;
         }
 

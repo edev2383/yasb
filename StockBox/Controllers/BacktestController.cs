@@ -126,7 +126,7 @@ namespace StockBox.Controllers
                 if (evalResult.Success)
                 {
                     // try a state transition
-                    innerVr.AddRange(localStateMachine.TryNextState(currSetup.Action.TransitionState));
+                    innerVr.AddRange(localStateMachine.TryNextState(currSetup.Action.TransitionState, ref symbol));
 
                     // if successful, perform the action within the setup
                     if (innerVr.Success)
@@ -135,7 +135,8 @@ namespace StockBox.Controllers
                         // by the Action's adapter
                         var dailyFrame = backtestDataFrames.FindByFrequency(Associations.Enums.EFrequency.eDaily);
                         //symbol.TransitionState(currSetup.Action.TransitionState);
-                        innerVr.AddRange(PerformSetupAction(currSetup, dailyFrame.FirstDataPoint()));
+                        var vrResponse = PerformSetupAction(currSetup, dailyFrame.FirstDataPoint());
+                        innerVr.AddRange(vrResponse.vr);
                     }
                 }
 

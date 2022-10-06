@@ -33,6 +33,8 @@ namespace StockBox.Associations.Tokens
         eIdentifier,
         eString,
         eNumber,
+        eQuoteSingle,
+        eQuoteDouble,
 
         // Domain Keywords
         eHigh,

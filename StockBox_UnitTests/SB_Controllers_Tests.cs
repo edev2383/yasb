@@ -82,7 +82,12 @@ namespace StockBox_UnitTests
         public void SB_Controllers_03_BacktestReturnsExpectedResults()
         {
 
-            var riskProfile = new RiskProfile();
+            var riskProfile = new RiskProfile()
+            {
+                TotalBalance = 10000,
+                TotalRiskPercent = .02,
+                StopLossDollars = 200,
+            };
 
             var watchState = new UserDefinedState("watch");
             var primedState = new UserDefinedState("primed");
@@ -167,10 +172,13 @@ namespace StockBox_UnitTests
 
             var results = domainController.GetResults().GetHasValidationObjectsOfType<ActionResponse>();
 
-
+            // In this specific setup, we expect 118 total ActionResponses
             var actionResponses = results.GetHasValidationObjectsOfType<ActionResponse>();
-            var transactionResponse = results.GetHasValidationObjectsOfType<TransactionResponse>();
+            Assert.AreEqual(118, actionResponses.Count);
 
+            // 59 of those ActionRepsonses are actually TransactionResponses
+            var transactionResponses = results.GetHasValidationObjectsOfType<TransactionResponse>();
+            Assert.AreEqual(59, transactionResponses.Count);
 
         }
     }

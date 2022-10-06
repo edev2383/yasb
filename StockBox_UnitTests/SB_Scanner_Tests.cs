@@ -435,6 +435,19 @@ namespace StockBox_UnitTests
             Assert.AreEqual(tokens[^1].Type, TokenType.eEOF);
         }
 
+        [TestMethod]
+        public void SBC_37_ScannerRecognizesAndIgnoresPossessiveContractions()
+        {
+            var scanner = new Scanner("yesterday's week's month's day's");
+            var tokens = scanner.ScanTokens();
+            Assert.AreEqual(9, tokens.Count);
+            Assert.AreEqual(tokens[1].Type, TokenType.eDaily);
+            Assert.AreEqual(tokens[3].Type, TokenType.eWeekly);
+            Assert.AreEqual(tokens[5].Type, TokenType.eMonthly);
+            Assert.AreEqual(tokens[7].Type, TokenType.eDaily);
+            Assert.AreEqual(tokens[^1].Type, TokenType.eEOF);
+        }
+
         private TokenList GetTokens(EFile target)
         {
             var contents = new Reader().GetFileContents(target);

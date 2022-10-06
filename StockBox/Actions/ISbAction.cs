@@ -5,6 +5,7 @@ using StockBox.Actions.Helpers;
 using StockBox.Actions.Responses;
 using StockBox.Models;
 using StockBox.Data.SbFrames;
+using StockBox.RiskProfiles;
 
 namespace StockBox.Actions
 {
@@ -15,6 +16,7 @@ namespace StockBox.Actions
         StateBase TransitionState { get; }
         ISbActionAdapter Adapter { get; }
         SymbolProfile Symbol { get; set; }
+        RiskProfile RiskProfile { get; set; }
 
         object Response { get; set; }
 

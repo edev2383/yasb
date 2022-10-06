@@ -1,4 +1,5 @@
-﻿using StockBox.Actions;
+﻿using System;
+using StockBox.Actions;
 using StockBox.Interpreter;
 using StockBox.Models;
 using StockBox.RiskProfiles;
@@ -17,6 +18,10 @@ namespace StockBox.Setups
     /// </summary>
     public class Setup : IValidationResultsListProvider
     {
+        /// <summary>
+        /// Identifying Guid 
+        /// </summary>
+        public Guid? Token { get; set; }
 
         /// <summary>
         /// The rules that determine a given setup

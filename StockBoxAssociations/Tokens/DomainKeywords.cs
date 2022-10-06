@@ -16,7 +16,12 @@
             Add("volume", TokenType.eColumn);
             Add("sma", TokenType.eIndicator, true);
 
-            // 
+            // Note: any "'s" that are typed into the rules are
+            // ignored by the scanner *as expected behavior* We
+            // don't need the possessive. We could also have
+            // stripped out the character from the rules, but we
+            // may have use for it in the future and changes
+            // will be relatively easy
             Add("day", TokenType.eDaily);
             Add("days", TokenType.eDaily);
             Add("daily", TokenType.eDaily);
@@ -30,7 +35,6 @@
             Add("last", TokenType.eLast);
             Add("yesterday", TokenType.eYesterday);
             Add("yesterdays", TokenType.eYesterday);
-            Add("yesterday's", TokenType.eYesterday);
 
             Add("and", TokenType.eAnd);
 

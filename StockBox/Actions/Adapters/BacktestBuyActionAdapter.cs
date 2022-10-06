@@ -1,6 +1,7 @@
 ﻿using System;
 using StockBox.Actions.Responses;
 using StockBox.Data.SbFrames;
+using StockBox.Positions;
 using StockBox.States;
 
 namespace StockBox.Actions.Adapters
@@ -18,9 +19,17 @@ namespace StockBox.Actions.Adapters
         public override ActionResponse PerformAction(DataPoint dataPoint)
         {
             var ret = new BuyActionResponse(true);
+            // for backtest to continue, we transition directly to Active
+            // because the backtest ignores the pending/error states
             ParentAction.Symbol.TransitionState(new ActiveState());
-            ret.Message = $"Bought Symbol '{ParentAction.Symbol.Symbol.Name}' at, or near, ${dataPoint.Close}";
-            ret.Source = dataPoint;
+            var riskProfile = ParentAction.RiskProfile;
+            var vrShares = riskProfile.CalculateTotalShares(dataPoint.Close);
+
+            ret.Message = $"Bought ({vrShares.Shares}) Symbol '{ParentAction.Symbol.Symbol.Name}' at, or near, ${dataPoint.Close}";
+
+            var transaction = new Transaction((int)vrShares.Shares, dataPoint.Close);
+            transaction.Type = Positions.Helpers.ETransactionType.eBuy;
+            ret.Source = transaction;
             return ret;
         }
 

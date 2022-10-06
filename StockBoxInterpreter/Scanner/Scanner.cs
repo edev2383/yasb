@@ -109,6 +109,17 @@ namespace StockBox.Interpreter.Scanner
                         AddToken(TokenType.eNumber, 100);
                         break;
                     }
+                case '\'':
+                    {
+                        if (Match('s'))
+                        {
+                            // do nothing. The Match call actually advances the
+                            // counter if true, so what we're saying is that if
+                            // we encounter a single quote ignore it, but also
+                            // ignore the following character if it's an 's'.
+                        }
+                        break;
+                    }
                 case ' ':
                 case '\r':
                 case '\t':
@@ -133,7 +144,7 @@ namespace StockBox.Interpreter.Scanner
         {
             return (c >= 'a' && c <= 'z') ||
                 (c >= 'A' && c <= 'Z') ||
-                c == '_' || c == '\'';
+                c == '_';//|| c == '\'';
         }
 
         private void Identifier()

@@ -89,13 +89,15 @@ namespace StockBox.Controllers
                 // had to have been true.
                 if (evalResult.Success)
                 {
-                    innerVr.AddRange(localSm.TryNextState(localSetup.Action.TransitionState));
+                    var locsym = sp;
+                    innerVr.AddRange(localSm.TryNextState(localSetup.Action.TransitionState, ref locsym));
                     // if the the StateMachine allows the transition, we can
                     // perform the action contained within the Setup
                     if (innerVr.Success)
                     {
                         var dailyFrame = localFrameList.FindByFrequency(Associations.Enums.EFrequency.eDaily);
-                        innerVr.AddRange(PerformSetupAction(localSetup, dailyFrame.FirstDataPoint()));
+                        var vrResponse = PerformSetupAction(localSetup, dailyFrame.FirstDataPoint());
+                        innerVr.AddRange(vrResponse.vr);
                     }
                 }
 

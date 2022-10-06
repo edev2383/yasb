@@ -1,6 +1,7 @@
 ﻿using System;
 using StockBox.Actions.Responses;
 using StockBox.Data.SbFrames;
+using StockBox.Positions;
 using StockBox.States;
 
 namespace StockBox.Actions.Adapters
@@ -20,7 +21,10 @@ namespace StockBox.Actions.Adapters
             var ret = new SellActionResponse(true);
             ParentAction.Symbol.TransitionState(new InactiveState());
             ret.Message = $"Sold Symbol '{ParentAction.Symbol.Symbol.Name}' at, or near, ${dataPoint.Close}";
-            ret.Source = dataPoint;
+
+            var transaction = new Transaction(0, dataPoint.Close);
+            transaction.Type = Positions.Helpers.ETransactionType.eSell;
+            ret.Source = transaction;
             return ret;
         }
     }

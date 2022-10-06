@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using StockBox.Actions;
+using StockBox.Actions.Adapters;
 using StockBox.Controllers;
 using StockBox.Data.Adapters.DataFrame;
 using StockBox.Data.SbFrames;
@@ -28,7 +29,7 @@ namespace StockBox_IntegrationTests
             };
 
             var setup = new Setup(rules, new UserDefinedState("start"), new RiskProfile());
-            setup.AddAction(new Move(new BackTestMoveActionAdapter(), "end"));
+            setup.AddAction(new Move(new BacktestMoveActionAdapter(), "end"));
             var profiles = new SymbolProfileList()
             {
                 new SymbolProfile(new Symbol("MSFT"), new UserDefinedState("start")),

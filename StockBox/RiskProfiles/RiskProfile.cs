@@ -66,6 +66,10 @@ namespace StockBox.RiskProfiles
                     return NormalizeUserInput_Percentage(_totalRiskPercent);
                 return null;
             }
+            set
+            {
+                _totalRiskPercent = value;
+            }
         }
 
         #endregion
@@ -78,9 +82,28 @@ namespace StockBox.RiskProfiles
         public double? SellHalfTargetDollars { get; set; }
         public double? SellHalfTargetPercent { get { return NormalizeUserInput_Percentage(_sellHalfTargetPercent); } }
         public double? StopLossDollars { get; set; }
-        public double? StopLossPercent { get { return NormalizeUserInput_Percentage(_stopLossPercent); } }
+        public double? StopLossPercent
+        {
+            get
+            {
+                return NormalizeUserInput_Percentage(_stopLossPercent);
+            }
+            set
+            {
+                _stopLossPercent = value;
+            }
+        }
+
+        /// <summary>
+        /// Set a maximum timeframe for the position/state to be valid. This
+        /// may belong elsewhere. I'm thinking a fall-back state should be
+        /// associated, which makes me feel like this is the wrong place for
+        /// this value.
+        /// </summary>
         public int? ValidDuration { get; set; }
         public EFrequency DurationType { get; set; }
+
+
         public double? TotalBalance { get; set; }
         public double? ActiveBalance { get; set; }
 
