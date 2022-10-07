@@ -36,6 +36,8 @@
             Add("yesterday", TokenType.eYesterday);
             Add("yesterdays", TokenType.eYesterday);
 
+            Add("x", TokenType.eCrossOver);
+
             Add("and", TokenType.eAnd);
 
             #region Ignore Tokens

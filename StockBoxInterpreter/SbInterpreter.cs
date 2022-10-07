@@ -127,6 +127,20 @@ namespace StockBox.Interpreter
                             expr.Operator,
                             (DomainLiteral)expr.Right));
 
+                case eCrossOver:
+                    _results.AddRange(checkNumberOperands(expr.Operator, left, right));
+                    if (_results.HasFailures)
+                        throw new Exception(_results.GetFailureMessages());
+
+                    // TODO - there is a lot of potential for failure around
+                    // here. We need to type check everything. This is worth
+                    // extracting.
+                    var current = (double)left > (double)right;
+                    var newLeft = new Binary(new Literal((int)expr.Left.Left.Value + 1), expr.Left.Operator, expr.Left.Right);
+                    var newRight = new Binary(new Literal((int)expr.Right.Left.Value + 1), expr.Right.Operator, expr.Right.Right);
+                    var newLeftValue = evaluate(newLeft);
+                    var newRightValue = evaluate(newRight);
+                    return current && ((double)newLeftValue < (double)newRightValue);
                 case eGreat:
                     _results.AddRange(checkNumberOperands(expr.Operator, left, right));
                     if (_results.HasFailures)

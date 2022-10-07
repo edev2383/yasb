@@ -223,5 +223,40 @@ namespace StockBox_UnitTests
 
             Assert.IsTrue(result.HasFailures);
         }
+
+        [TestMethod, Description("")]
+        public void SB_Interpreter_14_InterpreterCanCalculateCrossOverExpressions()
+        {
+            // setup the data list to include a single data point, that will
+            // not be enough to satisfy the requirements of the rulelist
+            var adapter = new DataFrameAdapter_Accessor();
+
+            // add specific datapoints. The crossover operator means that the
+            // value on the left was below the value on the right for the
+            // previous record and has "crossed over" and is now greater than
+            // the value on the right.
+            // In this example, the previous record (index 1) 11 < 12 and the
+            // current record (index 0) 13 > 12. So we expect a successful test
+            adapter.CreateAndAddDataPoint(DateTime.Now, 0, 0, 13, 12, 1000);
+            adapter.CreateAndAddDataPoint(DateTime.Now, 0, 0, 11, 12, 1000);
+
+            // init the frame/fraemlist
+            var dailyFrame = new DailyFrame(adapter, new Symbol(string.Empty));
+            var framelist = new SbFrameList() { dailyFrame };
+
+            // create and process the rules
+            var rules = new RuleList() {
+                new Rule("Open x Close"),
+            };
+
+            var service = new ActiveService(new Scanner(), new Parser());
+            service.ProcessRules(rules);
+
+            // use the Interpreter to evaluate the rules expressions
+            var result = rules.Evalute(new SbInterpreter(framelist));
+
+            // hazzah
+            Assert.IsTrue(result.Success);
+        }
     }
 }

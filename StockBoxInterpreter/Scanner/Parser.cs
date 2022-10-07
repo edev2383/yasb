@@ -76,7 +76,7 @@ namespace StockBox.Interpreter.Scanner
         {
             Expr expr = Term();
 
-            while (Match(eGreat, eGreatEqual, eLess, eLessEqual))
+            while (Match(eCrossOver, eGreat, eGreatEqual, eLess, eLessEqual))
             {
                 Token oper = Previous();
                 Expr right = Term();

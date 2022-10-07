@@ -24,5 +24,9 @@ namespace StockBox.Interpreter.Expressions
             return visitor.VisitDomainExpr(this);
         }
 
+        public override Expr Clone()
+        {
+            return new DomainExpr(Left as Literal, Operator, Right as DomainLiteral);
+        }
     }
 }

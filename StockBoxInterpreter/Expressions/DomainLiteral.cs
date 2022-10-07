@@ -20,5 +20,9 @@ namespace StockBox.Interpreter.Expressions
             return visitor.VisitDomainLiteral(this);
         }
 
+        public override Expr Clone()
+        {
+            return new DomainLiteral(Column, Indices);
+        }
     }
 }

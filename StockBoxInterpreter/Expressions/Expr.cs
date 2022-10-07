@@ -75,5 +75,7 @@ namespace StockBox.Interpreter.Expressions
         }
 
         public abstract object Accept(IVisitor visitor);
+
+        public abstract Expr Clone();
     }
 }

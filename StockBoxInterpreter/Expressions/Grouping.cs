@@ -23,5 +23,9 @@ namespace StockBox.Interpreter.Expressions
             return visitor.VisitGroupingExpr(this);
         }
 
+        public override Expr Clone()
+        {
+            return new Grouping(_expression);
+        }
     }
 }

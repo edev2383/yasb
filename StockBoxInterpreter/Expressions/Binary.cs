@@ -19,5 +19,9 @@ namespace StockBox.Interpreter.Expressions
             return visitor.VisitBinaryExpr(this);
         }
 
+        public override Expr Clone()
+        {
+            return new Binary(Left, Operator, Right);
+        }
     }
 }

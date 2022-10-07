@@ -252,6 +252,9 @@ namespace StockBox.Interpreter.Scanner
                                 InjectUnsourcedToken(TokenType.eNumber, "0", 0, line, current);
                             AddToken(TokenType.eMonthly);
                             break;
+                        case TokenType.eCrossOver:
+                            AddToken(TokenType.eCrossOver, null);
+                            break;
                         case TokenType.eLast:
                             AddToken(TokenType.eNumber, 1);
                             break;

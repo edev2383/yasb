@@ -19,5 +19,10 @@ namespace StockBox.Interpreter.Expressions
         {
             return visitor.VisitLiteralExpr(this);
         }
+
+        public override Expr Clone()
+        {
+            return new Literal(Value);
+        }
     }
 }

@@ -18,5 +18,10 @@ namespace StockBox.Interpreter.Expressions
         {
             return visitor.VisitUnaryExpr(this);
         }
+
+        public override Expr Clone()
+        {
+            return new Unary(Operator, Right);
+        }
     }
 }

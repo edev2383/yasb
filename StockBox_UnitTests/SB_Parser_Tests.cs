@@ -78,6 +78,13 @@ namespace StockBox_UnitTests
             Assert.IsInstanceOfType(expression.Right, typeof(Literal));
         }
 
+        [TestMethod]
+        public void SB_Parser_06_CrossOverExprParsedCorrectly()
+        {
+            var p = GetParserWithSource("Close x Yesterday's High");
+            var expression = p.Parse();
+        }
+
         private Parser GetParserWithSource(string source)
         {
             var s = new Scanner(source);
