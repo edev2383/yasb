@@ -1,4 +1,6 @@
 ﻿using StockBox.Associations.Enums;
+using StockBox.Data.SbFrames;
+using StockBox.Positions;
 using StockBox.Validation;
 using System;
 
@@ -177,6 +179,33 @@ namespace StockBox.RiskProfiles
                 vr.Add(new ValidationResult(EResult.eFail, e.Message));
                 return (vr, ret);
             }
+        }
+
+        /// <summary>
+        /// Returns success if we must perform the exit
+        /// </summary>
+        /// <param name="position"></param>
+        /// <param name="dataPoint"></param>
+        /// <returns></returns>
+        public ValidationResultList PerformRiskPositionExit(Position position, DataPoint dataPoint)
+        {
+            var ret = new ValidationResultList();
+            var originalInvestment = position.CalculateOriginalInvestment();
+            var profitLoss = position.CalculateProfitLoss(dataPoint);
+            if (TotalRiskDollars != null)
+            {
+                ret.Add(new ValidationResult(profitLoss < -(TotalRiskDollars), $"Current P&L (${profitLoss}, {profitLoss / originalInvestment * 100}%) is greater than acceptable TotalRiskDollars (-${TotalRiskDollars})"));
+            }
+            else
+            {
+                // TotalRiskPercent is the percent risk of total balance at risk
+                // per position. If balance is 10000, total risk percent is 2%
+                // total dollar amount is 200$.
+                var percentLoss = profitLoss / TotalBalance;
+                ret.Add(new ValidationResult(percentLoss < -(TotalRiskPercent), $"Current P&L (${profitLoss}, {profitLoss / originalInvestment * 100}%) is greater than acceptable TotalRiskPercent (-{TotalRiskPercent}%)"));
+            }
+
+            return ret;
         }
 
         /// <summary>

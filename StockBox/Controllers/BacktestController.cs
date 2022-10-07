@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using StockBox.Actions;
+using StockBox.Actions.Adapters;
+using StockBox.Actions.Responses;
 using StockBox.Associations;
 using StockBox.Data.Adapters.DataFrame;
 using StockBox.Data.SbFrames;
@@ -27,6 +30,8 @@ namespace StockBox.Controllers
     {
 
         public PositionList Positions { get; set; } = new PositionList();
+        public PositionSummary PositionSummary { get; set; }
+
 
         public BacktestController(ISbService service, StateMachine stateMachine, ISbFrameListProvider frameListProvider) : base(service, stateMachine, frameListProvider)
         {
@@ -73,6 +78,9 @@ namespace StockBox.Controllers
 
             while (!adapter.IsAtEnd())
             {
+                bool riskExit = false;
+                Position localPosition = Positions.GetCurrentPosition();
+                SbFrame localDailyFrame = null;
                 // create a local VRL
                 var innerVr = new ValidationResultList();
 
@@ -117,45 +125,95 @@ namespace StockBox.Controllers
                     cachedSetups.Add(currSetup.Clone());
                 }
 
+                localDailyFrame = backtestDataFrames.FindByFrequency(Associations.Enums.EFrequency.eDaily);
+
                 // create a local StateMachine to be used for transitions
                 var localStateMachine = _stateMachine.CreateWithStateAndTransitions();
                 localStateMachine.SetCurrentState(symbol.State);
 
-                // Finally... evaluate the setup against the adapter's window
-                var evalResult = currSetup.Evaluate(new SbInterpreter(backtestDataFrames));
-                if (evalResult.Success)
-                {
-                    // try a state transition
-                    innerVr.AddRange(localStateMachine.TryNextState(currSetup.Action.TransitionState, ref symbol));
 
-                    // if successful, perform the action within the setup
-                    if (innerVr.Success)
-                    {
-                        // if there is a state transition, it will be handled
-                        // by the Action's adapter
-                        var dailyFrame = backtestDataFrames.FindByFrequency(Associations.Enums.EFrequency.eDaily);
-                        //symbol.TransitionState(currSetup.Action.TransitionState);
-                        var vrResponse = PerformSetupAction(currSetup, dailyFrame.FirstDataPoint());
-                        innerVr.AddRange(vrResponse.vr);
-                    }
+                if (localPosition != null)
+                {
+                    var riskExitResult = currSetup.RiskProfile.PerformRiskPositionExit(localPosition, localDailyFrame.FirstDataPoint());
+                    riskExit = riskExitResult.Success;
                 }
 
-                // Add all data to the return object, to be analyzed later
-                ret.AddRange(evalResult);
-                ret.AddRange(innerVr);
+                // if risk exit is true, we don't care about state, or setup or
+                // rules or anything. It immediately attempts to sell
+                if (riskExit)
+                {
+                    var sellAction = new Sell(new BacktestSellActionAdapter());
+                    sellAction.Symbol = symbol;
+                    sellAction.RiskProfile = currSetup.RiskProfile;
+                    var riskResponse = sellAction.PerformAction(localDailyFrame.FirstDataPoint());
+                    HandleResponse(currSetup, riskResponse);
+                    ret.Add(new ValidationResult(EResult.eInfo, "RiskExitPerformed", riskResponse));
+                    localPosition.RiskExitPerformed = true;
+                }
+                else
+                {
+                    // Finally... evaluate the setup against the adapter's window
+                    var evalResult = currSetup.Evaluate(new SbInterpreter(backtestDataFrames));
+                    if (evalResult.Success)
+                    {
+                        // try a state transition
+                        innerVr.AddRange(localStateMachine.TryNextState(currSetup.Action.TransitionState, ref symbol));
+
+                        // if successful, perform the action within the setup
+                        if (innerVr.Success)
+                        {
+                            // if there is a state transition, it will be handled
+                            // by the Action's adapter
+                            //symbol.TransitionState(currSetup.Action.TransitionState);
+                            var vrResponse = PerformSetupAction(currSetup, localDailyFrame.FirstDataPoint());
+                            innerVr.AddRange(vrResponse.vr);
+                            HandleResponse(currSetup, vrResponse.response);
+                        }
+                    }
+                    // Add all data to the return object, to be analyzed later
+                    ret.AddRange(evalResult);
+                    ret.AddRange(innerVr);
+                }
 
                 // call IterateWindow to move the dataset
                 adapter.IterateWindow();
                 // normalize Daily/Weekly/Monthly adapters
                 backtestDataFrames.Normalize();
             }
-
+            PositionSummary = Positions.CreateSummary();
             return ret;
         }
 
         protected override ValidationResultList ProcessSetup(Setup setup, SymbolProfileList relatedProfiles)
         {
             throw new NotImplementedException();
+        }
+
+        private void HandleResponse(Setup setup, ActionResponse response)
+        {
+            if (response is BuyActionResponse)
+            {
+                var transaction = response.Source as Transaction;
+                if (transaction != null && transaction.Type == StockBox.Positions.Helpers.ETransactionType.eBuy)
+                {
+                    var newPosition = new Position(Guid.NewGuid());
+                    newPosition.AddBuy(transaction);
+                    Positions.Add(newPosition);
+                }
+            }
+
+            if (response is SellActionResponse)
+            {
+                var transaction = response.Source as Transaction;
+                if (transaction != null && transaction.Type == StockBox.Positions.Helpers.ETransactionType.eSell)
+                {
+                    var foundPosition = Positions.GetCurrentPosition();
+                    if (foundPosition != null)
+                    {
+                        foundPosition.AddSell(transaction);
+                    }
+                }
+            }
         }
     }
 }

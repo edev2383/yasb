@@ -1,4 +1,5 @@
 ﻿using System;
+using StockBox.Data.SbFrames;
 using StockBox.Models;
 using StockBox.RiskProfiles;
 
@@ -15,15 +16,16 @@ namespace StockBox.Positions
         public TransactionList Transactions { get { return _transactions; } }
         public RiskProfile RiskProfile { get { return _riskProfile; } }
 
-        public bool? IsOpen { get { return _transactions.HasOpenTransaction(); } }
+        public bool IsOpen { get { return _transactions.HasOpenTransaction(); } }
 
-        public int? TotalShares { get; set; }
+        public bool RiskExitPerformed { get; set; } = false;
+        public int TotalShares { get; set; }
         // this value can differ from TotalShares when the user opts to sell
         // a portion their stake at a given target
         public int? ActiveShares { get; set; }
         public double? TotalDollars { get; set; }
-        public double? EntryPrice { get; set; }
-        public double? CurrentPrice { get; set; }
+        public double EntryPrice { get; set; }
+        public double CurrentPrice { get; set; }
         public double? ProfitLoss { get { return CalculateProfitLoss(); } }
 
         public int? PositionId { get; set; }
@@ -39,14 +41,26 @@ namespace StockBox.Positions
             _token = token != null ? (Guid)token : Guid.NewGuid();
         }
 
+        public double CalculateOriginalInvestment()
+        {
+            return TotalShares * EntryPrice;
+        }
+
+        public double CalculateProfitLoss(DataPoint dataPoint)
+        {
+            CurrentPrice = dataPoint.Close;
+            return CalculateProfitLoss();
+        }
+
         public double CalculateProfitLoss()
         {
-            return 0;
+            var diff = CurrentPrice - EntryPrice;
+            return diff * TotalShares;
         }
 
         public void AddBuy(Transaction transaction)
         {
-            TotalShares = transaction.ShareCount;
+            TotalShares = transaction.ShareCount != null ? (int)transaction.ShareCount : 0;
             ActiveShares = transaction.ShareCount;
             EntryPrice = transaction.SharePrice;
             transaction.PositionToken = _token;
@@ -56,8 +70,13 @@ namespace StockBox.Positions
         public void AddSell(Transaction transaction)
         {
             ActiveShares -= transaction.ShareCount;
+            CurrentPrice = transaction.SharePrice;
             transaction.PositionToken = _token;
             _transactions.Add(transaction);
+            if (ActiveShares <= 0)
+            {
+
+            }
         }
     }
 }
