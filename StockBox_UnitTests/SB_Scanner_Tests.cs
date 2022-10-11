@@ -468,6 +468,18 @@ namespace StockBox_UnitTests
             Assert.AreEqual(tokens[^1].Type, TokenType.eEOF);
         }
 
+        [TestMethod]
+        public void SBC_39_ScannerRecognizesEntryPointIdentifier()
+        {
+            var scanner = new Scanner("@Entry");
+            var tokens = scanner.ScanTokens();
+            Assert.AreEqual(2, tokens.Count);
+            Assert.AreEqual(tokens[0].Type, TokenType.eEntryPoint);
+            Assert.AreEqual(tokens[0].Lexeme, "@Entry");
+            Assert.AreEqual(tokens[^1].Type, TokenType.eEOF);
+        }
+
+
         private TokenList GetTokens(EFile target)
         {
             var contents = new Reader().GetFileContents(target);

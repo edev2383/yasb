@@ -1,8 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 
+
 namespace StockBox.Associations
 {
+
+    /// <summary>
+    /// 
+    /// </summary>
     public interface ISbFrameListProvider
     {
         List<ISbFrame> Create(IDomainCombinationsProvider combos, ISymbolProvider symbol);

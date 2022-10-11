@@ -28,6 +28,7 @@ namespace StockBox.Data.Adapters.DataFrame
 
         private int? _windowIndex;
         private DataPointList _viewData { get { return GetData(); } }
+
         /// <summary>
         /// Decrease the _windowIndex integer value by 1, increasing the actual
         /// window of data by 1.

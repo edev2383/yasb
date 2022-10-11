@@ -12,7 +12,8 @@ namespace StockBox_TestArtifacts.Mocks
 {
 
     /// <summary>
-    /// Class <c>MockFrameListFactory</c>
+    /// Class <c>MockFrameListFactory</c> creates an SbFrameList from locally
+    /// saved CSVs
     /// </summary>
     public class MockFrameListFactory : ISbFrameListProvider
     {

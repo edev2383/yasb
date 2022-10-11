@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using StockBox.Actions;
 using StockBox.Actions.Adapters;
@@ -7,7 +6,6 @@ using StockBox.Actions.Responses;
 using StockBox.Associations;
 using StockBox.Data.Adapters.DataFrame;
 using StockBox.Data.SbFrames;
-using StockBox.Data.Scraper;
 using StockBox.Interpreter;
 using StockBox.Interpreter.Scanner;
 using StockBox.Models;
@@ -48,12 +46,15 @@ namespace StockBox.Controllers
             _results.AddRange(ProcessSetups(setups, profiles.First()));
         }
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="setups"></param>
+        /// <param name="symbol"></param>
+        /// <returns></returns>
         protected override ValidationResultList ProcessSetups(SetupList setups, SymbolProfile symbol)
         {
             var ret = new ValidationResultList();
-            // to scan backtest behavior, we need to iterate through the
-            // data, while matching the appropriate setup from the
-            // current state of the profile
 
             // when a setup has been processed, push it here and when we pull
             // a setup from the primary list to test against the symbol, we can
@@ -81,7 +82,8 @@ namespace StockBox.Controllers
                 bool riskExit = false;
                 Position localPosition = Positions.GetCurrentPosition();
                 SbFrame localDailyFrame = null;
-                // create a local VRL
+
+                // create a local result list to track each iteration
                 var innerVr = new ValidationResultList();
 
                 // search the provided setups for the symbol's current state,
@@ -104,10 +106,11 @@ namespace StockBox.Controllers
                 // first found will be used for the back testing
                 var currSetup = foundSetups.First();
                 currSetup.AddSymbol(symbol);
+
                 // as we process setups and get the expressions from their rules
                 // we cache them in a separate list, so we can know which setups
                 // have been processed. We don't need the rules again (for the
-                // purposes of analyzing the expressions
+                // purposes of analyzing the expressions)
                 if (!cachedSetups.ContainsItem(currSetup))
                 {
                     // process the setup and break the Rules into expressions
@@ -125,16 +128,17 @@ namespace StockBox.Controllers
                     cachedSetups.Add(currSetup.Clone());
                 }
 
+                // prepare the daily frame, because we will use that to denote
+                // our 'current' price of the stock being tested
                 localDailyFrame = backtestDataFrames.FindByFrequency(Associations.Enums.EFrequency.eDaily);
 
                 // create a local StateMachine to be used for transitions
                 var localStateMachine = _stateMachine.CreateWithStateAndTransitions();
                 localStateMachine.SetCurrentState(symbol.State);
 
-
                 if (localPosition != null)
                 {
-                    var riskExitResult = currSetup.RiskProfile.PerformRiskPositionExit(localPosition, localDailyFrame.FirstDataPoint());
+                    var riskExitResult = currSetup.RiskProfile.ValidateRiskExit(localPosition, localDailyFrame.FirstDataPoint());
                     riskExit = riskExitResult.Success;
                 }
 
@@ -146,9 +150,8 @@ namespace StockBox.Controllers
                     sellAction.Symbol = symbol;
                     sellAction.RiskProfile = currSetup.RiskProfile;
                     var riskResponse = sellAction.PerformAction(localDailyFrame.FirstDataPoint());
-                    HandleResponse(currSetup, riskResponse);
+                    HandleResponse(riskResponse, riskExit);
                     ret.Add(new ValidationResult(EResult.eInfo, "RiskExitPerformed", riskResponse));
-                    localPosition.RiskExitPerformed = true;
                 }
                 else
                 {
@@ -156,21 +159,25 @@ namespace StockBox.Controllers
                     var evalResult = currSetup.Evaluate(new SbInterpreter(backtestDataFrames));
                     if (evalResult.Success)
                     {
-                        // try a state transition
+                        // try a state transition, if it's successful, apply to
+                        // the current symbol
                         innerVr.AddRange(localStateMachine.TryNextState(currSetup.Action.TransitionState, ref symbol));
 
                         // if successful, perform the action within the setup
                         if (innerVr.Success)
                         {
-                            // if there is a state transition, it will be handled
-                            // by the Action's adapter
-                            //symbol.TransitionState(currSetup.Action.TransitionState);
+                            // if there is a state transition, it will initially
+                            // be handleed by StateMachine.TryNextState, and any
+                            // additional transitions during Backtesting will be
+                            // handled by the Action's adapter
                             var vrResponse = PerformSetupAction(currSetup, localDailyFrame.FirstDataPoint());
                             innerVr.AddRange(vrResponse.vr);
-                            HandleResponse(currSetup, vrResponse.response);
+                            HandleResponse(vrResponse.response);
                         }
                     }
-                    // Add all data to the return object, to be analyzed later
+
+                    // Add all data to the return object to be added to the
+                    // _results
                     ret.AddRange(evalResult);
                     ret.AddRange(innerVr);
                 }
@@ -180,6 +187,8 @@ namespace StockBox.Controllers
                 // normalize Daily/Weekly/Monthly adapters
                 backtestDataFrames.Normalize();
             }
+
+            // Create a summary Report of the transactions
             PositionSummary = Positions.CreateSummary();
             return ret;
         }
@@ -189,7 +198,7 @@ namespace StockBox.Controllers
             throw new NotImplementedException();
         }
 
-        private void HandleResponse(Setup setup, ActionResponse response)
+        private void HandleResponse(ActionResponse response, bool isRiskExit = false)
         {
             if (response is BuyActionResponse)
             {
@@ -211,6 +220,7 @@ namespace StockBox.Controllers
                     if (foundPosition != null)
                     {
                         foundPosition.AddSell(transaction);
+                        foundPosition.RiskExitPerformed = isRiskExit;
                     }
                 }
             }

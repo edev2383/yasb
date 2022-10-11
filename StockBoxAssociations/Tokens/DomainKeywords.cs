@@ -38,6 +38,12 @@
 
             Add("x", TokenType.eCrossOver);
 
+            Add("@entry", TokenType.eEntryPoint);
+            Add("@52weekhigh", TokenType.e52WeekHigh);
+            Add("@52weeklow", TokenType.e52WeekLow);
+            Add("@ath", TokenType.eAllTimeHigh);
+            Add("@atl", TokenType.eAllTimeLow);
+
             Add("and", TokenType.eAnd);
 
             #region Ignore Tokens

@@ -9,6 +9,10 @@ using static StockBox.Associations.Tokens.TokenType;
 namespace StockBox.Interpreter.Scanner
 {
 
+    /// <summary>
+    /// Class <c>Parser</c> accepts a TokenList and outputs a complex Expression
+    /// to be interpretted into values.
+    /// </summary>
     public class Parser : IValidationResultsListProvider
     {
 

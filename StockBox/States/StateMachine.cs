@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using StockBox.Associations;
+﻿using System.Linq;
 using StockBox.Models;
 using StockBox.Validation;
 
@@ -76,6 +74,11 @@ namespace StockBox.States
             _states = source._states;
         }
 
+        /// <summary>
+        /// Create a new StateMachine using this as a source, ignoring the
+        /// _currentState of the source
+        /// </summary>
+        /// <returns></returns>
         public StateMachine CreateWithStateAndTransitions()
         {
             return new StateMachine(this);
@@ -147,6 +150,7 @@ namespace StockBox.States
         /// method.
         /// </summary>
         /// <param name="tryState"></param>
+        /// <param name="symbol"></param>
         /// <returns></returns>
         public ValidationResultList TryNextState(StateBase tryState, ref SymbolProfile symbol)
         {
@@ -155,7 +159,7 @@ namespace StockBox.States
             // create a Transition object based on the SM's current state and
             // the provided next state. If true, we get success and can perform
             // the requested transition
-            vr.Add(TransitionExists(new Transition(_currentState, tryState)), $"Provided state {tryState.ToString()} is valid target from {_currentState.ToString()}");
+            vr.Add(TransitionExists(new Transition(_currentState, tryState)), $"Provided state {tryState} is valid target from {_currentState}");
             if (vr.Success)
             {
                 PerformTransition(tryState);

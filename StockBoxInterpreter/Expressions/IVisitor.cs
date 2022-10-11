@@ -1,6 +1,12 @@
 ﻿using System;
+
+
 namespace StockBox.Interpreter.Expressions
 {
+
+    /// <summary>
+    /// 
+    /// </summary>
     public interface IVisitor
     {
         object VisitBinaryExpr(Binary expr);

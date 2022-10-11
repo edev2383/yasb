@@ -187,7 +187,7 @@ namespace StockBox.RiskProfiles
         /// <param name="position"></param>
         /// <param name="dataPoint"></param>
         /// <returns></returns>
-        public ValidationResultList PerformRiskPositionExit(Position position, DataPoint dataPoint)
+        public ValidationResultList ValidateRiskExit(Position position, DataPoint dataPoint)
         {
             var ret = new ValidationResultList();
             var originalInvestment = position.CalculateOriginalInvestment();

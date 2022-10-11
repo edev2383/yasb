@@ -129,6 +129,10 @@ namespace StockBox.Interpreter.Scanner
                     line++;
                     break;
                 case '"': String(); break;
+                case '@':
+                    Advance();
+                    Identifier();
+                    break;
                 default:
                     if (IsDigit(c))
                         Number();
@@ -266,6 +270,9 @@ namespace StockBox.Interpreter.Scanner
                             break;
                         case TokenType.eFalse:
                             AddToken(TokenType.eTrue, false);
+                            break;
+                        case TokenType.eEntryPoint:
+                            AddToken(TokenType.eEntryPoint, null);
                             break;
                         case TokenType.eYesterday:
                             InjectUnsourcedToken(TokenType.eNumber, "1", 1, line, current);

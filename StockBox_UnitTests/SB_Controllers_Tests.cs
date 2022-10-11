@@ -162,6 +162,8 @@ namespace StockBox_UnitTests
             };
 
             var activeService = new ActiveService(new Scanner(), new Parser());
+            // MockFrameListFactory loads data from local files, rather than
+            // calling the Scraper
             var framelistFactory = new MockFrameListFactory(null, new DeedleBacktestAdapter());
             framelistFactory.DataTarget_Daily = EFile.eAmdDaily;
             framelistFactory.DataTarget_Weekly = EFile.eAmdWeekly;

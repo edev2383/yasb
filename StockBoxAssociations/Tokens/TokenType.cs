@@ -45,6 +45,11 @@ namespace StockBox.Associations.Tokens
         eIndicator,
         eIndicatorIndices,
         eColumn,
+        eEntryPoint,
+        eAllTimeHigh,
+        eAllTimeLow,
+        e52WeekHigh,
+        e52WeekLow,
 
         // Timeframe frequency keywords
         // All Day, Daily, Days, Weeks, etc.. are reduced to these tokens
