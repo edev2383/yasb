@@ -23,6 +23,7 @@ namespace StockBox.Interpreter.Expressions
         public Token Operator { get { return _operator; } }
         public Expr Right { get { return _right; } }
         public object Value { get { return _value; } }
+        public Token Name { get { return _name; } }
 
         public string Statement { get; set; }
 
@@ -34,8 +35,8 @@ namespace StockBox.Interpreter.Expressions
         private readonly Expr _right;
         private readonly object _value;
         private readonly object _column;
-
         private readonly int[] _indices;
+        private readonly Token _name;
 
         public Expr(Expr left, Token op, Expr right)
         {
@@ -62,15 +63,34 @@ namespace StockBox.Interpreter.Expressions
             _value = value;
         }
 
-        public Expr(Token indicator, Token indices = null)
+        /// <summary>
+        /// A generic constructor for expressions that consist only of Tokens.
+        /// Properties are set by their location in the constructor
+        /// </summary>
+        /// <param name="indicator"></param>
+        /// <param name="indices"></param>
+        /// <param name="domainToken"></param>
+        /// <param name="variableName"></param>
+        public Expr(Token indicator = null, Token indices = null, Token domainToken = null, Token variableName = null)
         {
-            _column = indicator.Lexeme;
-            if (indices != null)
+            if (domainToken != null)
             {
-                List<int> tmp = new List<int>();
-                foreach (var idx in indices.Lexeme.Split(','))
-                    tmp.Add(Convert.ToInt32(idx.Trim()));
-                _indices = tmp.ToArray();
+                _operator = domainToken;
+            }
+            else if (variableName != null)
+            {
+                _name = variableName;
+            }
+            else
+            {
+                _column = indicator.Lexeme;
+                if (indices != null)
+                {
+                    List<int> tmp = new List<int>();
+                    foreach (var idx in indices.Lexeme.Split(','))
+                        tmp.Add(Convert.ToInt32(idx.Trim()));
+                    _indices = tmp.ToArray();
+                }
             }
         }
 

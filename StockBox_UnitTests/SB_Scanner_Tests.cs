@@ -479,6 +479,62 @@ namespace StockBox_UnitTests
             Assert.AreEqual(tokens[^1].Type, TokenType.eEOF);
         }
 
+        [TestMethod]
+        public void SBC_40_ScannerRecognizes52WeekHighPointIdentifier()
+        {
+            var scanner = new Scanner("@52WeekHigh");
+            var tokens = scanner.ScanTokens();
+            Assert.AreEqual(2, tokens.Count);
+            Assert.AreEqual(tokens[0].Type, TokenType.e52WeekHigh);
+            Assert.AreEqual(tokens[0].Lexeme, "@52WeekHigh");
+            Assert.AreEqual(tokens[^1].Type, TokenType.eEOF);
+        }
+
+        [TestMethod]
+        public void SBC_41_ScannerRecognizes52WeekLowPointIdentifier()
+        {
+            var scanner = new Scanner("@52WeekLow");
+            var tokens = scanner.ScanTokens();
+            Assert.AreEqual(2, tokens.Count);
+            Assert.AreEqual(tokens[0].Type, TokenType.e52WeekLow);
+            Assert.AreEqual(tokens[0].Lexeme, "@52WeekLow");
+            Assert.AreEqual(tokens[^1].Type, TokenType.eEOF);
+        }
+
+        [TestMethod]
+        public void SBC_42_ScannerRecognizesAllTimeHighPointIdentifier()
+        {
+            var scanner = new Scanner("@ATH");
+            var tokens = scanner.ScanTokens();
+            Assert.AreEqual(2, tokens.Count);
+            Assert.AreEqual(tokens[0].Type, TokenType.eAllTimeHigh);
+            Assert.AreEqual(tokens[0].Lexeme, "@ATH");
+            Assert.AreEqual(tokens[^1].Type, TokenType.eEOF);
+        }
+
+        [TestMethod]
+        public void SBC_43_ScannerRecognizesAllTimeLowPointIdentifier()
+        {
+            var scanner = new Scanner("@ATL");
+            var tokens = scanner.ScanTokens();
+            Assert.AreEqual(2, tokens.Count);
+            Assert.AreEqual(tokens[0].Type, TokenType.eAllTimeLow);
+            Assert.AreEqual(tokens[0].Lexeme, "@ATL");
+            Assert.AreEqual(tokens[^1].Type, TokenType.eEOF);
+        }
+
+        [TestMethod]
+        public void SBC_43_ScannerDoesNotRecognizeEntryAsDomainKeywordWithoutSymbol()
+        {
+            // TODO - Error handling to show compile errors on the non symbol'd
+            // Keyword 
+            var scanner = new Scanner("Entry");
+            var tokens = scanner.ScanTokens();
+            Assert.AreEqual(2, tokens.Count);
+            Assert.AreEqual(tokens[0].Type, TokenType.eIdentifier);
+            Assert.AreEqual(tokens[0].Lexeme, "Entry");
+            Assert.AreEqual(tokens[^1].Type, TokenType.eEOF);
+        }
 
         private TokenList GetTokens(EFile target)
         {
@@ -486,5 +542,6 @@ namespace StockBox_UnitTests
             var scanner = new Scanner(contents);
             return scanner.ScanTokens();
         }
+
     }
 }

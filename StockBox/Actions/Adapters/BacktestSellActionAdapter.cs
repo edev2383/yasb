@@ -23,6 +23,7 @@ namespace StockBox.Actions.Adapters
             ret.Message = $"Sold Symbol '{ParentAction.Symbol.Symbol.Name}' at, or near, ${dataPoint.Close}";
 
             var transaction = new Transaction(0, dataPoint.Close);
+            transaction.Timestamp = dataPoint.Date;
             transaction.Type = Positions.Helpers.ETransactionType.eSell;
             ret.Source = transaction;
             return ret;

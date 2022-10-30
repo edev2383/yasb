@@ -49,6 +49,14 @@ namespace StockBox.Validation
             return ret;
         }
 
+        public List<T> GetValidationObjects<T>()
+        {
+            var ret = new List<T>();
+            foreach (var result in GetHasValidationObjectsOfType<T>())
+                ret.Add((T)result.ValidationObject);
+            return ret;
+        }
+
         public ValidationResultList GetHasValidationObjects()
         {
             var ret = new ValidationResultList();
@@ -74,6 +82,11 @@ namespace StockBox.Validation
             foreach (var item in failures)
                 ret.Add(item.Message);
             return String.Join("\r\n", ret);
+        }
+
+        public void Add(IValidationResultProvider result)
+        {
+            base.Add(new ValidationResult(result.Result, result.Message, result.ValidationObject));
         }
     }
 }

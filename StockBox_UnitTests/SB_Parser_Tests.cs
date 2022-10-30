@@ -83,6 +83,56 @@ namespace StockBox_UnitTests
         {
             var p = GetParserWithSource("Close x Yesterday's High");
             var expression = p.Parse();
+            Assert.IsTrue(expression is Binary);
+            Assert.IsTrue(expression.Left is Binary);
+            Assert.IsTrue(expression.Operator is Token);
+            Assert.AreEqual(TokenType.eCrossOver, expression.Operator.Type);
+            Assert.IsTrue(expression.Right is Binary);
+        }
+
+        [TestMethod]
+        public void SB_Parser_07_DomainTokensAreParsedCorrectly_EntryPoint()
+        {
+            var p = GetParserWithSource("@Entry");
+            var expression = p.Parse();
+            Assert.IsTrue(expression is DomainToken);
+            Assert.AreEqual(TokenType.eEntryPoint, expression.Operator.Type);
+        }
+
+        [TestMethod]
+        public void SB_Parser_08_DomainTokensAreParsedCorrectly_AllTimeHigh()
+        {
+            var p = GetParserWithSource("@ATH");
+            var expression = p.Parse();
+            Assert.IsTrue(expression is DomainToken);
+            Assert.AreEqual(TokenType.eAllTimeHigh, expression.Operator.Type);
+        }
+
+        [TestMethod]
+        public void SB_Parser_09_DomainTokensAreParsedCorrectly_AllTimeLow()
+        {
+            var p = GetParserWithSource("@ATL");
+            var expression = p.Parse();
+            Assert.IsTrue(expression is DomainToken);
+            Assert.AreEqual(TokenType.eAllTimeLow, expression.Operator.Type);
+        }
+
+        [TestMethod]
+        public void SB_Parser_10_DomainTokensAreParsedCorrectly_52WeekHigh()
+        {
+            var p = GetParserWithSource("@52WeekHigh");
+            var expression = p.Parse();
+            Assert.IsTrue(expression is DomainToken);
+            Assert.AreEqual(TokenType.e52WeekHigh, expression.Operator.Type);
+        }
+
+        [TestMethod]
+        public void SB_Parser_11_DomainTokensAreParsedCorrectly_52WeekHigh()
+        {
+            var p = GetParserWithSource("@52Weeklow");
+            var expression = p.Parse();
+            Assert.IsTrue(expression is DomainToken);
+            Assert.AreEqual(TokenType.e52WeekLow, expression.Operator.Type);
         }
 
         private Parser GetParserWithSource(string source)
@@ -92,11 +142,12 @@ namespace StockBox_UnitTests
         }
 
         [TestMethod]
-        public void SB_Parser_05_ParserCanCorrectlyParseACompoundExpression()
+        public void SB_Parser_12_ParserCanCorrectlyParseACompoundExpression()
         {
             var source = "100 > 40 AND 60 > 40";
             var parser = GetParserWithSource(source);
             var expression = parser.Parse();
         }
+
     }
 }

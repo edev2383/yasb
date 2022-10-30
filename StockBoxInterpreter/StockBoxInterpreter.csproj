@@ -2,10 +2,19 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFramework>netcoreapp3.1</TargetFramework>
+		<RootNamespace>StockBox.Interpreter</RootNamespace>
 	</PropertyGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\StockBoxData\StockBoxData.csproj" />
 		<ProjectReference Include="..\StockBoxConfiguration\StockBoxConfiguration.csproj" />
 		<ProjectReference Include="..\StockBoxAssociations\StockBoxAssociations.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+	  <None Remove="Statements\" />
+	  <None Remove="Environment\" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Statements\" />
+	  <Folder Include="Environment\" />
 	</ItemGroup>
 </Project>

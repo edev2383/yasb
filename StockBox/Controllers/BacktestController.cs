@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using StockBox.Actions;
 using StockBox.Actions.Adapters;
@@ -29,6 +30,7 @@ namespace StockBox.Controllers
 
         public PositionList Positions { get; set; } = new PositionList();
         public PositionSummary PositionSummary { get; set; }
+
 
 
         public BacktestController(ISbService service, StateMachine stateMachine, ISbFrameListProvider frameListProvider) : base(service, stateMachine, frameListProvider)
@@ -170,9 +172,9 @@ namespace StockBox.Controllers
                             // be handleed by StateMachine.TryNextState, and any
                             // additional transitions during Backtesting will be
                             // handled by the Action's adapter
-                            var vrResponse = PerformSetupAction(currSetup, localDailyFrame.FirstDataPoint());
-                            innerVr.AddRange(vrResponse.vr);
-                            HandleResponse(vrResponse.response);
+                            var vr = PerformSetupActions(currSetup, localDailyFrame.FirstDataPoint());
+                            innerVr.AddRange(vr);
+                            HandleResponses(vr.GetValidationObjects<ActionResponse>());
                         }
                     }
 
@@ -198,6 +200,12 @@ namespace StockBox.Controllers
             throw new NotImplementedException();
         }
 
+        private void HandleResponses(List<ActionResponse> responses)
+        {
+            foreach (var item in responses)
+                HandleResponse(item);
+        }
+
         private void HandleResponse(ActionResponse response, bool isRiskExit = false)
         {
             if (response is BuyActionResponse)
@@ -205,7 +213,7 @@ namespace StockBox.Controllers
                 var transaction = response.Source as Transaction;
                 if (transaction != null && transaction.Type == StockBox.Positions.Helpers.ETransactionType.eBuy)
                 {
-                    var newPosition = new Position(Guid.NewGuid());
+                    var newPosition = new Position(Guid.NewGuid(), transaction.Symbol);
                     newPosition.AddBuy(transaction);
                     Positions.Add(newPosition);
                 }

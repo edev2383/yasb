@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Linq;
+using StockBox.Base.Utilities;
 
 namespace StockBox.Positions
 {
@@ -75,6 +76,44 @@ namespace StockBox.Positions
                 if (item.RiskExitPerformed)
                     ret.Add(item);
             return ret;
+        }
+
+        public string CreateConsoleDump()
+        {
+            var sb = new StringBuilder();
+
+            sb.Add("Symbol".PadLeft(6));
+            sb.Add("Open Date".PadLeft(20));
+            sb.Add("Entry Price".PadLeft(12));
+            sb.Add("Close Date".PadLeft(20));
+            sb.Add("Exit Price".PadLeft(12));
+            sb.Add("Share Diff".PadLeft(12));
+            sb.Add("Ttl Shares".PadLeft(12));
+            sb.Add("Total P&L".PadLeft(12));
+            sb.Add("\r\n");
+
+            foreach (var item in this)
+            {
+                // symbol
+                sb.Add(item.Symbol.Name.PadLeft(6));
+                // open date
+                sb.Add(item.Transactions.First().Timestamp.Date.ToString().PadLeft(20));
+                // entry price
+                sb.Add(Math.Round(item.EntryPrice, 2).ToString().PadLeft(12));
+                // close date
+                sb.Add(item.Transactions.Count > 1 ? item.Transactions[1].Timestamp.Date.ToString().PadLeft(20) : string.Empty.PadLeft(20));
+                // exit price
+                sb.Add(Math.Round(item.CurrentPrice, 2).ToString().PadLeft(12));
+                // price diff
+                sb.Add(Math.Round(item.ShareDiff, 2).ToString().PadLeft(12));
+                // share count
+                sb.Add(item.TotalShares.ToString().PadLeft(12));
+                // P&L
+                sb.Add(Math.Round(item.ProfitLoss, 2).ToString().PadLeft(12));
+                sb.Add("\r\n");
+            }
+            Console.WriteLine(sb.Build('|'));
+            return sb.Build('|');
         }
     }
 }

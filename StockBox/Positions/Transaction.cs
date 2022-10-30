@@ -1,4 +1,5 @@
 ﻿using System;
+using StockBox.Associations;
 using StockBox.Positions.Helpers;
 
 
@@ -22,6 +23,8 @@ namespace StockBox.Positions
         public Guid? Token { get; set; }
         public int? ShareCount { get; set; }
         public double SharePrice { get; set; }
+        public DateTime Timestamp { get; set; }
+        public ISymbolProvider Symbol { get; set; }
 
         public Transaction()
         {

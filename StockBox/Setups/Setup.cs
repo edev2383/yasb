@@ -1,5 +1,6 @@
 ﻿using System;
 using StockBox.Actions;
+using StockBox.Data.SbFrames;
 using StockBox.Interpreter;
 using StockBox.Models;
 using StockBox.RiskProfiles;
@@ -145,12 +146,29 @@ namespace StockBox.Setups
         public bool IdentifiesAs(Setup item)
         {
             foreach (var rule in Rules)
-            {
                 if (!item.Rules.ContainsItem(rule))
                     return false;
-            }
             if (!OriginState.Equals(item.OriginState)) return false;
             return true;
+        }
+
+        /// <summary>
+        /// Perform all related actions within a setup.
+        ///
+        /// TODO - Need to perform the actions and return them to the
+        /// Controller in a way that preserves the overall status
+        /// </summary>
+        /// <param name="dataPoint"></param>
+        /// <returns></returns>
+        public ValidationResultList PerformActions(DataPoint dataPoint)
+        {
+            var ret = new ValidationResultList();
+            foreach (ISbAction action in _actions)
+                // add the ActionResponse object to the ret list. ActionResponse
+                // is an IValidationResultProvider, so the VRList knows how to
+                // parse it as a result
+                ret.Add(action.PerformAction(dataPoint));
+            return ret;
         }
     }
 }

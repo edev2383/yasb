@@ -55,6 +55,20 @@ namespace StockBox.Interpreter.Scanner
             return null;
         }
 
+        /// <summary>
+        /// Evaluate any found domain tokens prefixed w/ an `@` char.
+        ///
+        /// Current list includes @Entry, @AllTimeHigh, @AllTimeLow, @52WeekHigh
+        /// and @52WeekLow
+        /// </summary>
+        /// <param name="expr"></param>
+        /// <returns></returns>
+        public object VisitDomainToken(DomainToken expr)
+        {
+            return null;
+        }
+
+
         public object VisitUnaryExpr(Unary expr)
         {
             object right = Scan(expr.Right);

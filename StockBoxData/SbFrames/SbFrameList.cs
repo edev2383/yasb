@@ -21,6 +21,39 @@ namespace StockBox.Data.SbFrames
             }
         }
 
+        public double AllTimeHigh
+        {
+            get
+            {
+                return 0;
+            }
+        }
+
+        public double AllTimeLow
+        {
+            get
+            {
+                return 0;
+            }
+        }
+
+        public double FiftyTwoWeekHigh
+        {
+            get
+            {
+                return 0;
+            }
+        }
+
+        public double FiftyTwoWeekLow
+        {
+            get
+            {
+                return 0;
+            }
+        }
+
+
         public SbFrameList()
         {
         }

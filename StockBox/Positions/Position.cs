@@ -1,4 +1,5 @@
 ﻿using System;
+using StockBox.Associations;
 using StockBox.Data.SbFrames;
 using StockBox.Models;
 using StockBox.RiskProfiles;
@@ -9,10 +10,10 @@ namespace StockBox.Positions
     /// <summary>
     /// Class <c>Position</c> models an open investment of a stock.
     /// </summary>
-    public class Position
+    public class Position : IPosition
     {
 
-        public SymbolProfile Symbol { get { return _symbol; } }
+        public ISymbolProvider Symbol { get { return _symbol; } }
         public TransactionList Transactions { get { return _transactions; } }
         public RiskProfile RiskProfile { get { return _riskProfile; } }
 
@@ -26,19 +27,28 @@ namespace StockBox.Positions
         public double? TotalDollars { get; set; }
         public double EntryPrice { get; set; }
         public double CurrentPrice { get; set; }
-        public double? ProfitLoss { get { return CalculateProfitLoss(); } }
+        public double ShareDiff
+        {
+            get
+            {
+                if (CurrentPrice == 0) return 0;
+                return CurrentPrice - EntryPrice;
+            }
+        }
+        public double ProfitLoss { get { return CalculateProfitLoss(); } }
 
         public int? PositionId { get; set; }
         public Guid? Token { get { return _token; } }
 
         private TransactionList _transactions = new TransactionList();
-        private SymbolProfile _symbol;
+        private ISymbolProvider _symbol;
         private RiskProfile _riskProfile;
         private Guid _token;
 
-        public Position(Guid? token)
+        public Position(Guid? token, ISymbolProvider symbol)
         {
             _token = token != null ? (Guid)token : Guid.NewGuid();
+            _symbol = symbol;
         }
 
         public double CalculateOriginalInvestment()
@@ -54,8 +64,7 @@ namespace StockBox.Positions
 
         public double CalculateProfitLoss()
         {
-            var diff = CurrentPrice - EntryPrice;
-            return diff * TotalShares;
+            return ShareDiff * TotalShares;
         }
 
         public void AddBuy(Transaction transaction)
@@ -75,7 +84,7 @@ namespace StockBox.Positions
             _transactions.Add(transaction);
             if (ActiveShares <= 0)
             {
-
+                // do closing activities here...
             }
         }
     }

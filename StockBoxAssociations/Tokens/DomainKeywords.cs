@@ -54,6 +54,10 @@
 
             Add("true", TokenType.eTrue);
             Add("false", TokenType.eFalse);
+
+            #region Language Keywords
+            Add("var", TokenType.eVar);
+            #endregion
         }
     }
 }

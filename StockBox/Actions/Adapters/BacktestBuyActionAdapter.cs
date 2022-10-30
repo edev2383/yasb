@@ -28,6 +28,8 @@ namespace StockBox.Actions.Adapters
             ret.Message = $"Bought ({vrShares.Shares}) Symbol '{ParentAction.Symbol.Symbol.Name}' at, or near, ${dataPoint.Close}";
 
             var transaction = new Transaction((int)vrShares.Shares, dataPoint.Close);
+            transaction.Symbol = ParentAction.Symbol.Symbol;
+            transaction.Timestamp = dataPoint.Date;
             transaction.Type = Positions.Helpers.ETransactionType.eBuy;
             ret.Source = transaction;
             return ret;

@@ -1,6 +1,5 @@
 ﻿using StockBox.Actions.Responses;
 using StockBox.Associations;
-using StockBox.Data.Context;
 using StockBox.Data.SbFrames;
 using StockBox.Models;
 using StockBox.Services;
@@ -63,17 +62,13 @@ namespace StockBox.Controllers
         /// </summary>
         /// <param name="setup"></param>
         /// <returns></returns>
-        protected virtual (ValidationResultList vr, ActionResponse response) PerformSetupAction(Setup setup, DataPoint dataPoint)
+        protected virtual ValidationResultList PerformSetupActions(Setup setup, DataPoint dataPoint)
         {
             var vr = new ValidationResultList();
-            ActionResponse actionResponse = null;
             vr.Add(new ValidationResult(setup.Action != null, "Setup MUST HAVE an action"));
             if (vr.Success)
-            {
-                actionResponse = setup.Action.PerformAction(dataPoint);
-                vr.Add(new ValidationResult(actionResponse.IsSuccess, setup.ToString(), actionResponse));
-            }
-            return (vr, actionResponse);
+                vr.AddRange(setup.PerformActions(dataPoint));
+            return vr;
         }
 
         public ValidationResultList GetResults()

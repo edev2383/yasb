@@ -76,6 +76,11 @@ namespace StockBox.Associations.Tokens
             return false;
         }
 
+        public bool IsDomainToken()
+        {
+            return _lexeme.StartsWith('@');
+        }
+
         public Token Clone()
         {
             return new Token(this);

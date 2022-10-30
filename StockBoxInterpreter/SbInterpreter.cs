@@ -5,7 +5,10 @@ using StockBox.Associations.Tokens;
 using StockBox.Validation;
 using static StockBox.Associations.Tokens.TokenType;
 using StockBox.Associations.Enums;
-
+using StockBox.Associations;
+using System.Collections.Generic;
+using StockBox.Interpreter.Statements;
+using sbenv = StockBox.Interpreter.Environments;
 
 namespace StockBox.Interpreter
 {
@@ -13,17 +16,48 @@ namespace StockBox.Interpreter
     /// <summary>
     /// Recursively calculate the provided expression
     /// </summary>
-    public class SbInterpreter : IVisitor, IValidationResultsListProvider
+    public class SbInterpreter : IVisitor, IStatementVisitor, IValidationResultsListProvider
     {
 
+        protected sbenv.Environment Environment = new sbenv.Environment();
+
         private readonly SbFrameList _frames;
+        private readonly IPosition _position;
 
         public ValidationResultList Results { get { return _results; } }
         private readonly ValidationResultList _results = new ValidationResultList();
 
-        public SbInterpreter(SbFrameList frames) { _frames = frames; }
+        public SbInterpreter(SbFrameList frames, IPosition position)
+        {
+            _frames = frames;
+            _position = position;
+        }
+
+        public SbInterpreter(SbFrameList frames)
+        {
+            _frames = frames;
+        }
 
         public SbInterpreter() { }
+
+
+        public void InterpretStatements(List<Stmt> statements)
+        {
+            try
+            {
+                foreach (Stmt statement in statements)
+                    Execute(statement);
+            }
+            catch (Exception e)
+            {
+
+            }
+        }
+
+        protected void Execute(Stmt statement)
+        {
+            statement.Accept(this);
+        }
 
         /// <summary>
         /// Begin the recursive evaluation
@@ -95,6 +129,36 @@ namespace StockBox.Interpreter
         public object VisitDomainLiteral(DomainLiteral expr)
         {
             return new DataColumn((string)expr.Column, expr.Indices);
+        }
+
+        /// <summary>
+        /// Evaluate any found domain tokens prefixed w/ an `@` char.
+        ///
+        /// Current list includes @Entry, @AllTimeHigh, @AllTimeLow, @52WeekHigh
+        /// and @52WeekLow
+        /// </summary>
+        /// <param name="expr"></param>
+        /// <returns></returns>
+        public object VisitDomainToken(DomainToken expr)
+        {
+            object ret = null;
+            switch (expr.Operator.Type)
+            {
+                case TokenType.e52WeekHigh:
+                    break;
+                case TokenType.e52WeekLow:
+                    break;
+                case TokenType.eAllTimeHigh:
+                    break;
+                case TokenType.eAllTimeLow:
+                    break;
+                case TokenType.eEntryPoint:
+                    if (_position != null)
+                        ret = _position.EntryPrice;
+                    break;
+            }
+
+            return ret;
         }
 
         /// <summary>
@@ -392,5 +456,29 @@ namespace StockBox.Interpreter
             return ret;
         }
 
+        #region IStatementVisitor
+
+        public void visitExpressionStmt(Expression stmt)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void visitIfStmt(If stmt)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void visitVarStmt(Var stmt)
+        {
+            object value = null;
+            if (stmt.Initializer == null)
+            {
+                value = evaluate(stmt.Initializer);
+            }
+            Environment.Define(stmt.Name.Lexeme, value);
+
+        }
+
+        #endregion
     }
 }

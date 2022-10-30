@@ -67,5 +67,6 @@
     <ProjectReference Include="..\StockBoxData\StockBoxData.csproj" />
     <ProjectReference Include="..\StockBoxConfiguration\StockBoxConfiguration.csproj" />
     <ProjectReference Include="..\StockBoxInterpreter\StockBoxInterpreter.csproj" />
+    <ProjectReference Include="..\StockBoxBase\StockBoxBase.csproj" />
   </ItemGroup>
 </Project>

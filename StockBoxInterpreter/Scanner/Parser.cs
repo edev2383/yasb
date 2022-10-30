@@ -16,10 +16,12 @@ namespace StockBox.Interpreter.Scanner
     public class Parser : IValidationResultsListProvider
     {
 
-        private TokenList _tokens;
-        private int _current = 0;
+        protected TokenList _tokens;
+        protected int _current = 0;
 
-        private ValidationResultList _results = new ValidationResultList();
+        protected TokenList _cacheTokens = new TokenList();
+
+        protected ValidationResultList _results = new ValidationResultList();
 
         public Parser(TokenList tokens)
         {
@@ -52,17 +54,18 @@ namespace StockBox.Interpreter.Scanner
             }
             finally
             {
+                _cacheTokens.AddRange(_tokens.Clone());
                 _tokens = null;
                 _current = 0;
             }
         }
 
-        private Expr Expression()
+        protected Expr Expression()
         {
             return Equality();
         }
 
-        private Expr Equality()
+        protected Expr Equality()
         {
             Expr expr = Comparison();
 
@@ -76,7 +79,7 @@ namespace StockBox.Interpreter.Scanner
             return expr;
         }
 
-        private Expr Comparison()
+        protected Expr Comparison()
         {
             Expr expr = Term();
 
@@ -90,7 +93,7 @@ namespace StockBox.Interpreter.Scanner
             return expr;
         }
 
-        private Expr Term()
+        protected Expr Term()
         {
             Expr expr = Factor();
 
@@ -104,7 +107,7 @@ namespace StockBox.Interpreter.Scanner
             return expr;
         }
 
-        private Expr Factor()
+        protected Expr Factor()
         {
             Expr expr = Unary();
 
@@ -118,7 +121,7 @@ namespace StockBox.Interpreter.Scanner
             return expr;
         }
 
-        private Expr Unary()
+        protected Expr Unary()
         {
             if (Match(eBang, eMinus))
             {
@@ -130,16 +133,24 @@ namespace StockBox.Interpreter.Scanner
             return Primary();
         }
 
-        private Expr Primary()
+        protected Expr Primary()
         {
+            if (Match(eAllTimeHigh)) return new DomainToken(Previous());
+            if (Match(eAllTimeLow)) return new DomainToken(Previous());
+            if (Match(e52WeekHigh)) return new DomainToken(Previous());
+            if (Match(e52WeekLow)) return new DomainToken(Previous());
+            if (Match(eEntryPoint)) return new DomainToken(Previous());
             if (Match(eFalse)) return new Literal(false);
             if (Match(eTrue)) return new Literal(true);
             if (Match(eNull)) return new Literal(null);
 
-            if (Match(eNumber, eString))
+            if (Match(eIdentifier))
             {
-                return new Literal(Previous().Literal);
+                return new Variable(Previous());
             }
+
+            if (Match(eNumber, eString))
+                return new Literal(Previous().Literal);
 
             if (Match(eLeftParen))
             {
@@ -149,9 +160,7 @@ namespace StockBox.Interpreter.Scanner
             }
 
             if (Match(eColumn))
-            {
                 return new DomainLiteral(Previous().Lexeme);
-            }
 
             if (Match(eIndicator))
             {
@@ -179,14 +188,14 @@ namespace StockBox.Interpreter.Scanner
             throw new Exception("Expect expression");
         }
 
-        private Token Consume(TokenType type, string message)
+        protected Token Consume(TokenType type, string message)
         {
             if (Check(type)) return Advance();
             _results.Add(new ValidationResult(EResult.eFail, message));
             return new Token();
         }
 
-        private bool Match(params TokenType[] args)
+        protected bool Match(params TokenType[] args)
         {
             foreach (TokenType item in args)
             {
@@ -199,29 +208,29 @@ namespace StockBox.Interpreter.Scanner
             return false;
         }
 
-        private Token Advance()
+        protected Token Advance()
         {
             if (!IsAtEnd()) _current++;
             return Previous();
         }
 
-        private bool Check(TokenType tryType)
+        protected bool Check(TokenType tryType)
         {
             if (IsAtEnd()) return false;
             return Peek().Type == tryType;
         }
 
-        private Token Previous()
+        protected Token Previous()
         {
             return _tokens[_current - 1];
         }
 
-        private bool IsAtEnd()
+        protected bool IsAtEnd()
         {
             return Peek().Type == eEOF;
         }
 
-        private Token Peek()
+        protected Token Peek()
         {
             return _tokens[_current];
         }
@@ -229,6 +238,23 @@ namespace StockBox.Interpreter.Scanner
         public ValidationResultList GetResults()
         {
             return _results;
+        }
+
+        protected void Synchronize()
+        {
+            Advance();
+            while (!IsAtEnd())
+            {
+                if (Previous().Type == eSemicolon) return;
+
+                switch (Peek().Type)
+                {
+                    case eIf:
+                    case eVar:
+                        return;
+                }
+            }
+            Advance();
         }
     }
 }

@@ -96,8 +96,8 @@ namespace StockBox.Controllers
                     if (innerVr.Success)
                     {
                         var dailyFrame = localFrameList.FindByFrequency(Associations.Enums.EFrequency.eDaily);
-                        var vrResponse = PerformSetupAction(localSetup, dailyFrame.FirstDataPoint());
-                        innerVr.AddRange(vrResponse.vr);
+                        var vr = PerformSetupActions(localSetup, dailyFrame.FirstDataPoint());
+                        innerVr.AddRange(vr);
                     }
                 }
 

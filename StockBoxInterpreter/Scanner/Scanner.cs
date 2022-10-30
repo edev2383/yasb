@@ -274,6 +274,18 @@ namespace StockBox.Interpreter.Scanner
                         case TokenType.eEntryPoint:
                             AddToken(TokenType.eEntryPoint, null);
                             break;
+                        case TokenType.e52WeekHigh:
+                            AddToken(TokenType.e52WeekHigh, null);
+                            break;
+                        case TokenType.e52WeekLow:
+                            AddToken(TokenType.e52WeekLow, null);
+                            break;
+                        case TokenType.eAllTimeHigh:
+                            AddToken(TokenType.eAllTimeHigh, null);
+                            break;
+                        case TokenType.eAllTimeLow:
+                            AddToken(TokenType.eAllTimeLow, null);
+                            break;
                         case TokenType.eYesterday:
                             InjectUnsourcedToken(TokenType.eNumber, "1", 1, line, current);
                             InjectUnsourcedToken(TokenType.eDaily, "day", "Yesterday", line, current);
