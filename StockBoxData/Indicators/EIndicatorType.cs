@@ -8,5 +8,7 @@ namespace StockBox.Data.Indicators
     {
         eSma = 0,
         eVolume,
+        eRSI,
+        eSlowStochastics,
     }
 }

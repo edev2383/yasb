@@ -112,6 +112,9 @@ namespace StockBox.Data.SbFrames
                 case EIndicatorType.eVolume:
                     MapIndicator((Volume)indicator);
                     break;
+                case EIndicatorType.eRSI:
+                    MapIndicator((RelativeStrengthIndex)indicator);
+                    break;
                 default:
                     break;
             }
@@ -136,6 +139,17 @@ namespace StockBox.Data.SbFrames
                 var foundDataPoint = FindByDate(item.Key);
                 if (foundDataPoint != null)
                     foundDataPoint.AddIndicatorValue(sma.Name, item.Value);
+            }
+        }
+
+        private void MapIndicator(RelativeStrengthIndex rsi)
+        {
+            var payload = (Dictionary<DateTime, double>)rsi.Payload;
+            foreach (KeyValuePair<DateTime, double> item in payload)
+            {
+                var foundDataPoint = FindByDate(item.Key);
+                if (foundDataPoint != null)
+                    foundDataPoint.AddIndicatorValue(rsi.Name, item.Value);
             }
         }
 

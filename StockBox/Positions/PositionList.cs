@@ -82,7 +82,7 @@ namespace StockBox.Positions
         {
             var sb = new StringBuilder();
 
-            sb.Add("Symbol".PadLeft(6));
+            sb.Add("|Symbol".PadLeft(6));
             sb.Add("Open Date".PadLeft(20));
             sb.Add("Entry Price".PadLeft(12));
             sb.Add("Close Date".PadLeft(20));
@@ -110,8 +110,10 @@ namespace StockBox.Positions
                 sb.Add(item.TotalShares.ToString().PadLeft(12));
                 // P&L
                 sb.Add(Math.Round(item.ProfitLoss, 2).ToString().PadLeft(12));
+
                 sb.Add("\r\n");
             }
+
             Console.WriteLine(sb.Build('|'));
             return sb.Build('|');
         }

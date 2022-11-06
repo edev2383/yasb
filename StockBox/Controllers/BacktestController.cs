@@ -169,7 +169,7 @@ namespace StockBox.Controllers
                         if (innerVr.Success)
                         {
                             // if there is a state transition, it will initially
-                            // be handleed by StateMachine.TryNextState, and any
+                            // be handled by StateMachine.TryNextState, and any
                             // additional transitions during Backtesting will be
                             // handled by the Action's adapter
                             var vr = PerformSetupActions(currSetup, localDailyFrame.FirstDataPoint());
