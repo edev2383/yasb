@@ -22,7 +22,7 @@ namespace StockBox.Data.Indicators
             return column.ToLower() switch
             {
                 "sma" => new SimpleMovingAverage(column, indices),
-                "avgvolume" => new Volume(column, indices),
+                "avgvolume" => new AverageVolume(column, indices),
                 "rsi" => new RelativeStrengthIndex(column, indices),
                 "slowsto" => new SlowStochastic(column, indices),
                 "faststo" => new FastStochastic(column, indices),
