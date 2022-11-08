@@ -12,7 +12,6 @@ using StockBox.Rules;
 using StockBox.Services;
 using StockBox.Setups;
 using StockBox.States;
-using StockBox_TestArtifacts.Mocks;
 
 namespace StockBox_IntegrationTests
 {

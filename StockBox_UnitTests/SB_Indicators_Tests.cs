@@ -128,6 +128,83 @@ namespace StockBox_UnitTests
             // which is mostly irrelevant because the payload is mapped to the
             // DataPoint.Indicators via DateTime key. This is just for the test
             Assert.AreEqual(payload.Values.Last(), indicatorValue);
+
+        }
+
+        [TestMethod, Description("Test the indicator `FastStochastics` is created and the values are as expected based on the test dataset")]
+        public void SB_Indicators_04_FastStochastics()
+        {
+            var expectedFirstKValue = 57.82;
+            var expectedFirstDValue = 62.59;
+            var stream = new Reader().GetFileStream(eAmdDaily);
+            var adapter = new DeedleAdapter(stream);
+            var frame = new SbFrame(adapter, EFrequency.eDaily, new Symbol(string.Empty));
+            var fastSto = IndicatorFactory.Create("FastSto", 14, 3);
+            frame.AddIndicator(fastSto);
+
+            // Asserting the Indicator initializes correctly and performs the
+            // proper calculations
+            Assert.AreEqual("FastSto(14,3)", fastSto.Name);
+
+            var firstPayloadValue = ((Dictionary<DateTime, (double k, double d)>)fastSto.Payload).First().Value;
+            Assert.AreEqual(expectedFirstKValue, Math.Round(firstPayloadValue.k, 2, MidpointRounding.AwayFromZero));
+            Assert.AreEqual(expectedFirstDValue, Math.Round(firstPayloadValue.d, 2, MidpointRounding.AwayFromZero));
+            Assert.IsNotNull(fastSto.Payload);
+            Assert.IsInstanceOfType(fastSto.Payload, typeof(Dictionary<DateTime, (double k, double d)>));
+
+            // cast the indicator to the appropriate payload obj
+            var payload = (Dictionary<DateTime, (double k, double d)>)fastSto.Payload;
+
+            // assert the indicator was correctly mapped to the SbFrame's inner
+            // DataPointList object
+            var firstDataPoint = frame.FirstDataPoint();
+            var indicatorValue = firstDataPoint.GetByColumn(new DataColumn("FastSto", 14, 3));
+            Assert.IsNotNull(indicatorValue);
+
+            // DeedleAdapter is forward testing, i.e., DESC order - most recent
+            // DateTime first, so the last value of the calculated indicator
+            // payload is going to be the first value in the SbFrame's dataset
+            // which is mostly irrelevant because the payload is mapped to the
+            // DataPoint.Indicators via DateTime key. This is just for the test
+            Assert.AreEqual(payload.Values.Last().k, indicatorValue);
+        }
+
+        [TestMethod, Description("Test the indicator `SlowStochastic` is created and the values are as expected based on the test dataset")]
+        public void SB_Indicators_05_SlowStochastics()
+        {
+            var expectedFirstKValue = 39.26;
+            var expectedFirstDValue = 52.22;
+            var stream = new Reader().GetFileStream(eAmdDaily);
+            var adapter = new DeedleAdapter(stream);
+            var frame = new SbFrame(adapter, EFrequency.eDaily, new Symbol(string.Empty));
+            var slowSto = IndicatorFactory.Create("SlowSto", 14, 3);
+            frame.AddIndicator(slowSto);
+
+            // Asserting the Indicator initializes correctly and performs the
+            // proper calculations
+            Assert.AreEqual("SlowSto(14,3)", slowSto.Name);
+
+            var firstPayloadValue = ((Dictionary<DateTime, (double k, double d)>)slowSto.Payload).First().Value;
+            Assert.AreEqual(expectedFirstKValue, Math.Round(firstPayloadValue.k, 2, MidpointRounding.AwayFromZero));
+            Assert.AreEqual(expectedFirstDValue, Math.Round(firstPayloadValue.d, 2, MidpointRounding.AwayFromZero));
+            Assert.IsNotNull(slowSto.Payload);
+            Assert.IsInstanceOfType(slowSto.Payload, typeof(Dictionary<DateTime, (double k, double d)>));
+
+            // cast the indicator to the appropriate payload obj
+            var payload = (Dictionary<DateTime, (double k, double d)>)slowSto.Payload;
+
+            // assert the indicator was correctly mapped to the SbFrame's inner
+            // DataPointList object
+            var firstDataPoint = frame.FirstDataPoint();
+            var indicatorValue = firstDataPoint.GetByColumn(new DataColumn("SlowSto", 14, 3));
+            Assert.IsNotNull(indicatorValue);
+
+            // DeedleAdapter is forward testing, i.e., DESC order - most recent
+            // DateTime first, so the last value of the calculated indicator
+            // payload is going to be the first value in the SbFrame's dataset
+            // which is mostly irrelevant because the payload is mapped to the
+            // DataPoint.Indicators via DateTime key. This is just for the test
+            Assert.AreEqual(payload.Values.Last().k, indicatorValue);
         }
     }
 }

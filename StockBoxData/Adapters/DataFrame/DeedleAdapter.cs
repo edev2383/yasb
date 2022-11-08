@@ -29,7 +29,7 @@ namespace StockBox.Data.Adapters.DataFrame
         /// Return the whole DataPointList
         /// </summary>
         /// <returns></returns>
-        protected override DataPointList GetData()
+        public override DataPointList GetData()
         {
             return _data;
         }

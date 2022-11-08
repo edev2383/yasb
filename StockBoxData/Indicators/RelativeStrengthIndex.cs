@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using StockBox.Data.Adapters.DataFrame;
-using Deedle;
-using System.Data;
 using System.Linq;
-
+using StockBox.Data.SbFrames;
 
 namespace StockBox.Data.Indicators
 {
@@ -30,21 +28,19 @@ namespace StockBox.Data.Indicators
             // next calculated averages
             List<(double gain, double loss)> averages = new List<(double gain, double loss)>();
 
-            // pull a series (column) from the data in the Close column
-            var orderedSeries = adapter.SourceData.GetColumn<double>("Close").SortByKey();
+            var altOrderedSeries = adapter.GetSeries("Close").SortByKey();
+            var altValues = altOrderedSeries.Window(Indices[0], win => CalculateRsi(win, ref averages, Indices[0]));
 
-            var values = orderedSeries.WindowInto(Indices[0], win => CalculateRsi(win, ref averages, Indices[0]));
-            for (var idx = 0; idx < values.KeyCount; idx++)
+            for (var idx = 0; idx < altValues.Count; idx++)
             {
-                var key = values.Keys.ToOrdinalSeries<DateTime>()[idx];
-                var innerValue = values[key];
-                ret.Add(key, innerValue);
+                var e = altValues.ElementAt(idx);
+                ret.Add(e.Key, e.Value);
             }
 
             return ret;
         }
 
-        protected double CalculateRsi(Series<DateTime, double> values, ref List<(double gain, double loss)> averages, int window)
+        protected double CalculateRsi(SbSeries values, ref List<(double gain, double loss)> averages, int window)
         {
             double avgGain = 0;
             double avgLoss = 0;
@@ -54,7 +50,9 @@ namespace StockBox.Data.Indicators
             // for the first winow, create the seed data by taking a simple avg
             if (averages.Count == 0)
             {
+                // 1.0264
                 avgGain = values.Diff(1).Select(kvp => kvp.Value > 0 ? kvp.Value : 0).Sum() / window;
+                // 0.4328
                 avgLoss = Math.Abs(values.Diff(1).Select(kvp => kvp.Value < 0 ? kvp.Value : 0).Sum()) / window;
             }
             else
@@ -62,7 +60,7 @@ namespace StockBox.Data.Indicators
                 // now that we have an extended set of values, we can target
                 // only the current diff as a single gain-loss value which will
                 // act to smooth the values
-                double currentGainLoss = values.Diff(1).LastValue();
+                double currentGainLoss = values.Diff(1).Last().Value;
                 (double gain, double loss) currentAverages = averages.Last();
                 // apply the gainloss value only to the proper average, making
                 // sure to use the absolute value in the case of the a loss

@@ -47,6 +47,14 @@ namespace StockBox.Data.SbFrames
             return new DataPoint(this);
         }
 
+        /// <summary>
+        /// Return a value from a single DataPoint by DataColumn object.
+        ///
+        /// Will return first value of any IndicatorDataPoints. Indicators with
+        /// multiple values must be handled directly [atm]
+        /// </summary>
+        /// <param name="tryColumn"></param>
+        /// <returns></returns>
         public object GetByColumn(DataColumn tryColumn)
         {
             object ret = null;
@@ -78,15 +86,17 @@ namespace StockBox.Data.SbFrames
                     break;
             }
 
-            if (ret == null)
-                throw new ArgumentOutOfRangeException($"GetByColumn: provided column not found: {tryColumn.Column}");
-
             return ret;
         }
 
         public void AddIndicatorValue(string column, object value)
         {
             Indicators.Add(new IndicatorDataPoint(column, value));
+        }
+
+        public void AddIndicatorValue(IndicatorDataPoint indicatorDataPoint)
+        {
+            Indicators.Add(indicatorDataPoint);
         }
     }
 }

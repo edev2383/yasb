@@ -24,6 +24,8 @@ namespace StockBox.Data.Indicators
                 "sma" => new SimpleMovingAverage(column, indices),
                 "avgvolume" => new Volume(column, indices),
                 "rsi" => new RelativeStrengthIndex(column, indices),
+                "slowsto" => new SlowStochastic(column, indices),
+                "faststo" => new FastStochastic(column, indices),
                 _ => throw new ArgumentOutOfRangeException(),
             };
         }

@@ -50,7 +50,7 @@ namespace StockBox.Data.Adapters.DataFrame
             AddData(data);
         }
 
-        protected abstract DataPointList GetData();
+        public abstract DataPointList GetData();
 
         /// <summary>
         /// Add data from a MemoryStream after the object has been created
@@ -171,6 +171,11 @@ namespace StockBox.Data.Adapters.DataFrame
         /// </summary>
         /// <returns></returns>
         public abstract IDataFrameAdapter Create();
+
+        public SbSeries GetSeries(string column)
+        {
+            return GetData().ToSeries(column);
+        }
 
     }
 }

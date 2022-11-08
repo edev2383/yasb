@@ -67,7 +67,7 @@ namespace StockBox.Data.Adapters.DataFrame
         /// This returns a slice of the origin data list
         /// </summary>
         /// <returns></returns>
-        protected override DataPointList GetData()
+        public override DataPointList GetData()
         {
             var clone = _data.Clone();
             var ret = clone.GetRange((int)_windowIndex, (int)Length - (int)_windowIndex);

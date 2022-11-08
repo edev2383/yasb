@@ -10,5 +10,6 @@ namespace StockBox.Data.Indicators
         eVolume,
         eRSI,
         eSlowStochastics,
+        eFastStochastics,
     }
 }

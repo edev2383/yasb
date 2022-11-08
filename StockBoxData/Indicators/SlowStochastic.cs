@@ -4,7 +4,7 @@ using StockBox.Data.Adapters.DataFrame;
 using Deedle;
 using System.Data;
 using System.Linq;
-
+using StockBox.Data.SbFrames;
 
 namespace StockBox.Data.Indicators
 {
@@ -21,35 +21,45 @@ namespace StockBox.Data.Indicators
 
         protected override object CalculateIndicator(IDataFrameAdapter adapter)
         {
-            var ret = new Dictionary<DateTime, double>();
+            var ret = new Dictionary<DateTime, (double k, double d)>();
+
 
             // guard out if the adapter hasn't been sourced. 
             if (adapter.SourceData == null) return ret;
 
-            // averages is a collection of previous values cached and passed
-            // to the aggregation function. The last value is needed for the
-            // next calculated averages
-            List<(double gain, double loss)> averages = new List<(double gain, double loss)>();
+            var fastSto = IndicatorFactory.Create("FastSto", Indices);
+            fastSto.Calculate(adapter);
+            adapter.MapIndicator(fastSto);
+
+            var data = adapter.GetData().Reversed;
+
+            var kseries = new SbSeries("SlowSto.k");
+            var dataColumn = SbFrames.DataColumn.ParseColumnDescriptor(fastSto.Name);
+            foreach (var dp in data)
+            {
+                var indicator = dp.Indicators.FindByKey(fastSto.Name);
+                if (indicator != null)
+                    kseries.Add(dp.Date, (double)indicator.Values[1]);
+            }
 
             // pull a series (column) from the data in the Close column
-            var orderedSeries = adapter.SourceData.GetColumn<double>("Close").SortByKey();
+            //var kseries = data.ToSeries(fastSto.Name).Window(Indices[0], win => win.Mean());
+            var dseries = kseries.Window(Indices[1], win => win.Mean());
+            //var orderedSeries = adapter.SourceData.GetColumn<double>("Close").SortByKey();
 
-            var values = orderedSeries.WindowInto(Indices[0], win => CalculateSlowStochastic(win));
-            for (var idx = 0; idx < values.KeyCount; idx++)
+            for (var idx = 0; idx < kseries.KeyCount; idx++)
             {
-                var key = values.Keys.ToOrdinalSeries<DateTime>()[idx];
-                var innerValue = values[key];
-                ret.Add(key, innerValue);
+                var k = kseries.ElementAt(idx);
+                if (dseries.ContainsKey(k.Key))
+                {
+                    var d = dseries[k.Key];
+                    ret.Add(k.Key, (k.Value, d));
+                }
             }
 
             return ret;
 
         }
 
-
-        protected double CalculateSlowStochastic(Series<DateTime, double> values)
-        {
-            return 0;
-        }
     }
 }

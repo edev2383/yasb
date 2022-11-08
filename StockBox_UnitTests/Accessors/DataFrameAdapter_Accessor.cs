@@ -36,7 +36,13 @@ namespace StockBox_UnitTests.Accessors
             return ret;
         }
 
-        protected override DataPointList GetData()
+        public DataPointList Access_GetData()
+        {
+            return GetData();
+        }
+
+
+        public override DataPointList GetData()
         {
             return _data;
         }
