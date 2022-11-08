@@ -8,15 +8,14 @@ namespace StockBox.Data.Indicators
 {
 
     /// <summary>
-    /// Class <c>SimpleMovingAverage</c> is a smoothing curve indicator against
-    /// the Close value of time-series data
-    ///
-    /// <see cref="https://www.investopedia.com/terms/s/sma.asp"/>
+    /// Class <c>AverageVolume</c> is a smoothing function for daily volume
+    /// values. Allows for easy comparisons if volume is increasing or
+    /// decreasing against the average
     /// </summary>
-    public class SimpleMovingAverage : BaseIndicator
+    public class AverageVolume : BaseIndicator
     {
 
-        public SimpleMovingAverage(string column, params int[] indices) : base(column, EIndicatorType.eSma, indices)
+        public AverageVolume(string column, params int[] indices) : base(column, EIndicatorType.eVolume, indices)
         {
         }
 
@@ -28,10 +27,7 @@ namespace StockBox.Data.Indicators
             if (adapter.SourceData == null) return ret;
 
             // apply the Mean method over the window of length = Indices[0]
-            // the SortByKey() call may be unnecessary, however, it's probably
-            // better to be safe
-            var values = adapter.GetSeries("Close").SortByKey()
-                                 .Window(Indices[0], win => win.Mean());
+            var values = adapter.GetSeries("Value").SortByKey().Window(Indices[0], win => win.Mean());
 
             // loop through the result set
             for (var idx = 0; idx < values.Count; idx++)

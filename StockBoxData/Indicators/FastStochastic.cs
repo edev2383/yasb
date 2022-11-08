@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using StockBox.Data.Adapters.DataFrame;
-using Deedle;
 using System.Linq;
 using StockBox.Data.SbFrames;
+
 
 namespace StockBox.Data.Indicators
 {
 
     /// <summary>
-    /// Class <c>FastStochastic</c>
+    /// Class <c>FastStochastic</c> is a momentum indicator that oscillates
+    /// between 0 and 100 depending on over-bought/over-sold conditions
+    ///
+    /// <see cref="https://www.fidelity.com/learning-center/trading-investing/technical-analysis/technical-indicator-guide/fast-stochastic"/>
     /// </summary>
     public class FastStochastic : BaseIndicator
     {

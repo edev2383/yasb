@@ -138,7 +138,7 @@ namespace StockBox.Data.SbFrames
                     MapIndicator((SimpleMovingAverage)indicator);
                     break;
                 case EIndicatorType.eVolume:
-                    MapIndicator((Volume)indicator);
+                    MapIndicator((AverageVolume)indicator);
                     break;
                 case EIndicatorType.eRSI:
                     MapIndicator((RelativeStrengthIndex)indicator);
@@ -187,7 +187,7 @@ namespace StockBox.Data.SbFrames
             }
         }
 
-        private void MapIndicator(Volume sma)
+        private void MapIndicator(AverageVolume sma)
         {
             var payload = (Dictionary<DateTime, double>)sma.Payload;
             foreach (KeyValuePair<DateTime, double> item in payload)

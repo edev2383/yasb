@@ -1,16 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using StockBox.Data.Adapters.DataFrame;
-using Deedle;
-using System.Data;
 using System.Linq;
 using StockBox.Data.SbFrames;
+
 
 namespace StockBox.Data.Indicators
 {
 
     /// <summary>
-    /// Class <c>SlowStochastic</c>
+    /// Class <c>SlowStochastic</c> is a momentum osillator indicator, related
+    /// to the FastStochastic indicator, but smoothed out, typically with a
+    /// SMA(3) applied to the FastStochastics %D value
+    ///
+    /// <see cref="https://www.fidelity.com/learning-center/trading-investing/technical-analysis/technical-indicator-guide/slow-stochastic"/>
     /// </summary>
     public class SlowStochastic : BaseIndicator
     {

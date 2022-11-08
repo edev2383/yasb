@@ -4,11 +4,14 @@ using StockBox.Data.Adapters.DataFrame;
 using System.Linq;
 using StockBox.Data.SbFrames;
 
+
 namespace StockBox.Data.Indicators
 {
 
     /// <summary>
-    /// Class <c>RelativeStrengthIndex</c> 
+    /// Class <c>RelativeStrengthIndex</c> is a price-trend indicator
+    ///
+    /// <see cref="https://www.omnicalculator.com/finance/rsi"/>
     /// </summary>
     public class RelativeStrengthIndex : BaseIndicator
     {
@@ -23,23 +26,40 @@ namespace StockBox.Data.Indicators
             // guard out if the adapter hasn't been sourced. 
             if (adapter.SourceData == null) return ret;
 
-            // averages is a collection of previous values cached and passed
-            // to the aggregation function. The last value is needed for the
-            // next calculated averages
+            // we need to cache the averages created by the calculation without
+            // mutating any original data, so we create this list to hold onto
+            // our averages as we go. We'll need to reference the Last() tuple
+            // on each iteration of the window
             List<(double gain, double loss)> averages = new List<(double gain, double loss)>();
 
-            var altOrderedSeries = adapter.GetSeries("Close").SortByKey();
-            var altValues = altOrderedSeries.Window(Indices[0], win => CalculateRsi(win, ref averages, Indices[0]));
+            // apply the Mean method over the window of length = Indices[0]
+            // the SortByKey() call may be unnecessary, however, it's probably
+            // better to be safe
+            var values = adapter.GetSeries("Close")
+                                    .SortByKey()
+                                    .Window(
+                                    Indices[0],
+                                    win => CalculateRsi(win, ref averages, Indices[0]));
 
-            for (var idx = 0; idx < altValues.Count; idx++)
+            // loop through the result set
+            for (var idx = 0; idx < values.Count; idx++)
             {
-                var e = altValues.ElementAt(idx);
+                // acquire the element at a given index
+                var e = values.ElementAt(idx);
+                // add the DateTime Key and double value to the return object
                 ret.Add(e.Key, e.Value);
             }
 
             return ret;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="values"></param>
+        /// <param name="averages"></param>
+        /// <param name="window"></param>
+        /// <returns></returns>
         protected double CalculateRsi(SbSeries values, ref List<(double gain, double loss)> averages, int window)
         {
             double avgGain = 0;
@@ -47,12 +67,12 @@ namespace StockBox.Data.Indicators
             double rs = 0;
             double rsi = 0;
 
-            // for the first winow, create the seed data by taking a simple avg
             if (averages.Count == 0)
             {
-                // 1.0264
+                // this path is seed data. Create the first average values,
+                // after which, we can compare against series Close data as we
+                // move along the window
                 avgGain = values.Diff(1).Select(kvp => kvp.Value > 0 ? kvp.Value : 0).Sum() / window;
-                // 0.4328
                 avgLoss = Math.Abs(values.Diff(1).Select(kvp => kvp.Value < 0 ? kvp.Value : 0).Sum()) / window;
             }
             else
@@ -71,6 +91,7 @@ namespace StockBox.Data.Indicators
             // store the averages in the cache list
             averages.Add((avgGain, avgLoss));
 
+            // rsi calculation. see url in class def for more
             rs = avgGain / avgLoss;
             rsi = 100 - (100 / (1 + rs));
             return rsi;
