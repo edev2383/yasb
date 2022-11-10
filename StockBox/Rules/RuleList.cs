@@ -89,11 +89,6 @@ namespace StockBox.Rules
             return false;
         }
 
-        public RuleList Clone()
-        {
-            return new RuleList(this);
-        }
-
         public ValidationResultList GetResults()
         {
             return _results;

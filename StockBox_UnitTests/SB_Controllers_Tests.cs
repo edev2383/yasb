@@ -50,7 +50,7 @@ namespace StockBox_UnitTests
             var stateMachine = new StateMachine(stateList, startState);
             stateMachine.AddTransition(transition);
 
-            var ruleList = new RuleList() {
+            var ruleList = new Pattern() {
                 new Rule("Close < Yesterday Close"),
             };
 
@@ -116,14 +116,14 @@ namespace StockBox_UnitTests
             stateMachine.AddTransition(new Transition(sellState, watchState));
 
 
-            var watchToPrimeRuleList = new RuleList() {
+            var watchToPrimeRuleList = new Pattern() {
                 new Rule("Close > Yesterday Close"),
             };
 
             var watchToPrimeSetup = new Setup(watchToPrimeRuleList, watchState, riskProfile);
             watchToPrimeSetup.AddAction(new Move(new BacktestMoveActionAdapter(), "primed"));
 
-            var primedToActiveRuleList = new RuleList()
+            var primedToActiveRuleList = new Pattern()
             {
                 new Rule("Close > Yesterday Close"),
             };
@@ -131,7 +131,7 @@ namespace StockBox_UnitTests
             var primeToActiveSetup = new Setup(primedToActiveRuleList, primedState, riskProfile);
             primeToActiveSetup.AddAction(new Buy(new BacktestBuyActionAdapter()));
 
-            var activeToInactiveRuleList = new RuleList()
+            var activeToInactiveRuleList = new Pattern()
             {
                 new Rule("Close > Yesterday's Close"),
                 new Rule("Close > 2 day ago close"),
@@ -140,7 +140,7 @@ namespace StockBox_UnitTests
             var activeToInactiveSetup = new Setup(activeToInactiveRuleList, activeState, riskProfile);
             activeToInactiveSetup.AddAction(new Sell(new BacktestSellActionAdapter()));
 
-            var inactiveToWatchRuleList = new RuleList()
+            var inactiveToWatchRuleList = new Pattern()
             {
                 new Rule("Close > 90"),
             };

@@ -27,7 +27,7 @@ namespace StockBox.Setups
         /// <summary>
         /// The rules that determine a given setup
         /// </summary>
-        public RuleList Rules { get { return _rules; } }
+        public Pattern Rules { get { return _rules; } }
 
         /// <summary>
         /// Explicitly defined origin state
@@ -68,23 +68,23 @@ namespace StockBox.Setups
         public SymbolProfile SymbolProfile { get; set; }
 
         private SbActionList _actions = new SbActionList();
-        private readonly RuleList _rules;
+        private readonly Pattern _rules;
 
         public Setup()
         {
         }
 
-        public Setup(RuleList rules)
+        public Setup(Pattern rules)
         {
             _rules = rules;
         }
 
-        public Setup(RuleList rules, RiskProfile profile) : this(rules)
+        public Setup(Pattern rules, RiskProfile profile) : this(rules)
         {
             RiskProfile = profile;
         }
 
-        public Setup(RuleList rules, StateBase originState, RiskProfile profile)
+        public Setup(Pattern rules, StateBase originState, RiskProfile profile)
         {
             _rules = rules;
             _originState = originState;

@@ -128,7 +128,7 @@ namespace StockBox_UnitTests
             var config_targetState = new StateDataModel(7, config_targetWatchList, StockBox.States.Helpers.EStateType.eUserDefined);
 
             // create a setup with a simple rulelist and action
-            var ruleList = new RuleList { new Rule("1 == 1"), new Rule("1 == 1"), };
+            var ruleList = new Pattern { new Rule("1 == 1"), new Rule("1 == 1"), };
             var setup = new Setup(ruleList);
             setup.AddAction(new Move(null, config_targetWatchList));
 
@@ -184,7 +184,7 @@ namespace StockBox_UnitTests
             var config_targetState = new StateDataModel(8, config_targetWatchList, StockBox.States.Helpers.EStateType.eUserDefined);
 
             // create a setup with a simple rulelist and action
-            var ruleList = new RuleList { new Rule("1 == 1"), new Rule("2 >= 1"), };
+            var ruleList = new Pattern { new Rule("1 == 1"), new Rule("2 >= 1"), };
             var setup = new Setup(ruleList);
             setup.AddAction(new Move(null, config_targetWatchList));
 

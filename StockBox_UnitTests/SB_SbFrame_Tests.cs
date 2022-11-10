@@ -12,6 +12,7 @@ using StockBox_UnitTests.Accessors;
 using StockBox_TestArtifacts.Helpers;
 using StockBox.Associations.Enums;
 using StockBox.Models;
+using StockBox_TestArtifacts.Builders.StockBox.Rules;
 
 namespace StockBox_UnitTests
 {
@@ -104,11 +105,11 @@ namespace StockBox_UnitTests
         [TestMethod]
         public void SB_SbFrame_04_Tests()
         {
-            var rules = new RuleList() {
-                    new Rule("Close > 82"),
-                    new Rule("2 Days ago SMA(5) > 78"),
-                    new Rule("SMA(150) > 68")
-            };
+            var rules = new PatternBuilder()
+                            .WithRule(new Rule("Close > 82"))
+                            .WithRule(new Rule("2 Days ago SMA(5) > 78"))
+                            .WithRule(new Rule("SMA(150) > 68"))
+                            .Build();
 
             var setup = new Setup(rules);
 

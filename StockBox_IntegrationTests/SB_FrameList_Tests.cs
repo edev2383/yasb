@@ -22,7 +22,7 @@ namespace StockBox_IntegrationTests
         [TestMethod]
         public void SB_FrameList_01_FrameListFactoryCreatesLargeEnoughDataSetFromRulesInput_DAILYONLY()
         {
-            var rules = new RuleList() {
+            var rules = new Pattern() {
                 new Rule("close > open"),
                 new Rule("CLOSE > 60")
             };
@@ -51,7 +51,7 @@ namespace StockBox_IntegrationTests
         [TestMethod]
         public void SB_FrameList_02_FrameListFactoryCreatesLargeEnoughDataSetFromRulesInput_WEEKLYONLY()
         {
-            var rules = new RuleList() {
+            var rules = new Pattern() {
                 new Rule("weekly close > weekly open"),
                 new Rule("weekly CLOSE > 60")
             };
@@ -80,7 +80,7 @@ namespace StockBox_IntegrationTests
         [TestMethod]
         public void SB_FrameList_03_FrameListFactoryCreatesLargeEnoughDataSetFromRulesInput_MONTHLYONLY()
         {
-            var rules = new RuleList() {
+            var rules = new Pattern() {
                 new Rule("Monthly close > monthly open"),
                 new Rule("MONTHLY CLOSE > 60")
             };
@@ -109,7 +109,7 @@ namespace StockBox_IntegrationTests
         [TestMethod]
         public void SB_FrameList_03_FrameListFactoryCreatesLargeEnoughDataSetFromRulesInput_MONTHLYWEEKLYDAILYCOMPLEX()
         {
-            var rules = new RuleList() {
+            var rules = new Pattern() {
                 new Rule("Monthly close > weekly open"),
                 new Rule("CLOSE > 60")
             };
@@ -146,7 +146,7 @@ namespace StockBox_IntegrationTests
             // we are able to compute the full range of data.
             // The DateTimeRangeHelper takes the max of Column-Index vs Indicator
             // Indices, but there are probably edge-cases we need to account for
-            var rules = new RuleList() {
+            var rules = new Pattern() {
                 new Rule("Close > SMA(25)"),
             };
 

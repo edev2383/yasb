@@ -3,7 +3,7 @@ using StockBox.Interpreter;
 using StockBox.Interpreter.Scanner;
 using StockBox.Rules;
 using StockBox.Services;
-
+using StockBox_TestArtifacts.Builders.StockBox.Rules;
 
 namespace StockBox_UnitTests
 {
@@ -82,25 +82,25 @@ namespace StockBox_UnitTests
         [TestMethod]
         public void SB_Rules_05_CanProcessSimpleRuleSets_ExpectFalse()
         {
-            var rulelist = new RuleList
-            {
-                new Rule("5 < 10"),
-                new Rule("15 > 10"),
-                new Rule("15 != 10"),
-                new Rule("15 != (10 + 5)")
-            };
+            var pattern = new PatternBuilder()
+                                .WithId(1234)
+                                .WithStatement("5 < 10")
+                                .WithStatement("15 > 10")
+                                .WithStatement("15 != 10")
+                                .WithStatement("15 != (10 + 5)")
+                                .Build();
 
             var service = new ActiveService(new Scanner(), new Parser());
 
-            service.ProcessRules(rulelist);
+            service.ProcessRules(pattern);
 
             // this results list will be an aggregate of all scanner and parser
             // actions
             var results = service.GetResults();
 
-            var exprResults = rulelist.Evalute(new SbInterpreter());
+            var exprResults = pattern.Evalute(new SbInterpreter());
 
-            Assert.AreEqual(rulelist.Expressions.Count, 4);
+            Assert.AreEqual(pattern.Expressions.Count, 4);
             Assert.IsTrue(exprResults.HasFailures);
         }
     }

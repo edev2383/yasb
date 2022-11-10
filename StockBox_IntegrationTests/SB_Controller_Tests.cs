@@ -22,7 +22,7 @@ namespace StockBox_IntegrationTests
         [TestMethod]
         public void SB_DomainController_01_Tests()
         {
-            var rules = new RuleList() {
+            var rules = new Pattern() {
                 new Rule("close < open"),
                 new Rule("CLOSE > 60")
             };

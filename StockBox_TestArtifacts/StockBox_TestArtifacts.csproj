@@ -8,11 +8,17 @@
     <None Remove="Mocks\" />
     <None Remove="Files\" />
     <None Remove="Helpers\" />
+    <None Remove="Builders\" />
+    <None Remove="Builders\StockBox\" />
+    <None Remove="Builders\StockBox\Rules\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Mocks\" />
     <Folder Include="Files\" />
     <Folder Include="Helpers\" />
+    <Folder Include="Builders\" />
+    <Folder Include="Builders\StockBox\" />
+    <Folder Include="Builders\StockBox\Rules\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\StockBox\StockBox.csproj" />
