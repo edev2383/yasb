@@ -35,6 +35,7 @@ namespace StockBox.Data.SbFrames
             _values = values;
         }
 
+
         public IndicatorDataPoint Clone()
         {
             return new IndicatorDataPoint(Key, Values);

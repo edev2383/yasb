@@ -67,6 +67,10 @@ namespace StockBox.Associations.Tokens
             switch (DomainKeyword.ToLower())
             {
                 case "sma": ret = true; break;
+                case "rsi": ret = true; break;
+                case "avgvolume": ret = true; break;
+                case "slowsto": ret = true; break;
+                case "faststo": ret = true; break;
                 default: break;
             }
             return ret;

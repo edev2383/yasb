@@ -27,7 +27,19 @@ namespace StockBox.Setups
         /// <summary>
         /// The rules that determine a given setup
         /// </summary>
-        public Pattern Rules { get { return _rules; } }
+        public Pattern Rules
+        {
+            get
+            {
+                if (_rules == null)
+                    _rules = new Pattern();
+                return _rules;
+            }
+            set
+            {
+                _rules = value;
+            }
+        }
 
         /// <summary>
         /// Explicitly defined origin state
@@ -68,7 +80,7 @@ namespace StockBox.Setups
         public SymbolProfile SymbolProfile { get; set; }
 
         private SbActionList _actions = new SbActionList();
-        private readonly Pattern _rules;
+        private Pattern _rules;
 
         public Setup()
         {

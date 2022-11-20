@@ -15,6 +15,8 @@
             Add("open", TokenType.eColumn);
             Add("volume", TokenType.eColumn);
             Add("sma", TokenType.eIndicator, true);
+            Add("slowsto", TokenType.eIndicator, true);
+            Add("rsi", TokenType.eIndicator, true);
 
             // Note: any "'s" that are typed into the rules are
             // ignored by the scanner *as expected behavior* We

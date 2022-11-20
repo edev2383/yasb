@@ -1,8 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using static StockBox.Data.SbFrames.DataColumn;
+
 
 namespace StockBox.Data.SbFrames
 {
+
+    /// <summary>
+    /// 
+    /// </summary>
     public class DataPoint
     {
         public DateTime Date { get; set; }
@@ -97,6 +103,12 @@ namespace StockBox.Data.SbFrames
         public void AddIndicatorValue(IndicatorDataPoint indicatorDataPoint)
         {
             Indicators.Add(indicatorDataPoint);
+        }
+
+        public void AddIndicatorValues(List<IndicatorDataPoint> indicatorDataPoints)
+        {
+            foreach (var item in indicatorDataPoints)
+                AddIndicatorValue(item);
         }
     }
 }

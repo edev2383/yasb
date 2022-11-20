@@ -50,6 +50,11 @@ namespace StockBox.Data.Adapters.DataFrame
             AddData(data);
         }
 
+        public DataPointList GetFullDataSource()
+        {
+            return _data;
+        }
+
         public abstract DataPointList GetData();
 
         /// <summary>

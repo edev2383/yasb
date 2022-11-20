@@ -73,5 +73,10 @@ namespace StockBox.Data.Adapters.DataFrame
             var ret = clone.GetRange((int)_windowIndex, (int)Length - (int)_windowIndex);
             return new DataPointList(ret);
         }
+
+        public int CurrentIteration()
+        {
+            return _windowIndex == null ? 0 : (int)_windowIndex;
+        }
     }
 }

@@ -23,11 +23,8 @@ namespace StockBox.Data.Indicators
         {
             var ret = new Dictionary<DateTime, double>();
 
-            // guard out if the adapter hasn't been sourced. 
-            if (adapter.SourceData == null) return ret;
-
             // apply the Mean method over the window of length = Indices[0]
-            var values = adapter.GetSeries("Volume").SortByKey().Window(Indices[0], win => win.Mean());
+            var values = adapter.GetFullDataSource().ToSeries("Volume").SortByKey().Window(Indices[0], win => win.Mean());
 
             // loop through the result set
             for (var idx = 0; idx < values.Count; idx++)

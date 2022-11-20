@@ -23,9 +23,6 @@ namespace StockBox.Data.Indicators
         {
             var ret = new Dictionary<DateTime, double>();
 
-            // guard out if the adapter hasn't been sourced. 
-            if (adapter.SourceData == null) return ret;
-
             // we need to cache the averages created by the calculation without
             // mutating any original data, so we create this list to hold onto
             // our averages as we go. We'll need to reference the Last() tuple
@@ -35,7 +32,8 @@ namespace StockBox.Data.Indicators
             // apply the Mean method over the window of length = Indices[0]
             // the SortByKey() call may be unnecessary, however, it's probably
             // better to be safe
-            var values = adapter.GetSeries("Close")
+            var values = adapter.GetFullDataSource()
+                                    .ToSeries("Close")
                                     .SortByKey()
                                     .Window(
                                     Indices[0],

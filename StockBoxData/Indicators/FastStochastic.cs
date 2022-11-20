@@ -26,16 +26,13 @@ namespace StockBox.Data.Indicators
         {
             var ret = new Dictionary<DateTime, (double k, double d)>();
 
-            // guard out if the adapter hasn't been sourced. 
-            if (adapter.SourceData == null) return ret;
-
             // averages is a collection of previous values cached and passed
             // to the aggregation function. The last value is needed for the
             // next calculated averages
             List<(double gain, double loss)> averages = new List<(double gain, double loss)>();
 
             // pull a series (column) from the data in the Close column
-            var data = adapter.GetData().Reversed;
+            var data = adapter.GetFullDataSource().Reversed;
 
             var kseries = data.Window(Indices[0], x => CalculateFastStochastic(x));
             var dseries = kseries.Window(Indices[1], win => win.Mean());

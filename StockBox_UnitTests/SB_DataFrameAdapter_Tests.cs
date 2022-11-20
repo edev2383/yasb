@@ -4,6 +4,14 @@ using StockBox.Data.Adapters.DataFrame;
 using static StockBox_TestArtifacts.Helpers.EFile;
 using StockBox_TestArtifacts.Helpers;
 using StockBox_UnitTests.Accessors;
+using StockBox_TestArtifacts.Mocks.StockBoxData.SbFrames;
+using StockBox_TestArtifacts.Builders.StockBoxData.Adapters.DataFrame;
+using System.Collections.Generic;
+using StockBox.Data.SbFrames;
+using StockBox.Models;
+using StockBox.Data.Indicators;
+using StockBox_TestArtifacts.Presets.StockBoxData.SbFrames;
+using StockBox.Interpreter;
 
 namespace StockBox_UnitTests
 {
@@ -98,6 +106,19 @@ namespace StockBox_UnitTests
                 // iterate the expected index before the next loop
                 expectedIndex++;
             }
+        }
+
+        [TestMethod]
+        public void SB_07_DeedleBackTestAdapter_IndicatorDataGetsCopiedToWindow()
+        {
+            var df = PresetDeedleBacktestAdapter.ThreeDaySmaCrossOver();
+
+            var sbFrame = new DailyFrame(df, new Symbol("AMD"));
+            var sbFrameList = new SbFrameList() { sbFrame, };
+            var interpreter = new SbInterpreter(sbFrameList);
+
+            var adapter = sbFrame.GetAdapter();
+            df.IterateWindow();
         }
     }
 }

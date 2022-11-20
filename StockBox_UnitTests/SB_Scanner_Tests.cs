@@ -536,6 +536,39 @@ namespace StockBox_UnitTests
             Assert.AreEqual(tokens[^1].Type, TokenType.eEOF);
         }
 
+        [TestMethod]
+        public void SBC_44_ScannerRecognizesIndicators_SlowSto()
+        {
+            var scanner = new Scanner("SlowSto(14,3)");
+            var tokens = scanner.ScanTokens();
+            Assert.AreEqual(5, tokens.Count);
+            Assert.AreEqual(tokens[0].Type, TokenType.eNumber);
+            Assert.AreEqual(tokens[0].Literal, 0);
+            Assert.AreEqual(tokens[1].Type, TokenType.eDaily);
+            Assert.AreEqual(tokens[2].Type, TokenType.eIndicator);
+            Assert.AreEqual(tokens[2].Lexeme, "SlowSto");
+            Assert.AreEqual(tokens[3].Type, TokenType.eIndicatorIndices);
+            Assert.AreEqual(tokens[3].Lexeme, "SlowSto(14,3)");
+            Assert.AreEqual(tokens[^1].Type, TokenType.eEOF);
+        }
+
+
+        [TestMethod]
+        public void SBC_45_ScannerRecognizesIndicators_RSI()
+        {
+            var scanner = new Scanner("RSI(14)");
+            var tokens = scanner.ScanTokens();
+            Assert.AreEqual(5, tokens.Count);
+            Assert.AreEqual(tokens[0].Type, TokenType.eNumber);
+            Assert.AreEqual(tokens[0].Literal, 0);
+            Assert.AreEqual(tokens[1].Type, TokenType.eDaily);
+            Assert.AreEqual(tokens[2].Type, TokenType.eIndicator);
+            Assert.AreEqual(tokens[2].Lexeme, "RSI");
+            Assert.AreEqual(tokens[3].Type, TokenType.eIndicatorIndices);
+            Assert.AreEqual(tokens[3].Lexeme, "RSI(14)");
+            Assert.AreEqual(tokens[^1].Type, TokenType.eEOF);
+        }
+
         private TokenList GetTokens(EFile target)
         {
             var contents = new Reader().GetFileContents(target);

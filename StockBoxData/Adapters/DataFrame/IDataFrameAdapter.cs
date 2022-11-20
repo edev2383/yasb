@@ -22,11 +22,13 @@ namespace StockBox.Data.Adapters.DataFrame
         /// <returns></returns>
 
         void AddData(MemoryStream data);
+        void AddData(DataPointList data);
         DataPoint GetDataPoint(int indexFromZero);
         ColumnSeries GetColumnData(DataColumn column);
         void MapIndicator(IIndicator indicator);
         IDataFrameAdapter Create();
         SbSeries GetSeries(string column);
         DataPointList GetData();
+        DataPointList GetFullDataSource();
     }
 }

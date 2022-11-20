@@ -26,15 +26,11 @@ namespace StockBox.Data.Indicators
         {
             var ret = new Dictionary<DateTime, (double k, double d)>();
 
-
-            // guard out if the adapter hasn't been sourced. 
-            if (adapter.SourceData == null) return ret;
-
             var fastSto = IndicatorFactory.Create("FastSto", Indices);
             fastSto.Calculate(adapter);
             adapter.MapIndicator(fastSto);
 
-            var data = adapter.GetData().Reversed;
+            var data = adapter.GetFullDataSource().Reversed;
 
             var kseries = new SbSeries("SlowSto.k");
             var dataColumn = SbFrames.DataColumn.ParseColumnDescriptor(fastSto.Name);

@@ -11,6 +11,19 @@
     <None Remove="Builders\" />
     <None Remove="Builders\StockBox\" />
     <None Remove="Builders\StockBox\Rules\" />
+    <None Remove="Builders\StockBoxData\" />
+    <None Remove="Builders\StockBoxData\Adapters\" />
+    <None Remove="Builders\StockBoxData\Adapters\DataFrame\" />
+    <None Remove="Accessors\" />
+    <None Remove="Accessors\StockBoxData\" />
+    <None Remove="Accessors\StockBoxData\SbFrames\" />
+    <None Remove="Mocks\StockBoxData\" />
+    <None Remove="Mocks\StockBoxData\SbFrames\" />
+    <None Remove="Presets\" />
+    <None Remove="Presets\StockBoxData\" />
+    <None Remove="Presets\StockBoxData\SbFrames\" />
+    <None Remove="Presets\StockBox\" />
+    <None Remove="Presets\StockBox\Setups\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Mocks\" />
@@ -19,6 +32,19 @@
     <Folder Include="Builders\" />
     <Folder Include="Builders\StockBox\" />
     <Folder Include="Builders\StockBox\Rules\" />
+    <Folder Include="Builders\StockBoxData\" />
+    <Folder Include="Builders\StockBoxData\Adapters\" />
+    <Folder Include="Builders\StockBoxData\Adapters\DataFrame\" />
+    <Folder Include="Accessors\" />
+    <Folder Include="Accessors\StockBoxData\" />
+    <Folder Include="Accessors\StockBoxData\SbFrames\" />
+    <Folder Include="Mocks\StockBoxData\" />
+    <Folder Include="Mocks\StockBoxData\SbFrames\" />
+    <Folder Include="Presets\" />
+    <Folder Include="Presets\StockBoxData\" />
+    <Folder Include="Presets\StockBoxData\SbFrames\" />
+    <Folder Include="Presets\StockBox\" />
+    <Folder Include="Presets\StockBox\Setups\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\StockBox\StockBox.csproj" />
