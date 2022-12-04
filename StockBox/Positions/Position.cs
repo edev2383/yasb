@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using StockBox.Associations;
+using StockBox.Base.Types;
 using StockBox.Data.SbFrames;
 using StockBox.Models;
 using StockBox.RiskProfiles;
@@ -27,6 +29,46 @@ namespace StockBox.Positions
         public double? TotalDollars { get; set; }
         public double EntryPrice { get; set; }
         public double CurrentPrice { get; set; }
+
+        public OptionList<DateTime> EntryDates { get; set; } = new OptionList<DateTime>();
+        public DateTime? EntryDate
+        {
+            get
+            {
+                if (EntryDates == null)
+                    EntryDates = new OptionList<DateTime>();
+                var date = EntryDates.First();
+                if (date is Some<DateTime>) return ((Some<DateTime>)date).Value;
+                return null;
+            }
+        }
+
+        public OptionList<DateTime> ExitDates { get; set; } = new OptionList<DateTime>();
+        public DateTime? ExitDate
+        {
+            get
+            {
+                if (ExitDates == null)
+                    ExitDates = new OptionList<DateTime>();
+                var date = ExitDates.First();
+                if (date is Some<DateTime>) return ((Some<DateTime>)date).Value;
+                return null;
+            }
+        }
+
+        public double ActiveLength
+        {
+            get
+            {
+                DateTime exit;
+                if (ExitDate == null)
+                    exit = DateTime.Now;
+                else
+                    exit = (DateTime)ExitDate;
+                return (exit - (DateTime)EntryDate).TotalDays;
+            }
+        }
+
         public double ShareDiff
         {
             get
@@ -35,6 +77,7 @@ namespace StockBox.Positions
                 return CurrentPrice - EntryPrice;
             }
         }
+
         public double ProfitLoss { get { return CalculateProfitLoss(); } }
 
         public int? PositionId { get; set; }
@@ -72,6 +115,7 @@ namespace StockBox.Positions
             TotalShares = transaction.ShareCount != null ? (int)transaction.ShareCount : 0;
             ActiveShares = transaction.ShareCount;
             EntryPrice = transaction.SharePrice;
+            EntryDates.Add(transaction.Timestamp);
             transaction.PositionToken = _token;
             _transactions.Add(transaction);
         }
@@ -80,6 +124,7 @@ namespace StockBox.Positions
         {
             ActiveShares -= transaction.ShareCount;
             CurrentPrice = transaction.SharePrice;
+            ExitDates.Add(transaction.Timestamp);
             transaction.PositionToken = _token;
             _transactions.Add(transaction);
             if (ActiveShares <= 0)

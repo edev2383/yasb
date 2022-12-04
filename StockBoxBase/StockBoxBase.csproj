@@ -7,8 +7,10 @@
 
   <ItemGroup>
     <None Remove="Utilities\" />
+    <None Remove="Types\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Utilities\" />
+    <Folder Include="Types\" />
   </ItemGroup>
 </Project>

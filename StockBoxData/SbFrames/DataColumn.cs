@@ -74,7 +74,7 @@ namespace StockBox.Data.SbFrames
         {
             string column = string.Empty;
             int[] indices = null;
-            var re = @"^([a-zA-z0-9]+)(\(([0-9,]+)\))?$";
+            var re = @"^([a-zA-z0-9]+)(\(([0-9,\s]+)\))?$";
             var allMatches = Regex.Matches(descriptor, re);
 
             if (allMatches.Count == 0)
@@ -96,7 +96,7 @@ namespace StockBox.Data.SbFrames
                 var itemList = new List<int>();
                 foreach (var item in splitMatch)
                 {
-                    if (int.TryParse(item, out int resultInt))
+                    if (int.TryParse(item.Trim(), out int resultInt))
                         itemList.Add(resultInt);
                 }
                 indices = itemList.ToArray();

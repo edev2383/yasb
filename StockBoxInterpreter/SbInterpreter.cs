@@ -26,6 +26,7 @@ namespace StockBox.Interpreter
 
         public ValidationResultList Results { get { return _results; } }
         private readonly ValidationResultList _results = new ValidationResultList();
+        private readonly ValidationResultList _exceptions = new ValidationResultList();
 
         public SbInterpreter(SbFrameList frames, IPosition position)
         {
@@ -50,7 +51,7 @@ namespace StockBox.Interpreter
             }
             catch (Exception e)
             {
-
+                _exceptions.AddFromBool(false, e.Message);
             }
         }
 
@@ -72,6 +73,7 @@ namespace StockBox.Interpreter
             }
             catch (Exception e)
             {
+                _exceptions.AddFromBool(false, e.Message);
                 // this is a bandaid solution. If ANYTHING fails downstream, we
                 // catch all exceptions and just return false. This will allow
                 // the interpreter to continue evaluating. In the future we need
@@ -196,12 +198,31 @@ namespace StockBox.Interpreter
                     if (_results.HasFailures)
                         throw new Exception(_results.GetFailureMessages());
 
+                    Expr newRight;
+                    Expr newLeft;
+
                     // TODO - there is a lot of potential for failure around
                     // here. We need to type check everything. This is worth
                     // extracting.
                     var current = (double)left > (double)right;
-                    var newLeft = new Binary(new Literal((int)expr.Left.Left.Value + 1), expr.Left.Operator, expr.Left.Right);
-                    var newRight = new Binary(new Literal((int)expr.Right.Left.Value + 1), expr.Right.Operator, expr.Right.Right);
+
+                    if (expr.Left is Literal)
+                    {
+                        newLeft = expr.Left;
+                    }
+                    else
+                    {
+                        newLeft = new Binary(new Literal((int)expr.Left.Left.Value + 1), expr.Left.Operator, expr.Left.Right);
+                    }
+
+                    if (expr.Right is Literal)
+                    {
+                        newRight = expr.Right;
+                    }
+                    else
+                    {
+                        newRight = new Binary(new Literal((int)expr.Right.Left.Value + 1), expr.Right.Operator, expr.Right.Right);
+                    }
                     var newLeftValue = evaluate(newLeft);
                     var newRightValue = evaluate(newRight);
                     return current && ((double)newLeftValue < (double)newRightValue);
@@ -352,6 +373,10 @@ namespace StockBox.Interpreter
         private ValidationResultList checkNumberOperands(Token tokenOperator, object left, object right)
         {
             var ret = new ValidationResultList();
+            ret.Add(left != null, "Provided left value is not Null");
+            ret.Add(right != null, "Provided right value is not Null");
+            if (ret.HasFailures)
+                return ret;
             ret.Add(left is double, $"{left.ToString()}: Operand must be a number | {tokenOperator.ToString()}", left);
             ret.Add(right is double, $"{right.ToString()}: Operand must be a number | {tokenOperator.ToString()}", right);
             return ret;
@@ -480,5 +505,10 @@ namespace StockBox.Interpreter
         }
 
         #endregion
+
+        public ValidationResultList GetExceptions()
+        {
+            return _exceptions;
+        }
     }
 }

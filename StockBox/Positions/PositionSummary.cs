@@ -5,7 +5,8 @@ namespace StockBox.Positions
 {
 
     /// <summary>
-    /// 
+    /// Class <c>PositionSummary</c> is a data BDO wrapper around aggregated
+    /// Position data
     /// </summary>
     public class PositionSummary
     {
@@ -25,6 +26,16 @@ namespace StockBox.Positions
         public PositionList WinningPositions { get; set; }
         public PositionList LosingPositions { get; set; }
         public PositionList RiskExitedPositions { get; set; }
+
+        /// <summary>
+        /// Entry Price * Share Count Aggr(All Positions)
+        /// </summary>
+        public double TotalAmountRisked { get; set; }
+
+        /// <summary>
+        /// Total Profit / TotalAmountRisked
+        /// </summary>
+        public double ProfitPerDollarRisked { get; set; }
 
         public PositionSummary()
         {

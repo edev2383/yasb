@@ -31,7 +31,7 @@ namespace StockBox.Controllers
         public PositionList Positions { get; set; } = new PositionList();
         public PositionSummary PositionSummary { get; set; }
 
-
+        private ValidationResultList _interpeterExceptions = new ValidationResultList();
 
         public BacktestController(ISbService service, StateMachine stateMachine, ISbFrameListProvider frameListProvider) : base(service, stateMachine, frameListProvider)
         {
@@ -157,8 +157,9 @@ namespace StockBox.Controllers
                 }
                 else
                 {
+                    var interpreter = new SbInterpreter(backtestDataFrames);
                     // Finally... evaluate the setup against the adapter's window
-                    var evalResult = currSetup.Evaluate(new SbInterpreter(backtestDataFrames));
+                    var evalResult = currSetup.Evaluate(interpreter);
                     if (evalResult.Success)
                     {
                         // try a state transition, if it's successful, apply to
@@ -177,10 +178,17 @@ namespace StockBox.Controllers
                             HandleResponses(vr.GetValidationObjects<ActionResponse>());
                         }
                     }
+                    else
+                    {
+                        // temporary debugging visiblility into interpreter
+                        // exceptions
+                        _interpeterExceptions.AddRange(interpreter.GetExceptions());
+                    }
 
                     // Add all data to the return object to be added to the
                     // _results
                     ret.AddRange(evalResult);
+                    ret.AddRange(interpreter.GetExceptions());
                     ret.AddRange(innerVr);
                 }
 

@@ -181,12 +181,11 @@ namespace StockBox_UnitTests
         [TestMethod, Description("A complete setup successfully backtests multiple setups")]
         public void SB_Controllers_04_BacktestReturnsExpectedResults_ComplicatedRules()
         {
-            // Indicators are not propagating through the adapter while backtesting
-            // 
+
             var riskProfile = new RiskProfile()
             {
                 TotalBalance = 10000,
-                TotalRiskPercent = .02,
+                TotalRiskPercent = .20,
                 StopLossDollars = 200,
             };
 
@@ -236,7 +235,7 @@ namespace StockBox_UnitTests
 
             var activeToInactiveRuleList = new Pattern()
             {
-                new Rule("Close < SMA(10)"),
+                new Rule("SlowSto(14,3) x 80"),
             };
 
             var activeToInactiveSetup = new Setup(activeToInactiveRuleList, activeState, riskProfile);

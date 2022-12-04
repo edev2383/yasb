@@ -40,6 +40,11 @@ namespace StockBox.Validation
             Add(new ValidationResult(result, message, aux));
         }
 
+        public void AddFromBool(bool result, string message, object aux = null)
+        {
+            Add(new ValidationResult(result, message, aux));
+        }
+
         public ValidationResultList GetHasValidationObjectsOfType<T>()
         {
             var ret = new ValidationResultList();

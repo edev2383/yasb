@@ -209,27 +209,27 @@ namespace StockBox.Interpreter.Scanner
                 else
                 {
                     /** -------------------------------------------------------
-                    | 
-                    |  Handling Non-Indexed DomainKeywords
-                    |
-                    | - -------------------------------------------------------
-                    | at this point, we have a keyword that is non-indice'd,
-                    | i.e., a column, or an indicator that does not require a
-                    | numeric index (ex. SMA(15), SloSto(14,3). However, in
-                    | cases of CURRENT Daily/Weekly/Monthly columns, we need
-                    | to INJECT the IndexFromZero value as an "UnsourcedToken"
-                    | an example rule would be "Close > XXX". The Close has a
-                    | reference, but the SbInterpreter is going to look for
-                    | a "Literal Operator DomainLiteral" pattern in order to
-                    | calculate a value for the expression. In the "Close"
-                    | example, we need to inject both the eNumber/Literal and
-                    | the eDaily/Operator, however if a user were to use a rule
-                    | like "Daily Close", or "Weekly High", we only have to
-                    | inject the eNumber/Literal, which you can see below
-                    |
-                    | More testing needs to be done when working with Daily/Wk/M
-                    | indexes and Indicators, i.e., "Weekly SMA(15)"
-                    | - */
+					| 
+					|  Handling Non-Indexed DomainKeywords
+					|
+					| - -------------------------------------------------------
+					| at this point, we have a keyword that is non-indice'd,
+					| i.e., a column, or an indicator that does not require a
+					| numeric index (ex. SMA(15), SloSto(14,3). However, in
+					| cases of CURRENT Daily/Weekly/Monthly columns, we need
+					| to INJECT the IndexFromZero value as an "UnsourcedToken"
+					| an example rule would be "Close > XXX". The Close has a
+					| reference, but the SbInterpreter is going to look for
+					| a "Literal Operator DomainLiteral" pattern in order to
+					| calculate a value for the expression. In the "Close"
+					| example, we need to inject both the eNumber/Literal and
+					| the eDaily/Operator, however if a user were to use a rule
+					| like "Daily Close", or "Weekly High", we only have to
+					| inject the eNumber/Literal, which you can see below
+					|
+					| More testing needs to be done when working with Daily/Wk/M
+					| indexes and Indicators, i.e., "Weekly SMA(15)"
+					| - */
                     switch (keyword.TokenType)
                     {
                         case TokenType.eAnd:
