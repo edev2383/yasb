@@ -27,7 +27,8 @@ namespace StockBox.Models
         /// <summary>
         /// A list to hold onto previous state objects. It's unlikely that this
         /// will ever contain more than one state, as we most likely want to
-        /// prevent multiple state transitions for a single symbol
+        /// prevent multiple state transitions for a single symbol, however
+        /// during backtesting this could show us our transitions
         /// </summary>
         private StateList _stateCache = new StateList();
 

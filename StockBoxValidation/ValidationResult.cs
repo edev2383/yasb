@@ -34,5 +34,10 @@ namespace StockBox.Validation
         private readonly EResult _result;
         private readonly string _message;
         private readonly object _validationObject;
+
+        public override string ToString()
+        {
+            return $"Result: {_result.ToString()}: {_message}";
+        }
     }
 }

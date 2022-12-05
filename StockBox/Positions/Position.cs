@@ -20,6 +20,7 @@ namespace StockBox.Positions
         public RiskProfile RiskProfile { get { return _riskProfile; } }
 
         public bool IsOpen { get { return _transactions.HasOpenTransaction(); } }
+        public bool IsLoss { get { return ShareDiff < 0; } }
 
         public bool RiskExitPerformed { get; set; } = false;
         public int TotalShares { get; set; }

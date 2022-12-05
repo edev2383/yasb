@@ -189,12 +189,15 @@ namespace StockBox.RiskProfiles
         /// <returns></returns>
         public ValidationResultList ValidateRiskExit(Position position, DataPoint dataPoint)
         {
-            var ret = new ValidationResultList();
             var originalInvestment = position.CalculateOriginalInvestment();
             var profitLoss = position.CalculateProfitLoss(dataPoint);
             if (TotalRiskDollars != null)
             {
-                ret.Add(new ValidationResult(profitLoss < -(TotalRiskDollars), $"Current P&L (${profitLoss}, {profitLoss / originalInvestment * 100}%) is greater than acceptable TotalRiskDollars (-${TotalRiskDollars})"));
+                return ValidationResultList.CreateSingle(profitLoss < -(TotalRiskDollars), $"Current P&L (${profitLoss}, {profitLoss / originalInvestment * 100}%) is greater than acceptable TotalRiskDollars (-${TotalRiskDollars})");
+            }
+            else if (StopLossDollars != null)
+            {
+                return ValidationResultList.CreateSingle(position.IsLoss && Math.Abs(profitLoss) > StopLossDollars, $"Current P&L (${profitLoss}, {profitLoss / originalInvestment * 100}%) is greater than acceptable StopLossDollars (-${StopLossDollars})");
             }
             else
             {
@@ -202,10 +205,8 @@ namespace StockBox.RiskProfiles
                 // per position. If balance is 10000, total risk percent is 2%
                 // total dollar amount is 200$.
                 var percentLoss = profitLoss / TotalBalance;
-                ret.Add(new ValidationResult(percentLoss < -(TotalRiskPercent), $"Current P&L (${profitLoss}, {profitLoss / originalInvestment * 100}%) is greater than acceptable TotalRiskPercent (-{TotalRiskPercent}%)"));
+                return ValidationResultList.CreateSingle(percentLoss < -(TotalRiskPercent), $"Current P&L (${profitLoss}, {profitLoss / originalInvestment * 100}%) is greater than acceptable TotalRiskPercent (-{TotalRiskPercent}%)");
             }
-
-            return ret;
         }
 
         /// <summary>

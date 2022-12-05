@@ -24,6 +24,7 @@
     <None Remove="Presets\StockBoxData\SbFrames\" />
     <None Remove="Presets\StockBox\" />
     <None Remove="Presets\StockBox\Setups\" />
+    <None Remove="Presets\StockBox\Rules\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Mocks\" />
@@ -45,6 +46,7 @@
     <Folder Include="Presets\StockBoxData\SbFrames\" />
     <Folder Include="Presets\StockBox\" />
     <Folder Include="Presets\StockBox\Setups\" />
+    <Folder Include="Presets\StockBox\Rules\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\StockBox\StockBox.csproj" />

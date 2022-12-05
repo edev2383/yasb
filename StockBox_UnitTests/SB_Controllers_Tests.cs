@@ -178,15 +178,15 @@ namespace StockBox_UnitTests
             Assert.IsNotNull(positionSummary);
         }
 
-        [TestMethod, Description("A complete setup successfully backtests multiple setups")]
+        [TestMethod, Description("A complete test successfully backtests multiple setups")]
         public void SB_Controllers_04_BacktestReturnsExpectedResults_ComplicatedRules()
         {
 
             var riskProfile = new RiskProfile()
             {
                 TotalBalance = 10000,
-                TotalRiskPercent = .20,
-                StopLossDollars = 200,
+                TotalRiskPercent = .08,
+                StopLossDollars = 75,
             };
 
             var watchState = new UserDefinedState("watch");
@@ -235,7 +235,7 @@ namespace StockBox_UnitTests
 
             var activeToInactiveRuleList = new Pattern()
             {
-                new Rule("SlowSto(14,3) x 80"),
+                new Rule("80 x SlowSto(14,3)"),
             };
 
             var activeToInactiveSetup = new Setup(activeToInactiveRuleList, activeState, riskProfile);
@@ -255,7 +255,6 @@ namespace StockBox_UnitTests
                 activeToInactiveSetup,
                 inactiveToWatchSetup,
             };
-
 
             var symbols = new SymbolProfileList()
             {
@@ -278,5 +277,8 @@ namespace StockBox_UnitTests
             var positionSummary = domainController.PositionSummary;
             Assert.IsNotNull(positionSummary);
         }
+
+        [TestMethod]
+        public void SB_Controllers_05_SimpleTutorialTestSetup() { }
     }
 }

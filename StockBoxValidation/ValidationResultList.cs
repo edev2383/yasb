@@ -35,6 +35,13 @@ namespace StockBox.Validation
             AddRange(source);
         }
 
+        public static ValidationResultList CreateSingle(bool result, string message, object aux = null)
+        {
+            return new ValidationResultList() {
+                new ValidationResult(result, message, aux),
+            };
+        }
+
         public void Add(bool result, string message, object aux = null)
         {
             Add(new ValidationResult(result, message, aux));
