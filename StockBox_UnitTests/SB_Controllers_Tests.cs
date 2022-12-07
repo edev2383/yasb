@@ -18,6 +18,7 @@ using StockBox.States;
 using StockBox_TestArtifacts.Mocks;
 using StockBox_TestArtifacts.Helpers;
 using StockBox.Actions.Adapters;
+using StockBox_TestArtifacts.Presets.StockBox.Rules;
 
 namespace StockBox_UnitTests
 {
@@ -264,6 +265,96 @@ namespace StockBox_UnitTests
             var activeService = new ActiveService(new Scanner(), new Parser());
             // MockFrameListFactory loads data from local files, rather than
             // calling the Scraper
+            //var framelistFactory = new MockFrameListFactory(null, new DeedleBacktestAdapter());
+            //framelistFactory.DataTarget_Daily = EFile.eAmdDaily;
+            //framelistFactory.DataTarget_Weekly = EFile.eAmdWeekly;
+            //framelistFactory.DataTarget_Monthly = EFile.eAmdMonthly;
+            var framelistFactory = new FrameListFactory(null, new DeedleBacktestAdapter());
+
+            var domainController = new BacktestController(activeService, stateMachine, framelistFactory);
+            domainController.ScanSetups(setupList, symbols);
+
+            var results = domainController.GetResults().GetHasValidationObjectsOfType<ActionResponse>();
+
+            var positionSummary = domainController.PositionSummary;
+            Assert.IsNotNull(positionSummary);
+        }
+
+        [TestMethod]
+        public void SB_Controllers_05_SimpleTutorialTestSetup()
+        {
+
+            var riskProfile = new RiskProfile()
+            {
+                TotalBalance = 10000,
+                TotalRiskPercent = .08,
+                StopLossDollars = 75,
+            };
+
+            var watchState = new UserDefinedState("watch");
+            var primedState = new UserDefinedState("primed");
+            var activeState = new ActiveState();
+            var sellState = new InactiveState();
+            var endState = new UserDefinedState("recently sold");
+            var stateList = new StateList()
+            {
+                watchState,
+                primedState,
+                activeState,
+                new ActivePendingState(), // these MUST BE added, although they are only temporarily used
+                new InactivePendingState(), // these MUST BE added, although they are only temporarily used
+                sellState,
+                endState,
+            };
+
+            var stateMachine = new StateMachine(stateList, watchState);
+            stateMachine.AddTransition(new Transition(watchState, primedState));
+            // the iniitial transition requires the pending states, however,
+            // the BacktestActionAdapters perform an additional transition to
+            // the ActiveState and InactiveState states since we don't need to
+            // worry about Pending/Error states during backtesting
+            stateMachine.AddTransition(new Transition(primedState, new ActivePendingState()));
+            stateMachine.AddTransition(new Transition(activeState, new InactivePendingState()));
+            stateMachine.AddTransition(new Transition(sellState, watchState));
+
+            var watchToPrimeRuleList = PresetPattern.ThreeDayPullBack();
+
+            var watchToPrimeSetup = new Setup(watchToPrimeRuleList, watchState, riskProfile);
+            watchToPrimeSetup.AddAction(new Move(new BacktestMoveActionAdapter(), primedState));
+
+            var primedToActiveRuleList = PresetPattern.SimpleTwoDayReversal();
+
+            var primeToActiveSetup = new Setup(primedToActiveRuleList, primedState, riskProfile);
+            primeToActiveSetup.AddAction(new Buy(new BacktestBuyActionAdapter()));
+
+            var activeToInactiveRuleList = PresetPattern.TwoClosesUnderTheSMA10();
+
+            var activeToInactiveSetup = new Setup(activeToInactiveRuleList, activeState, riskProfile);
+            activeToInactiveSetup.AddAction(new Sell(new BacktestSellActionAdapter()));
+
+            var inactiveToWatchRuleList = new Pattern()
+            {
+                new Rule("SMA(20) > SMA(50)"),
+            };
+
+            var inactiveToWatchSetup = new Setup(inactiveToWatchRuleList, sellState, riskProfile);
+            inactiveToWatchSetup.AddAction(new Move(new BacktestMoveActionAdapter(), "watch"));
+
+            var setupList = new SetupList() {
+                watchToPrimeSetup,
+                primeToActiveSetup,
+                activeToInactiveSetup,
+                inactiveToWatchSetup,
+            };
+
+            var symbols = new SymbolProfileList()
+            {
+                new SymbolProfile(new Symbol("AMD"), watchState),
+            };
+
+            var activeService = new ActiveService(new Scanner(), new Parser());
+            // MockFrameListFactory loads data from local files, rather than
+            // calling the Scraper
             var framelistFactory = new MockFrameListFactory(null, new DeedleBacktestAdapter());
             framelistFactory.DataTarget_Daily = EFile.eAmdDaily;
             framelistFactory.DataTarget_Weekly = EFile.eAmdWeekly;
@@ -277,8 +368,5 @@ namespace StockBox_UnitTests
             var positionSummary = domainController.PositionSummary;
             Assert.IsNotNull(positionSummary);
         }
-
-        [TestMethod]
-        public void SB_Controllers_05_SimpleTutorialTestSetup() { }
     }
 }

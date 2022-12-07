@@ -20,6 +20,9 @@ namespace StockBox.Data.SbFrames
     public class FrameListFactory : ISbFrameListProvider
     {
 
+        /// <summary>
+        /// By default get data back to 01/01/2000
+        /// </summary>
         private DateTime _historicalStart = new DateTime(2000, 1, 1);
 
         /// <summary>

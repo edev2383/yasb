@@ -22,8 +22,11 @@ namespace StockBox.Actions
         /// <param name="watchlistName"></param>
         public Move(ISbActionAdapter adapter, string watchlistName)
             : base(adapter, new UserDefinedState(watchlistName), EActionType.eMoveGeneral)
-        {
-        }
+        { }
+
+        public Move(ISbActionAdapter adapter, StateBase state)
+            : base(adapter, state, EActionType.eMoveGeneral)
+        { }
 
         public override ISbAction Clone()
         {

@@ -86,10 +86,12 @@ namespace StockBox.Positions
             sb.Add("Open Date".PadLeft(20));
             sb.Add("Entry Price".PadLeft(12));
             sb.Add("Close Date".PadLeft(20));
+            sb.Add("Open Len.".PadLeft(20));
             sb.Add("Exit Price".PadLeft(12));
             sb.Add("Share Diff".PadLeft(12));
             sb.Add("Ttl Shares".PadLeft(12));
             sb.Add("Total P&L".PadLeft(12));
+            sb.Add("RiskExit?".PadLeft(12));
             sb.Add("\r\n");
 
             foreach (var item in this)
@@ -102,6 +104,8 @@ namespace StockBox.Positions
                 sb.Add(Math.Round(item.EntryPrice, 2).ToString().PadLeft(12));
                 // close date
                 sb.Add(item.Transactions.Count > 1 ? item.Transactions[1].Timestamp.Date.ToString().PadLeft(20) : string.Empty.PadLeft(20));
+                // Days Active
+                sb.Add(item.ActiveLength.ToString().PadLeft(12));
                 // exit price
                 sb.Add(Math.Round(item.CurrentPrice, 2).ToString().PadLeft(12));
                 // price diff
@@ -110,7 +114,8 @@ namespace StockBox.Positions
                 sb.Add(item.TotalShares.ToString().PadLeft(12));
                 // P&L
                 sb.Add(Math.Round(item.ProfitLoss, 2).ToString().PadLeft(12));
-
+                // RiskExit?
+                sb.Add(item.RiskExitPerformed.ToString().PadLeft(12));
                 sb.Add("\r\n");
             }
 

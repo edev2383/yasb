@@ -24,6 +24,28 @@ namespace StockBox_TestArtifacts.Presets.StockBox.Rules
                 new Rule("SMA(5) > SMA(20)"),
             };
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public static Pattern SimpleTwoDayReversal()
+        {
+            return new Pattern()
+            {
+                new Rule("Close > Yesterday Close"),
+                new Rule("Yesterday Close > 2 days ago close"),
+                new Rule("SMA(3) > SMA(10)"),
+            };
+        }
+
+        public static Pattern TwoClosesUnderTheSMA10()
+        {
+            return new Pattern() {
+                new Rule("Close < SMA(10)"),
+                new Rule("Yesterday Close < SMA(10)"),
+            };
+        }
     }
 }
 

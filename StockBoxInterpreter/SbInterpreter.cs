@@ -28,7 +28,7 @@ namespace StockBox.Interpreter
         private readonly ValidationResultList _results = new ValidationResultList();
         private readonly ValidationResultList _exceptions = new ValidationResultList();
 
-        public SbInterpreter(SbFrameList frames, IPosition position)
+        public SbInterpreter(SbFrameList frames, IPosition position = null)
         {
             _frames = frames;
             _position = position;

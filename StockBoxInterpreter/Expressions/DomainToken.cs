@@ -11,7 +11,7 @@ namespace StockBox.Interpreter.Expressions
 
         public override object Accept(IVisitor visitor)
         {
-            throw new NotImplementedException();
+            return visitor.VisitDomainToken(this);
         }
 
         public override Expr Clone()

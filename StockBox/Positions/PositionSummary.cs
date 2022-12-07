@@ -27,6 +27,17 @@ namespace StockBox.Positions
         public PositionList LosingPositions { get; set; }
         public PositionList RiskExitedPositions { get; set; }
 
+        public PositionList AllPositions
+        {
+            get
+            {
+                var ret = new PositionList();
+                ret.AddRange(WinningPositions);
+                ret.AddRange(LosingPositions);
+                return ret;
+            }
+        }
+
         /// <summary>
         /// Entry Price * Share Count Aggr(All Positions)
         /// </summary>

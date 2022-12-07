@@ -12,6 +12,7 @@ using StockBox.Rules;
 using StockBox.Services;
 using System;
 using StockBox.Models;
+using StockBox.Positions;
 
 namespace StockBox_UnitTests
 {
@@ -257,6 +258,35 @@ namespace StockBox_UnitTests
 
             // hazzah
             Assert.IsTrue(result.Success);
+        }
+
+        [TestMethod, Description("Test the rule > scanner > parser > interpreter flow can understadn the @Entry token")]
+        public void SB_Interpreter_15_InterpreterCanCalculateEntryPriceAsExpected()
+        {
+            var symbol = new Symbol(string.Empty);
+
+            var adapter = new DataFrameAdapter_Accessor();
+
+            adapter.CreateAndAddDataPoint(DateTime.Now, 0, 0, 0, 10, 1000);
+            adapter.CreateAndAddDataPoint(DateTime.Now.AddDays(-1), 0, 0, 0, 15, 1000);
+
+            var position = new Position(Guid.NewGuid(), symbol);
+            position.EntryPrice = 12.50;
+
+            var pattern = new Pattern() {
+                new Rule("@Entry > Close"),
+                new Rule("@Entry < yesterday's Close"),
+            };
+
+            var dailyFrame = new DailyFrame(adapter, symbol);
+            var framelist = new SbFrameList() { dailyFrame };
+
+            var service = new ActiveService(new Scanner(), new Parser());
+            service.ProcessRules(pattern);
+
+            var result = pattern.Evalute(new SbInterpreter(framelist, position));
+            Assert.IsTrue(result.Success);
+
         }
     }
 }

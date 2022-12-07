@@ -193,7 +193,7 @@ namespace StockBox.RiskProfiles
             var profitLoss = position.CalculateProfitLoss(dataPoint);
             if (TotalRiskDollars != null)
             {
-                return ValidationResultList.CreateSingle(profitLoss < -(TotalRiskDollars), $"Current P&L (${profitLoss}, {profitLoss / originalInvestment * 100}%) is greater than acceptable TotalRiskDollars (-${TotalRiskDollars})");
+                return ValidationResultList.CreateSingle(position.IsLoss && Math.Abs(profitLoss) > TotalRiskDollars, $"Current P&L (${profitLoss}, {profitLoss / originalInvestment * 100}%) is greater than acceptable TotalRiskDollars (-${TotalRiskDollars})");
             }
             else if (StopLossDollars != null)
             {
@@ -205,7 +205,7 @@ namespace StockBox.RiskProfiles
                 // per position. If balance is 10000, total risk percent is 2%
                 // total dollar amount is 200$.
                 var percentLoss = profitLoss / TotalBalance;
-                return ValidationResultList.CreateSingle(percentLoss < -(TotalRiskPercent), $"Current P&L (${profitLoss}, {profitLoss / originalInvestment * 100}%) is greater than acceptable TotalRiskPercent (-{TotalRiskPercent}%)");
+                return ValidationResultList.CreateSingle(position.IsLoss && percentLoss < -(TotalRiskPercent), $"Current P&L (${profitLoss}, {profitLoss / originalInvestment * 100}%) is greater than acceptable TotalRiskPercent (-{TotalRiskPercent}%)");
             }
         }
 
