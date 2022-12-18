@@ -18,6 +18,7 @@ namespace StockBox.Data.Adapters.DataFrame
     {
 
         protected DataPointList _data;
+        public SbFrame Parent { get; set; }
 
         /// <summary>
         /// The original dataset Frame created using Deedle Library. Keeping
@@ -182,5 +183,9 @@ namespace StockBox.Data.Adapters.DataFrame
             return GetData().ToSeries(column);
         }
 
+        public bool IndicatorExists(IIndicator indicator)
+        {
+            return Parent.HasIndicator(indicator);
+        }
     }
 }

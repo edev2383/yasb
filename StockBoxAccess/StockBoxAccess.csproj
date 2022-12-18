@@ -8,4 +8,12 @@
   <ItemGroup>
     <ProjectReference Include="..\StockBoxValidation\StockBoxValidation.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <None Remove="Authentication\" />
+    <None Remove="Authentication\Providers\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Authentication\" />
+    <Folder Include="Authentication\Providers\" />
+  </ItemGroup>
 </Project>

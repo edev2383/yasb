@@ -59,11 +59,19 @@ namespace StockBox.Data.SbFrames
             return FindByDate(GetKeys()[index]);
         }
 
+        /// <summary>
+        /// Return the last DataPoint in the list
+        /// </summary>
+        /// <returns></returns>
         public DataPoint Last()
         {
             return FindByIndex(Count - 1);
         }
 
+        /// <summary>
+        /// Return the first DataPoint in the list
+        /// </summary>
+        /// <returns></returns>
         public DataPoint First()
         {
             if (Count == 0) return null;
@@ -109,6 +117,11 @@ namespace StockBox.Data.SbFrames
             return new DataPointList(retSrc);
         }
 
+        /// <summary>
+        /// Return an SbSeries (Dict[DateTime, double]) of a single column
+        /// </summary>
+        /// <param name="column"></param>
+        /// <returns></returns>
         public SbSeries ToSeries(string column)
         {
             var ret = new SbSeries(column);
@@ -126,8 +139,9 @@ namespace StockBox.Data.SbFrames
         /// <summary>
         /// Accept a general indicator and map it to the DataPoints by DateTime.
         /// Because the indicator's payload could be different, we'll map each
-        /// with their own method for now. Once we have a better idea, we may
-        /// be able to combine some executions for simplicity
+        /// with their own method for now. Once we have a better idea of the
+        /// shape of indicator payload data, we may be able to combine some
+        /// executions for the sake of simplicity
         /// </summary>
         /// <param name="indicator"></param>
         public void MapIndicator(IIndicator indicator)
@@ -149,11 +163,21 @@ namespace StockBox.Data.SbFrames
                 case EIndicatorType.eFastStochastics:
                     MapIndicator((FastStochastic)indicator);
                     break;
+                case EIndicatorType.eSlope:
+                    MapIndicator((Slope)indicator);
+                    break;
                 default:
                     break;
             }
         }
 
+        /// <summary>
+        /// Apply an [expression] across a window [frame] of data, returning an
+        /// SbSeries object
+        /// </summary>
+        /// <param name="frame"></param>
+        /// <param name="expression"></param>
+        /// <returns></returns>
         public SbSeries Window(int frame, Func<DataPointList, double> expression)
         {
             var ret = new SbSeries();
@@ -166,11 +190,21 @@ namespace StockBox.Data.SbFrames
             return ret;
         }
 
+        /// <summary>
+        /// Return the highest [value] in a given column
+        /// </summary>
+        /// <param name="column"></param>
+        /// <returns></returns>
         public double Max(string column)
         {
             return ToSeries(column).Max();
         }
 
+        /// <summary>
+        /// Return the lower [value] in a given column
+        /// </summary>
+        /// <param name="column"></param>
+        /// <returns></returns>
         public double Min(string column)
         {
             return ToSeries(column).Min();
@@ -187,14 +221,25 @@ namespace StockBox.Data.SbFrames
             }
         }
 
-        private void MapIndicator(AverageVolume sma)
+        private void MapIndicator(Slope slope)
         {
-            var payload = (Dictionary<DateTime, double>)sma.Payload;
+            var payload = (Dictionary<DateTime, double>)slope.Payload;
             foreach (KeyValuePair<DateTime, double> item in payload)
             {
                 var foundDataPoint = FindByDate(item.Key);
                 if (foundDataPoint != null)
-                    foundDataPoint.AddIndicatorValue(sma.Name, item.Value);
+                    foundDataPoint.AddIndicatorValue(slope.Name, item.Value);
+            }
+        }
+
+        private void MapIndicator(AverageVolume averageVolume)
+        {
+            var payload = (Dictionary<DateTime, double>)averageVolume.Payload;
+            foreach (KeyValuePair<DateTime, double> item in payload)
+            {
+                var foundDataPoint = FindByDate(item.Key);
+                if (foundDataPoint != null)
+                    foundDataPoint.AddIndicatorValue(averageVolume.Name, item.Value);
             }
         }
 

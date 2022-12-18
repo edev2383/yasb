@@ -15,6 +15,7 @@ namespace StockBox.Data.Adapters.DataFrame
     {
         Frame<DateTime, string> SourceData { get; }
         public int? Length { get; }
+        SbFrame Parent { get; set; }
         /// <summary>  
         /// Return a single datapoint
         /// </summary>
@@ -30,5 +31,6 @@ namespace StockBox.Data.Adapters.DataFrame
         SbSeries GetSeries(string column);
         DataPointList GetData();
         DataPointList GetFullDataSource();
+        bool IndicatorExists(IIndicator indicator);
     }
 }

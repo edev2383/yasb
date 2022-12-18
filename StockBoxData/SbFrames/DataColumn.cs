@@ -8,7 +8,11 @@ namespace StockBox.Data.SbFrames
 
     /// <summary>
     /// Class <c>DataColumn</c> encapsulates and describes a column and
-    /// potential indices 
+    /// potential indices
+    ///
+    /// TODO: The usage of Column within this class has become diluted. Need to
+    /// refactor this to make more sense without impacting the codebase too
+    /// much. 
     /// </summary>
     public class DataColumn
     {
@@ -37,6 +41,12 @@ namespace StockBox.Data.SbFrames
         }
 
         public string Column { get { return MapToColumnString(); } }
+
+        /// <summary>
+        /// ColumnToken is a string representation of the Column without any
+        /// indices, i.e., SMA(50), Column = SMA(50), ColumnToken = SMA
+        /// </summary>
+        public string ColumnToken { get; set; }
         public List<int> Indices { get { return _indices; } }
         public EColumns EColumn { get { return _column; } }
         private EColumns _column;
@@ -46,6 +56,7 @@ namespace StockBox.Data.SbFrames
         public DataColumn(string column, params int[] indices)
         {
             _column = SanitizeRawStringColumn(column);
+            ColumnToken = column;
             if (indices != null)
             {
                 foreach (var item in indices)

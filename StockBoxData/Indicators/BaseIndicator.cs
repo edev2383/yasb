@@ -74,6 +74,9 @@ namespace StockBox.Data.Indicators
 
         /// <summary>
         /// Return true if this object identifies as the provided object.
+        /// Indicator equality is determined by the meta data, not the content,
+        /// as the only use-case is to determine if an indicator has already
+        /// been created.
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
@@ -86,6 +89,7 @@ namespace StockBox.Data.Indicators
             if (item.Indices.Intersect(Indices).Count() != Indices.Length) return false;
             return true;
         }
+
 
         /// <summary>
         /// All child calculations should be bracketted within this method and

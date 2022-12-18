@@ -26,9 +26,13 @@ namespace StockBox.Data.Indicators
         {
             var ret = new Dictionary<DateTime, (double k, double d)>();
 
+
             var fastSto = IndicatorFactory.Create("FastSto", Indices);
-            fastSto.Calculate(adapter);
-            adapter.MapIndicator(fastSto);
+
+            // If the indicator cannot be found in the IDataFrameAdapter.Parent,
+            // go ahead and add it to calculate and map it home
+            if (adapter.IndicatorExists(this) != true)
+                adapter.Parent.AddIndicator(fastSto);
 
             var data = adapter.GetFullDataSource().Reversed;
 

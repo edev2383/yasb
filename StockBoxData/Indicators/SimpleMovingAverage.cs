@@ -15,10 +15,17 @@ namespace StockBox.Data.Indicators
     /// </summary>
     public class SimpleMovingAverage : BaseIndicator
     {
+        private readonly string _targetColumn;
+        public SimpleMovingAverage(string column, string target = "Close", params int[] indices) : base(column, EIndicatorType.eSma, indices)
+        {
+            _targetColumn = target;
+        }
 
         public SimpleMovingAverage(string column, params int[] indices) : base(column, EIndicatorType.eSma, indices)
         {
+            _targetColumn = "Close";
         }
+
 
         protected override object CalculateIndicator(IDataFrameAdapter adapter)
         {
@@ -27,7 +34,7 @@ namespace StockBox.Data.Indicators
             // apply the Mean method over the window of length = Indices[0]
             // the SortByKey() call may be unnecessary, however, it's probably
             // better to be safe
-            var values = adapter.GetFullDataSource().ToSeries("Close").SortByKey()
+            var values = adapter.GetFullDataSource().ToSeries(_targetColumn).SortByKey()
                                  .Window(Indices[0], win => win.Mean());
 
             // loop through the result set

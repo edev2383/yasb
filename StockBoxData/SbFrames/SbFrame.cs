@@ -54,6 +54,7 @@ namespace StockBox.Data.SbFrames
         public SbFrame(IDataFrameAdapter adapter, EFrequency frequency, ISymbolProvider symbol) : this(frequency, symbol)
         {
             _adapter = adapter;
+            _adapter.Parent = this;
         }
 
         /// <summary>
@@ -134,6 +135,11 @@ namespace StockBox.Data.SbFrames
         public IDataFrameAdapter GetAdapter()
         {
             return _adapter;
+        }
+
+        public bool HasIndicator(IIndicator indicator)
+        {
+            return _indicators.ContainsItem(indicator);
         }
     }
 }
