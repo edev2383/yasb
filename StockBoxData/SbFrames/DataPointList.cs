@@ -173,7 +173,9 @@ namespace StockBox.Data.SbFrames
 
         /// <summary>
         /// Apply an [expression] across a window [frame] of data, returning an
-        /// SbSeries object
+        /// SbSeries object. The frames aggregate toward the final record, so
+        /// the key for the new SbSeries will be the DateTime of the last data
+        /// record.
         /// </summary>
         /// <param name="frame"></param>
         /// <param name="expression"></param>

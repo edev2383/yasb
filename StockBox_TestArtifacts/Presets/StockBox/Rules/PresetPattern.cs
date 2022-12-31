@@ -1,8 +1,13 @@
 ﻿using System;
 using StockBox.Rules;
 
+
 namespace StockBox_TestArtifacts.Presets.StockBox.Rules
 {
+
+    /// <summary>
+    /// A place to stash preset patterns
+    /// </summary>
     public class PresetPattern
     {
         public PresetPattern()

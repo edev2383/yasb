@@ -185,5 +185,21 @@ namespace StockBox_UnitTests
 
             Assert.IsTrue(exprAnalyzer.Combos.Count == 5);
         }
+
+        [TestMethod, Description("Analyzer can create a DomainCombination for 52WeekHigh token")]
+        public void SB_Expr_09_ExpressionAnalyzer_CanRecognize52WeekHighToken()
+        {
+            var rules = new Pattern()
+            {
+                new Rule("CLOSE > (@52WeekHigh * 0.95)"),
+            };
+            var service = new ActiveService(new Scanner(), new Parser());
+            service.ProcessRules(rules);
+
+            var exprAnalyzer = new ExpressionAnalyzer(rules.Expressions);
+            exprAnalyzer.Scan();
+
+            Assert.IsTrue(exprAnalyzer.Combos.Count == 2);
+        }
     }
 }

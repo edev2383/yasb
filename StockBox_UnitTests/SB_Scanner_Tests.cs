@@ -3,6 +3,7 @@ using StockBox.Interpreter.Scanner;
 using StockBox.Associations.Tokens;
 using StockBox_TestArtifacts.Helpers;
 using static StockBox_TestArtifacts.Helpers.EFile;
+using Antlr.Runtime;
 
 
 namespace StockBox_UnitTests
@@ -567,6 +568,25 @@ namespace StockBox_UnitTests
             Assert.AreEqual(tokens[3].Type, TokenType.eIndicatorIndices);
             Assert.AreEqual(tokens[3].Lexeme, "RSI(14)");
             Assert.AreEqual(tokens[^1].Type, TokenType.eEOF);
+        }
+
+        [TestMethod]
+        public void SBC_46_ScannerCanRecognizeSlopeTokens()
+        {
+            // need to further explore this to understand my intentions
+            //var scanner = new Scanner("Slope[SMA(25)]");
+            //var tokens = scanner.ScanTokens();
+
+            //// expect eSlopeOf eLeftSquare 
+            //Assert.AreEqual(5, tokens.Count);
+            //Assert.AreEqual(tokens[0].Type, TokenType.eNumber);
+            //Assert.AreEqual(tokens[0].Literal, 0);
+            //Assert.AreEqual(tokens[1].Type, TokenType.eDaily);
+            //Assert.AreEqual(tokens[2].Type, TokenType.eIndicator);
+            //Assert.AreEqual(tokens[2].Lexeme, "RSI");
+            //Assert.AreEqual(tokens[3].Type, TokenType.eIndicatorIndices);
+            //Assert.AreEqual(tokens[3].Lexeme, "RSI(14)");
+            //Assert.AreEqual(tokens[^1].Type, TokenType.eEOF);
         }
 
         private TokenList GetTokens(EFile target)

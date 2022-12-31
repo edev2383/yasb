@@ -9,13 +9,16 @@ namespace StockBox.Data.Indicators
 
     /// <summary>
     /// Class <c>Slope</c> is a calculation of the % of rate of change of a
-    /// column over a given period of time (range). This can be used to provide
-    /// context to other indicators, and will create the required indidcators
-    /// if none already exist.
+    /// column over a given period of time (range, default=3). This can be used
+    /// to provide context to other indicators, such as if SMA/EMAs are
+    /// converging or diverging. If the related indicator does not exist, it
+    /// will be created at run-time.
+    ///
+    /// "Slope[SMA(5)] >< Slope[SMA(20)]"
     /// </summary>
     public class Slope : BaseIndicator
     {
-        public Slope(string column, int range) : base(column, EIndicatorType.eSlope, new int[1] { range })
+        public Slope(string column, int range = 3) : base(column, EIndicatorType.eSlope, new int[1] { range })
         {
         }
 
@@ -23,20 +26,22 @@ namespace StockBox.Data.Indicators
         {
             var ret = new Dictionary<DateTime, double>();
 
-            if (adapter.IndicatorExists(this) != true)
-            {
-                // create the indicator
-                var dataColumn = DataColumn.ParseColumnDescriptor(ColumnKey);
-                var targetInidicator = IndicatorFactory.Create(dataColumn.ColumnToken, dataColumn.Indices.ToArray());
+            // Parse the column and create an indicator proto-object.
+            var dataColumn = DataColumn.ParseColumnDescriptor(ColumnKey);
+            var targetInidicator = IndicatorFactory.Create(dataColumn.ColumnToken, dataColumn.Indices.ToArray());
+
+            // check that the target indicator object already exists. If not,
+            // add it to the adapter parent SbFrame
+            if (adapter.IndicatorExists(targetInidicator) != true)
                 adapter.Parent.AddIndicator(targetInidicator);
-            }
+
 
             var values = adapter.GetFullDataSource()
                 .ToSeries(ColumnKey)
                 .SortByKey()
                 .Window(
-                    Indices[0]
-                    , win => CalculatePercentRateOfChange(win, Indices[0]));
+                    Indices[0],
+                    win => CalculatePercentRateOfChange(win, Indices[0]));
 
             // loop through the result set
             for (var idx = 0; idx < values.Count; idx++)

@@ -98,5 +98,15 @@ namespace StockBox.Associations.Tokens
             if (Indices.Intersect(item.Indices).Count() != item.Indices.Count()) return false;
             return true;
         }
+
+        public bool IsDomainToken()
+        {
+            if (IntervalFrequency.Type == TokenType.e52WeekHigh) return true;
+            if (IntervalFrequency.Type == TokenType.e52WeekLow) return true;
+            if (IntervalFrequency.Type == TokenType.eEntryPoint) return true;
+            if (IntervalFrequency.Type == TokenType.eAllTimeHigh) return true;
+            if (IntervalFrequency.Type == TokenType.eAllTimeLow) return true;
+            return false;
+        }
     }
 }

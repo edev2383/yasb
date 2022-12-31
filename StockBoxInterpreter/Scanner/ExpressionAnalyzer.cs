@@ -49,6 +49,12 @@ namespace StockBox.Interpreter.Scanner
                     Scan(expr.Left);
                 if (expr.Right is Binary)
                     Scan(expr.Right);
+                if (expr.Right is Grouping)
+                    VisitBinaryExpr(((Grouping)expr.Right).Expression as Binary);
+                if (expr.Left is DomainToken)
+                    VisitDomainToken(expr.Left as DomainToken);
+                if (expr.Right is DomainToken)
+                    VisitDomainToken(expr.Right as DomainToken);
             }
 
 
@@ -65,6 +71,8 @@ namespace StockBox.Interpreter.Scanner
         /// <returns></returns>
         public object VisitDomainToken(DomainToken expr)
         {
+            var combo = new DomainCombination(0, expr.Operator, expr.Operator.Lexeme);
+            Combos.Add(combo);
             return null;
         }
 
