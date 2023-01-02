@@ -173,5 +173,13 @@ namespace StockBox.Data.SbFrames
         {
             return this.Sum() / this.Count;
         }
+
+        public List<double> ToValueList()
+        {
+            var ret = new List<double>();
+            foreach (var item in this)
+                ret.Add(item.Value);
+            return ret;
+        }
     }
 }

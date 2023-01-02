@@ -20,16 +20,6 @@ namespace StockBox.Data.Adapters.DataFrame
         protected DataPointList _data;
         public SbFrame Parent { get; set; }
 
-        /// <summary>
-        /// The original dataset Frame created using Deedle Library. Keeping
-        /// this in the Adapter allows us to use the built-in window functions
-        /// to do our Indicator calculations. If we want to add window functions
-        /// down the road, we can potentially remove this, but so far we're able
-        /// to keep the Deedle reference to the StockBoxData library project
-        /// </summary>
-        public Frame<DateTime, string> SourceData { get { return _sourceData; } }
-        protected Frame<DateTime, string> _sourceData;
-
         public int? Length
         {
             get
@@ -51,27 +41,51 @@ namespace StockBox.Data.Adapters.DataFrame
             AddData(data);
         }
 
+        /// <summary>
+        /// Return the DataPointList source, ignoring the current 'window'. Use
+        /// this when attempting to do calculations for indicators. 
+        /// </summary>
+        /// <returns></returns>
         public DataPointList GetFullDataSource()
         {
             return _data;
         }
 
+        /// <summary>
+        /// Primary method for getting the current DataPointList. Use this when
+        /// doing general rule parsing, as this takes into account the current
+        /// 'window' for backtesting.
+        /// </summary>
+        /// <returns></returns>
         public abstract DataPointList GetData();
 
         /// <summary>
-        /// Add data from a MemoryStream after the object has been created
+        /// Add data from a MemoryStream after the object has been created.
+        /// Assumes CSV format. We can add adapters for other formats if needed,
+        /// i.e., JSON
         /// </summary>
         /// <param name="data"></param>
         public virtual void AddData(MemoryStream data)
         {
+            // read the incoming stream as a CSV
             var rawData = Frame.ReadCsv(data);
-            _sourceData = rawData.IndexRows<DateTime>("Date").SortRowsByKey();
-            _data = Map(_sourceData);
+
+            // using the Deedle library functions, index and sort by date
+            var tmpSorted = rawData.IndexRows<DateTime>("Date").SortRowsByKey();
+
+            // map the deedle data structure to the domain DataPointList
+            _data = Map(tmpSorted);
+
+            // since our data is time-series, we always want the data in desc
+            // order, with the most recent date key at 0-idx.
             if (!_data.IsDesc)
                 _data = _data.Reversed;
         }
 
-
+        /// <summary>
+        /// Add data to the adapter from a source DataPointList
+        /// </summary>
+        /// <param name="data"></param>
         public virtual void AddData(DataPointList data)
         {
             _data = data;
@@ -178,11 +192,21 @@ namespace StockBox.Data.Adapters.DataFrame
         /// <returns></returns>
         public abstract IDataFrameAdapter Create();
 
+        /// <summary>
+        /// Return an SbSeries for a specific column header
+        /// </summary>
+        /// <param name="column"></param>
+        /// <returns></returns>
         public SbSeries GetSeries(string column)
         {
             return GetData().ToSeries(column);
         }
 
+        /// <summary>
+        /// Return true if an indicator is present in the SbFrame parent. 
+        /// </summary>
+        /// <param name="indicator"></param>
+        /// <returns></returns>
         public bool IndicatorExists(IIndicator indicator)
         {
             return Parent.HasIndicator(indicator);

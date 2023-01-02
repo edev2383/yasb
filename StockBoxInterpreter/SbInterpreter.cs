@@ -147,12 +147,16 @@ namespace StockBox.Interpreter
             switch (expr.Operator.Type)
             {
                 case TokenType.e52WeekHigh:
+                    ret = _frames.FiftyTwoWeekHigh;
                     break;
                 case TokenType.e52WeekLow:
+                    ret = _frames.FiftyTwoWeekLow;
                     break;
                 case TokenType.eAllTimeHigh:
+                    ret = _frames.AllTimeHigh;
                     break;
                 case TokenType.eAllTimeLow:
+                    ret = _frames.AllTimeLow;
                     break;
                 case TokenType.eEntryPoint:
                     if (_position != null)

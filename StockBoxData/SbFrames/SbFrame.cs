@@ -91,23 +91,13 @@ namespace StockBox.Data.SbFrames
         }
 
         /// <summary>
-        /// Return an entire ColumnSeries by column string, i.e., Close, Open
+        /// Return an entire SbSeries using a column header key
         /// </summary>
         /// <param name="column"></param>
         /// <returns></returns>
-        public ColumnSeries GetColumnData(string column)
+        public SbSeries ToSeries(string column)
         {
-            return _adapter.GetColumnData(new DataColumn(column));
-        }
-
-        /// <summary>
-        /// Return an entire ColumnSeries using the DataColumn object
-        /// </summary>
-        /// <param name="column"></param>
-        /// <returns></returns>
-        public ColumnSeries GetColumnData(DataColumn column)
-        {
-            return _adapter.GetColumnData(column);
+            return _adapter.GetFullDataSource().ToSeries(column);
         }
 
         public void AddIndicator(IIndicator indicator)
@@ -141,5 +131,6 @@ namespace StockBox.Data.SbFrames
         {
             return _indicators.ContainsItem(indicator);
         }
+
     }
 }

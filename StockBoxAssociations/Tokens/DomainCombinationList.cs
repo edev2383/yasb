@@ -50,7 +50,7 @@ namespace StockBox.Associations.Tokens
         public DomainCombinationList GetUniqueDomainCombos()
         {
             if (IsHomogenousGroup().HasFailures)
-                throw new Exception("The DomainCombinationList being queried contains more than on type of IntervalFrequency Token. Before calling `GetUniqueDomainCombos`, request a specific frequency subset of data, i.e., GetDailyDomainCombos()");
+                throw new Exception("The DomainCombinationList being queried contains more than one type of IntervalFrequency Token. Before calling `GetUniqueDomainCombos`, request a specific frequency subset of data, i.e., GetDailyDomainCombos()");
 
             var ret = new DomainCombinationList();
             foreach (var item in this)
@@ -172,6 +172,20 @@ namespace StockBox.Associations.Tokens
             foreach (var item in this)
                 ret.Add(new ValidationResult(item.IntervalFrequency.Type == type, "Item is a homogenous match.", item));
 
+            return ret;
+        }
+
+        /// <summary>
+        /// Return a subset list comprised only of type DomainToken, i.e.,
+        /// @52WeekHigh, @52WeekLow, @AllTimeHigh, @AllTimeLow.
+        /// </summary>
+        /// <returns></returns>
+        public IDomainCombinationsProvider GetDomainTokens()
+        {
+            var ret = new DomainCombinationList();
+            foreach (var combo in this)
+                if (combo.IsDomainToken())
+                    ret.Add(combo);
             return ret;
         }
     }

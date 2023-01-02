@@ -13,5 +13,6 @@ namespace StockBox.Associations
         List<ISbFrame> Create(IDomainCombinationsProvider combos, ISymbolProvider symbol);
         List<ISbFrame> CreateBacktestData(ISymbolProvider symbol);
         void AddIndicators(List<ISbFrame> framelist, IDomainCombinationsProvider domainCombinations);
+        void HydrateFrameList(List<ISbFrame> frameList, IDomainCombinationsProvider domainCombinationsProvider);
     }
 }

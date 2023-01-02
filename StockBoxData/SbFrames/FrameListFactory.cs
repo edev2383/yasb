@@ -124,9 +124,17 @@ namespace StockBox.Data.SbFrames
             if (weeklyCombos.Count > 0)
                 ret.Add(CreateWeeklySbFrame(weeklyCombos, symbol));
 
-            var monthlyCombos = combos.GetMonthyDomainCombos() as DomainCombinationList;
-            if (monthlyCombos.Count > 0)
-                ret.Add(CreateMonthlySbFrame(monthlyCombos, symbol));
+            var domainTokens = combos.GetDomainTokens() as DomainCombinationList;
+            if (domainTokens.Count == 0)
+            {
+                var monthlyCombos = combos.GetMonthyDomainCombos() as DomainCombinationList;
+                if (monthlyCombos.Count > 0)
+                    ret.Add(CreateMonthlySbFrame(monthlyCombos, symbol));
+            }
+            else
+            {
+                ret.Add(CreateMonthlySbFrame(domainTokens, symbol));
+            }
 
             return ret;
         }
@@ -150,5 +158,13 @@ namespace StockBox.Data.SbFrames
             var montlyFrameList = fl.FindByFrequency(EFrequency.eMonthly);
             MapIndicators(montlyFrameList, domainCombinations.GetMonthyDomainCombos());
         }
+
+        public void HydrateFrameList(List<ISbFrame> frameList, IDomainCombinationsProvider domainCombinationsProvider)
+        {
+            // query for historical data when seeing
+            AddIndicators(frameList, domainCombinationsProvider);
+        }
+
+
     }
 }

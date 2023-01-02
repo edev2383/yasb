@@ -116,5 +116,10 @@ namespace StockBox_TestArtifacts.Mocks
             ret.AddData(reader.GetFileStream(DataTarget_Monthly));
             return ret;
         }
+
+        public void HydrateFrameList(List<ISbFrame> frameList, IDomainCombinationsProvider domainCombinationsProvider)
+        {
+            AddIndicators(frameList, domainCombinationsProvider);
+        }
     }
 }

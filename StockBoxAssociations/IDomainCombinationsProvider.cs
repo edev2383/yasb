@@ -8,5 +8,6 @@ namespace StockBox.Associations
         IDomainCombinationsProvider GetDailyDomainCombos();
         IDomainCombinationsProvider GetWeeklyDomainCombos();
         IDomainCombinationsProvider GetMonthyDomainCombos();
+        IDomainCombinationsProvider GetDomainTokens();
     }
 }
