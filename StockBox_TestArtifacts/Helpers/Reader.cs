@@ -7,7 +7,7 @@ namespace StockBox_TestArtifacts.Helpers
     public class Reader : ICallContextProvider
     {
 
-        private string _root = "/Users/jefferyedick/Projects/StockBox/StockBox_TestArtifacts/Files/";
+        private string _root = "../../../../StockBox_TestArtifacts/Files/";
 
         public string Text { get { return _text; } }
         private string _text;
