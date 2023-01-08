@@ -383,6 +383,7 @@ namespace StockBox.Interpreter.Scanner
         {
             string lexemeText = _source.Substring(start, _lexemeLength);
             _tokens.Add(new Token(type, lexemeText, literal, line, current));
+            _results.Add(new ValidationResult(EResult.eSuccess, $"Token '{lexemeText}' added from line {line}"));
         }
 
         private void InjectUnsourcedToken(TokenType type, string lexeme, object literal, int line, int character)
