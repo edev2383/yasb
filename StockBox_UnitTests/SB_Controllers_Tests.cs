@@ -235,6 +235,7 @@ namespace StockBox_UnitTests
             var inactiveToWatchRuleList = new Pattern()
             {
                 new Rule("SMA(20) > SMA(50)"),
+                new Rule("Monthly SMA(5) > Monthly SMA(40)"),
             };
 
             var inactiveToWatchSetup = new Setup(inactiveToWatchRuleList, sellState, riskProfile);
