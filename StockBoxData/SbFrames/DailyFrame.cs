@@ -1,7 +1,6 @@
-﻿using System;
-using StockBox.Data.Adapters.DataFrame;
-using StockBox.Associations.Enums;
+﻿using StockBox.Associations.Enums;
 using StockBox.Associations;
+using StockBox.Data.SbFrames.Helpers;
 
 
 namespace StockBox.Data.SbFrames
@@ -12,7 +11,7 @@ namespace StockBox.Data.SbFrames
     /// </summary>
     public class DailyFrame : SbFrame
     {
-        public DailyFrame(IDataFrameAdapter adapter, ISymbolProvider symbol) : base(adapter, EFrequency.eDaily, symbol)
+        public DailyFrame(IDataPointListProvider provider, ISymbolProvider symbol) : base(provider, EFrequency.eDaily, symbol)
         {
         }
     }

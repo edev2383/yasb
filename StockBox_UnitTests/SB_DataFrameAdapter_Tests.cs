@@ -12,6 +12,7 @@ using StockBox.Models;
 using StockBox.Data.Indicators;
 using StockBox_TestArtifacts.Presets.StockBoxData.SbFrames;
 using StockBox.Interpreter;
+using StockBox.Data.SbFrames.Providers;
 
 namespace StockBox_UnitTests
 {
@@ -23,18 +24,20 @@ namespace StockBox_UnitTests
         public void SB_01_DeedleAdapterCanBeCreated()
         {
             var stream = new Reader().GetFileStream(eAmdDaily);
-            var adapter = new DeedleAdapter(stream);
+            var toDplAdapter = new DeedleToDataPointListAdapter(stream);
+            var provider = new ForwardTestingDataProvider(toDplAdapter.Convert());
 
-            Assert.IsNotNull(adapter);
+            Assert.IsNotNull(provider);
         }
 
         [TestMethod, Description("Test the creation of the object")]
         public void SB_02_DeedleBacktestAdapterCanBeCreated()
         {
             var stream = new Reader().GetFileStream(eAmdDaily);
-            var adapter = new DeedleBacktestAdapter(stream);
+            var toDplAdapter = new DeedleToDataPointListAdapter(stream);
+            var provider = new BackwardTestingDataProvider(toDplAdapter.Convert());
 
-            Assert.IsNotNull(adapter);
+            Assert.IsNotNull(provider);
         }
 
         [TestMethod, Description("Ensure the Adapter can return the first key in the DataPointList property")]
@@ -42,9 +45,10 @@ namespace StockBox_UnitTests
         {
             DateTime expected = new DateTime(2022, 6, 17, 0, 0, 0).Date;
             var stream = new Reader().GetFileStream(eAmdDaily);
-            var adapter = new DeedleAdapter(stream);
+            var toDplAdapter = new DeedleToDataPointListAdapter(stream);
 
-            Assert.AreEqual(expected, adapter.FirstKey.Date);
+            var provider = new ForwardTestingDataProvider(toDplAdapter.Convert());
+            Assert.AreEqual(expected, provider.FirstKey.Date);
         }
 
         [TestMethod, Description("Ensure the Adapter can return the first key in the DataPointList property")]
@@ -52,18 +56,22 @@ namespace StockBox_UnitTests
         {
             DateTime expected = new DateTime(2022, 6, 17, 0, 0, 0).Date;
             var stream = new Reader().GetFileStream(eAmdDaily);
-            var adapter = new DeedleBacktestAdapter(stream);
-            Assert.AreEqual(expected, adapter.FirstKey.Date);
+            var toDplAdapter = new DeedleToDataPointListAdapter(stream);
+
+            var provider = new BackwardTestingDataProvider(toDplAdapter.Convert());
+            Assert.AreEqual(expected, provider.FirstKey.Date);
         }
 
-        [TestMethod, Description("Ensure the backtest adapter IterateWindow method works as intended")]
+        [TestMethod, Description("Ensure the backtest provider IterateWindow method works as intended")]
         public void SB_05_DeedleBacktestAdapter_WindowIterationWorksAsExpected()
         {
 
             var stream = new Reader().GetFileStream(eAmdDailySmallDataset);
-            var adapter = new DeedleBacktestAdapter_Accessor(stream);
-            adapter.IterateWindow();
-            var data = adapter.Access_GetData();
+            var toDplAdapter = new DeedleToDataPointListAdapter(stream);
+
+            var provider = new BackwardTestingDataProvider_Accessor(toDplAdapter.Convert());
+            provider.IterateWindow();
+            var data = provider.Access_GetData();
             Assert.AreEqual(data.Count, 2);
             var first = data[0];
             Assert.AreEqual(first.Date, new DateTime(2022, 9, 20));
@@ -71,34 +79,38 @@ namespace StockBox_UnitTests
             Assert.AreEqual(second.Date, new DateTime(2022, 9, 19));
         }
 
-        [TestMethod, Description("Ensure the backtest adapter IterateWindow method works as intended")]
+        [TestMethod, Description("Ensure the backtest provider IterateWindow method works as intended")]
         public void SB_06_DeedleBacktestAdapter_WindowIterationWorksAsExpected()
         {
             var stream = new Reader().GetFileStream(eAmdDailySmallDataset);
-            var adapter = new DeedleBacktestAdapter_Accessor(stream);
-            adapter.IterateWindow();
-            Assert.AreEqual(adapter.Access_GetData().Count, 2);
-            adapter.IterateWindow();
-            Assert.AreEqual(adapter.Access_GetData().Count, 3);
-            adapter.IterateWindow();
-            Assert.AreEqual(adapter.Access_GetData().Count, 4);
+            var toDplAdapter = new DeedleToDataPointListAdapter(stream);
+
+            var provider = new BackwardTestingDataProvider_Accessor(toDplAdapter.Convert());
+            provider.IterateWindow();
+            Assert.AreEqual(provider.Access_GetData().Count, 2);
+            provider.IterateWindow();
+            Assert.AreEqual(provider.Access_GetData().Count, 3);
+            provider.IterateWindow();
+            Assert.AreEqual(provider.Access_GetData().Count, 4);
         }
 
-        [TestMethod, Description("Ensure the backtest adapter IterateWindow method works as intended")]
+        [TestMethod, Description("Ensure the backtest provider IterateWindow method works as intended")]
         public void SB_06_DeedleBacktestAdapter_IsAtEndCheckWorksAsIntended()
         {
             var stream = new Reader().GetFileStream(eAmdDailySmallDataset);
-            var adapter = new DeedleBacktestAdapter_Accessor(stream);
+            var toDplAdapter = new DeedleToDataPointListAdapter(stream);
+
+            var provider = new BackwardTestingDataProvider_Accessor(toDplAdapter.Convert());
 
             // our first iteration gives us a primary dataset with a length of 2
             var expectedIndex = 2;
 
-            // when the adapter runs out of data, we'll return true and break
+            // when the provider runs out of data, we'll return true and break
             // the while loop
-            while (adapter.IsAtEnd() != true)
+            while (provider.IsAtEnd() != true)
             {
-                adapter.IterateWindow();
-                var data = adapter.Access_GetData();
+                provider.IterateWindow();
+                var data = provider.Access_GetData();
 
                 // test that our data length is as expected, growing by one on
                 // each iteration
@@ -111,13 +123,13 @@ namespace StockBox_UnitTests
         [TestMethod]
         public void SB_07_DeedleBackTestAdapter_IndicatorDataGetsCopiedToWindow()
         {
-            var df = PresetDeedleBacktestAdapter.ThreeDaySmaCrossOver();
+            var df = PresetBacktestingDataProviderCreator.ThreeDaySmaCrossOver();
 
             var sbFrame = new DailyFrame(df, new Symbol("AMD"));
             var sbFrameList = new SbFrameList() { sbFrame, };
             var interpreter = new SbInterpreter(sbFrameList);
 
-            var adapter = sbFrame.GetAdapter();
+            var provider = sbFrame.GetProvider();
             df.IterateWindow();
         }
     }

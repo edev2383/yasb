@@ -13,6 +13,7 @@ using StockBox_TestArtifacts.Helpers;
 using StockBox.Associations.Enums;
 using StockBox.Models;
 using StockBox_TestArtifacts.Builders.StockBox.Rules;
+using StockBox.Data.SbFrames.Providers;
 
 namespace StockBox_UnitTests
 {
@@ -36,7 +37,7 @@ namespace StockBox_UnitTests
             Assert.AreEqual(1, exprAnalyzer.Combos.Count);
 
             // from the analyzed expression, create the desired SbFrameList
-            var factory = new FrameListFactory(new Reader(), new DeedleAdapter());
+            var factory = new FrameListFactory(new Reader(), new ForwardTestingDataProvider());
             var sbframelist = factory.Create(exprAnalyzer.Combos, new Symbol("MSFT")) as SbFrameList;
 
             Assert.IsNotNull(sbframelist);
@@ -119,7 +120,7 @@ namespace StockBox_UnitTests
             var analyzer = new ExpressionAnalyzer(rules.Expressions);
             analyzer.Scan();
 
-            var factory = new FrameListFactory(new Reader(), new DeedleAdapter());
+            var factory = new FrameListFactory(new Reader(), new ForwardTestingDataProvider());
             var frameList = factory.Create(analyzer.Combos, new Symbol("MSFT")) as SbFrameList;
 
             Assert.IsTrue(frameList.Count > 0);

@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using StockBox.Data.Adapters.DataFrame;
+using StockBox.Data.SbFrames.Helpers;
 
 
 namespace StockBox.Data.Indicators
@@ -65,10 +65,10 @@ namespace StockBox.Data.Indicators
         /// property. The Payload is mapped downstream onto the DataPointList,
         /// which has context for the actual structure of the Payload object
         /// </summary>
-        /// <param name="adapter"></param>
-        public void Calculate(IDataFrameAdapter adapter)
+        /// <param name="provider"></param>
+        public void Calculate(IDataPointListProvider provider)
         {
-            _payload = CalculateIndicator(adapter);
+            _payload = CalculateIndicator(provider);
         }
 
 
@@ -103,7 +103,7 @@ namespace StockBox.Data.Indicators
         /// </summary>
         /// <param name="adapter"></param>
         /// <returns></returns>
-        protected abstract object CalculateIndicator(IDataFrameAdapter adapter);
+        protected abstract object CalculateIndicator(IDataPointListProvider provider);
 
     }
 }

@@ -1,8 +1,8 @@
-﻿using System.IO;
-using StockBox.Data.Adapters.DataFrame;
+﻿using StockBox.Data.Adapters.DataFrame;
 using StockBox.Data.Indicators;
 using StockBox.Associations.Enums;
 using StockBox.Associations;
+using StockBox.Data.SbFrames.Helpers;
 
 namespace StockBox.Data.SbFrames
 {
@@ -33,12 +33,12 @@ namespace StockBox.Data.SbFrames
         {
             get
             {
-                if (_adapter == null) return 0;
-                return _adapter.Length;
+                if (_provider == null) return 0;
+                return _provider.Length;
             }
         }
 
-        private IDataFrameAdapter _adapter;
+        private IDataPointListProvider _provider;
         private readonly EFrequency _frequency;
         private readonly ISymbolProvider _symbol;
         private readonly IndicatorList _indicators = new IndicatorList();
@@ -51,10 +51,10 @@ namespace StockBox.Data.SbFrames
             _symbol = symbol;
         }
 
-        public SbFrame(IDataFrameAdapter adapter, EFrequency frequency, ISymbolProvider symbol) : this(frequency, symbol)
+        public SbFrame(IDataPointListProvider provider, EFrequency frequency, ISymbolProvider symbol) : this(frequency, symbol)
         {
-            _adapter = adapter;
-            _adapter.Parent = this;
+            _provider = provider;
+            _provider.Parent = this;
         }
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace StockBox.Data.SbFrames
         /// <returns></returns>
         public DataPoint GetDataPoint(int index)
         {
-            return _adapter.GetDataPoint(index);
+            return _provider.GetDataPoint(index);
         }
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace StockBox.Data.SbFrames
         /// <returns></returns>
         public SbSeries ToSeries(string column)
         {
-            return _adapter.GetFullDataSource().ToSeries(column);
+            return _provider.GetFullDataSource().ToSeries(column);
         }
 
         public void AddIndicator(IIndicator indicator)
@@ -107,24 +107,24 @@ namespace StockBox.Data.SbFrames
 
             // indicator calculates own values based on the data in the adapter
             // it receives
-            indicator.Calculate(_adapter);
+            indicator.Calculate(_provider);
 
             // the indicator payload is then mapped to the adapters data
-            _adapter.MapIndicator(indicator);
+            _provider.MapIndicator(indicator);
 
             // add the indicator to the frame's list of indicators
             _indicators.Add(indicator);
         }
 
-        public void AddData(MemoryStream data)
+        public void AddData(DataPointList data)
         {
-            _adapter.AddData(data);
+            _provider.AddData(data);
         }
 
 
-        public IDataFrameAdapter GetAdapter()
+        public IDataPointListProvider GetProvider()
         {
-            return _adapter;
+            return _provider;
         }
 
         public bool HasIndicator(IIndicator indicator)

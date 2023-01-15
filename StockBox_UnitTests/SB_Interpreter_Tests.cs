@@ -13,6 +13,7 @@ using StockBox.Services;
 using System;
 using StockBox.Models;
 using StockBox.Positions;
+using StockBox.Data.SbFrames.Providers;
 
 namespace StockBox_UnitTests
 {
@@ -103,8 +104,9 @@ namespace StockBox_UnitTests
             var literal = new DomainLiteral("Close");
             var expr = new DomainExpr(index, op, literal);
             var stream = new Reader().GetFileStream(EFile.eAmdDaily);
-            var adapter = new DeedleAdapter(stream);
-            var dailyFrame = new DailyFrame(adapter, new Symbol(string.Empty));
+            var toDplAdapter = new DeedleToDataPointListAdapter(stream);
+            var provider = new ForwardTestingDataProvider(toDplAdapter.Convert());
+            var dailyFrame = new DailyFrame(provider, new Symbol(string.Empty));
             var framelist = new SbFrameList();
             framelist.Add(dailyFrame);
             var interpreter = new SbInterpreter(framelist);
@@ -122,8 +124,9 @@ namespace StockBox_UnitTests
             var scanner = new Scanner(source);
             var parser = new Parser(scanner.ScanTokens());
             var stream = new Reader().GetFileStream(EFile.eAmdDaily);
-            var adapter = new DeedleAdapter(stream);
-            var dailyFrame = new DailyFrame(adapter, new Symbol(string.Empty));
+            var toDplAdapter = new DeedleToDataPointListAdapter(stream);
+            var provider = new ForwardTestingDataProvider(toDplAdapter.Convert());
+            var dailyFrame = new DailyFrame(provider, new Symbol(string.Empty));
             var framelist = new SbFrameList();
             framelist.Add(dailyFrame);
             var interpreter = new SbInterpreter(framelist);
@@ -138,8 +141,9 @@ namespace StockBox_UnitTests
             var scanner = new Scanner(source);
             var parser = new Parser(scanner.ScanTokens());
             var stream = new Reader().GetFileStream(EFile.eAmdDaily);
-            var adapter = new DeedleAdapter(stream);
-            var dailyFrame = new DailyFrame(adapter, new Symbol(string.Empty));
+            var toDplAdapter = new DeedleToDataPointListAdapter(stream);
+            var provider = new ForwardTestingDataProvider(toDplAdapter.Convert());
+            var dailyFrame = new DailyFrame(provider, new Symbol(string.Empty));
             var framelist = new SbFrameList();
             framelist.Add(dailyFrame);
             var interpreter = new SbInterpreter(framelist);
@@ -155,8 +159,9 @@ namespace StockBox_UnitTests
             var tokens = scanner.ScanTokens();
             var parser = new Parser(tokens);
             var stream = new Reader().GetFileStream(EFile.eAmdDaily);
-            var adapter = new DeedleAdapter(stream);
-            var dailyFrame = new DailyFrame(adapter, new Symbol(string.Empty));
+            var toDplAdapter = new DeedleToDataPointListAdapter(stream);
+            var provider = new ForwardTestingDataProvider(toDplAdapter.Convert());
+            var dailyFrame = new DailyFrame(provider, new Symbol(string.Empty));
             var framelist = new SbFrameList() { dailyFrame };
             var interpreter = new SbInterpreter(framelist);
             var result = interpreter.Interpret(parser.Parse());
@@ -171,8 +176,9 @@ namespace StockBox_UnitTests
             var tokens = scanner.ScanTokens();
             var parser = new Parser(tokens);
             var stream = new Reader().GetFileStream(EFile.eAmdDaily);
-            var adapter = new DeedleAdapter(stream);
-            var dailyFrame = new DailyFrame(adapter, new Symbol(string.Empty));
+            var toDplAdapter = new DeedleToDataPointListAdapter(stream);
+            var provider = new ForwardTestingDataProvider(toDplAdapter.Convert());
+            var dailyFrame = new DailyFrame(provider, new Symbol(string.Empty));
             var framelist = new SbFrameList() { dailyFrame };
             var interpreter = new SbInterpreter(framelist);
             var result = interpreter.Interpret(parser.Parse());
@@ -187,9 +193,10 @@ namespace StockBox_UnitTests
             var tokens = scanner.ScanTokens();
             var parser = new Parser(tokens);
             var stream = new Reader().GetFileStream(EFile.eAmdDaily);
-            var adapter = new DeedleAdapter(stream);
+            var toDplAdapter = new DeedleToDataPointListAdapter(stream);
+            var provider = new ForwardTestingDataProvider(toDplAdapter.Convert());
             var sma = new SimpleMovingAverage("SMA", 25);
-            var dailyFrame = new DailyFrame(adapter, new Symbol(string.Empty));
+            var dailyFrame = new DailyFrame(provider, new Symbol(string.Empty));
             dailyFrame.AddIndicator(sma);
             var framelist = new SbFrameList() { dailyFrame };
             var interpreter = new SbInterpreter(framelist);
@@ -202,10 +209,11 @@ namespace StockBox_UnitTests
         {
             // setup the data list to include a single data point, that will
             // not be enough to satisfy the requirements of the rulelist
-            var adapter = new DataFrameAdapter_Accessor();
+            var adapter = new DataProvider_Accessor();
 
             // add a single datapoint with indicator data
             adapter.CreateAndAddDataPoint(DateTime.Now, 14, 10, 13, 12, 1000, "SMA(5)", 10);
+
 
             // init the frame/fraemlist
             var dailyFrame = new DailyFrame(adapter, new Symbol(string.Empty));
@@ -230,7 +238,7 @@ namespace StockBox_UnitTests
         {
             // setup the data list to include a single data point, that will
             // not be enough to satisfy the requirements of the rulelist
-            var adapter = new DataFrameAdapter_Accessor();
+            var adapter = new DataProvider_Accessor();
 
             // add specific datapoints. The crossover operator means that the
             // value on the left was below the value on the right for the
@@ -265,7 +273,7 @@ namespace StockBox_UnitTests
         {
             var symbol = new Symbol(string.Empty);
 
-            var adapter = new DataFrameAdapter_Accessor();
+            var adapter = new DataProvider_Accessor();
 
             adapter.CreateAndAddDataPoint(DateTime.Now, 0, 0, 0, 10, 1000);
             adapter.CreateAndAddDataPoint(DateTime.Now.AddDays(-1), 0, 0, 0, 15, 1000);

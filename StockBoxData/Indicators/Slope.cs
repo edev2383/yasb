@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using StockBox.Data.Adapters.DataFrame;
 using StockBox.Data.SbFrames;
+using StockBox.Data.SbFrames.Helpers;
 
 namespace StockBox.Data.Indicators
 {
@@ -22,7 +23,7 @@ namespace StockBox.Data.Indicators
         {
         }
 
-        protected override object CalculateIndicator(IDataFrameAdapter adapter)
+        protected override object CalculateIndicator(IDataPointListProvider provider)
         {
             var ret = new Dictionary<DateTime, double>();
 
@@ -32,11 +33,11 @@ namespace StockBox.Data.Indicators
 
             // check that the target indicator object already exists. If not,
             // add it to the adapter parent SbFrame
-            if (adapter.IndicatorExists(targetInidicator) != true)
-                adapter.Parent.AddIndicator(targetInidicator);
+            if (provider.IndicatorExists(targetInidicator) != true)
+                provider.Parent.AddIndicator(targetInidicator);
 
 
-            var values = adapter.GetFullDataSource()
+            var values = provider.GetFullDataSource()
                 .ToSeries(ColumnKey)
                 .SortByKey()
                 .Window(

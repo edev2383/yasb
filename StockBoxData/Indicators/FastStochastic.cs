@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using StockBox.Data.Adapters.DataFrame;
 using System.Linq;
 using StockBox.Data.SbFrames;
-
+using StockBox.Data.SbFrames.Helpers;
 
 namespace StockBox.Data.Indicators
 {
@@ -22,7 +22,7 @@ namespace StockBox.Data.Indicators
         }
 
 
-        protected override object CalculateIndicator(IDataFrameAdapter adapter)
+        protected override object CalculateIndicator(IDataPointListProvider provider)
         {
             var ret = new Dictionary<DateTime, (double k, double d)>();
 
@@ -32,7 +32,7 @@ namespace StockBox.Data.Indicators
             List<(double gain, double loss)> averages = new List<(double gain, double loss)>();
 
             // pull a series (column) from the data in the Close column
-            var data = adapter.GetFullDataSource().Reversed;
+            var data = provider.GetFullDataSource().Reversed;
 
             var kseries = data.Window(Indices[0], x => CalculateFastStochastic(x));
             var dseries = kseries.Window(Indices[1], win => win.Mean());

@@ -2,20 +2,17 @@
 using System.IO;
 using StockBox.Data.Adapters.DataFrame;
 using StockBox.Data.SbFrames;
+using StockBox.Data.SbFrames.Providers;
 
 namespace StockBox_UnitTests.Accessors
 {
-    public class DeedleBacktestAdapter_Accessor : DeedleBacktestAdapter
+    public class BackwardTestingDataProvider_Accessor : BackwardTestingDataProvider
     {
-        public DeedleBacktestAdapter_Accessor()
+        public BackwardTestingDataProvider_Accessor()
         {
         }
 
-        public DeedleBacktestAdapter_Accessor(DataPointList data) : base(data)
-        {
-        }
-
-        public DeedleBacktestAdapter_Accessor(MemoryStream data) : base(data)
+        public BackwardTestingDataProvider_Accessor(DataPointList data) : base(data)
         {
         }
 
@@ -24,7 +21,7 @@ namespace StockBox_UnitTests.Accessors
             return GetData();
         }
 
-        public DeedleBacktestAdapter_Accessor CloneWithSubsetOfData(DateTime startDate, DateTime? endDate = null)
+        public BackwardTestingDataProvider_Accessor CloneWithSubsetOfData(DateTime startDate, DateTime? endDate = null)
         {
             var datapoints = GetData();
             var startIndex = datapoints.FindIndex(x => x.Date == startDate);
@@ -34,7 +31,7 @@ namespace StockBox_UnitTests.Accessors
                 var endIndex = datapoints.FindIndex(x => x.Date == (DateTime)endDate);
                 count = datapoints.Count - endIndex;
             }
-            return new DeedleBacktestAdapter_Accessor(new DataPointList(datapoints.GetRange(startIndex, count)));
+            return new BackwardTestingDataProvider_Accessor(new DataPointList(datapoints.GetRange(startIndex, count)));
         }
     }
 }

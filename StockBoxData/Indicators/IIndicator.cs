@@ -1,4 +1,4 @@
-﻿using StockBox.Data.Adapters.DataFrame;
+﻿using StockBox.Data.SbFrames.Helpers;
 
 
 namespace StockBox.Data.Indicators
@@ -16,6 +16,6 @@ namespace StockBox.Data.Indicators
         object Payload { get; }
 
         bool IdentifiesAs(IIndicator item);
-        void Calculate(IDataFrameAdapter frame);
+        void Calculate(IDataPointListProvider frame);
     }
 }

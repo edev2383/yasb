@@ -1,14 +1,17 @@
-﻿using System;
-using StockBox.Data.Adapters.DataFrame;
-using StockBox.Associations.Enums;
+﻿using StockBox.Associations.Enums;
 using StockBox.Associations;
+using StockBox.Data.SbFrames.Helpers;
+
 
 namespace StockBox.Data.SbFrames
 {
 
+    /// <summary>
+    /// 
+    /// </summary>
     public class WeeklyFrame : SbFrame
     {
-        public WeeklyFrame(IDataFrameAdapter adapter, ISymbolProvider symbol) : base(adapter, EFrequency.eWeekly, symbol)
+        public WeeklyFrame(IDataPointListProvider provider, ISymbolProvider symbol) : base(provider, EFrequency.eWeekly, symbol)
         {
         }
     }

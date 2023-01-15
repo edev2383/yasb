@@ -5,6 +5,7 @@ using StockBox.Actions.Responses;
 using StockBox.Controllers;
 using StockBox.Data.Adapters.DataFrame;
 using StockBox.Data.SbFrames;
+using StockBox.Data.SbFrames.Providers;
 using StockBox.Data.Scraper;
 using StockBox.Interpreter.Scanner;
 using StockBox.Models;
@@ -48,7 +49,7 @@ namespace StockBox_IntegrationTests
             var stateMachine = new StateMachine(stateLists, new UserDefinedState("start"));
             stateMachine.AddTransition(new Transition(new UserDefinedState("start"), new UserDefinedState("end")));
 
-            var controller = new DomainController(activeService, stateMachine, new FrameListFactory(new SbScraper(), new DeedleAdapter()));
+            var controller = new DomainController(activeService, stateMachine, new FrameListFactory(new SbScraper(), new ForwardTestingDataProvider()));
 
             controller.ScanSetup(setup, profiles);
 
@@ -154,7 +155,7 @@ namespace StockBox_IntegrationTests
             //framelistFactory.DataTarget_Daily = EFile.eAmdDaily;
             //framelistFactory.DataTarget_Weekly = EFile.eAmdWeekly;
             //framelistFactory.DataTarget_Monthly = EFile.eAmdMonthly;
-            var framelistFactory = new FrameListFactory(null, new DeedleBacktestAdapter());
+            var framelistFactory = new FrameListFactory(null, new BackwardTestingDataProvider());
 
             var domainController = new BacktestController(activeService, stateMachine, framelistFactory);
             domainController.ScanSetups(setupList, symbols);

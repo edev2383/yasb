@@ -6,7 +6,7 @@ using StockBox.Associations.Tokens;
 using StockBox.Data.Adapters.DataFrame;
 using StockBox.Data.Context;
 using StockBox.Data.Indicators;
-
+using StockBox.Data.SbFrames.Helpers;
 
 namespace StockBox.Data.SbFrames
 {
@@ -30,77 +30,88 @@ namespace StockBox.Data.SbFrames
         /// that can be applied to the adapter through the AddData method
         /// </summary>
         private ICallContextProvider _ctx;
-        private IDataFrameAdapter _adapter;
+        private IDataPointListProvider _provider;
 
-        public FrameListFactory(ICallContextProvider ctx, IDataFrameAdapter adapter)
+        public FrameListFactory(ICallContextProvider ctx, IDataPointListProvider provider)
         {
             _ctx = ctx;
-            _adapter = adapter;
+            _provider = provider;
         }
 
         public SbFrame CreateDailySbFrame(IDomainCombinationsProvider dailyCombos, ISymbolProvider symbol)
         {
-            var ret = new DailyFrame(_adapter.Create(), symbol);
+            var ret = new DailyFrame(_provider.Create(), symbol);
 
             var startDate = DateTimeFrameHelper.Get(dailyCombos, EFrequency.eDaily);
             var endDate = DateTimeFrameHelper.GetOrigin();
             var payload = StreamFactory.Create(symbol.Name, EFrequency.eDaily, startDate, endDate);
 
-            ret.AddData(payload.Stream);
+            var toDataPointListAdapter = new DeedleToDataPointListAdapter(payload.Stream);
+
+            ret.AddData(toDataPointListAdapter.Convert());
             MapIndicators(ret, dailyCombos);
             return ret;
         }
 
         public SbFrame CreateWeeklySbFrame(IDomainCombinationsProvider weeklyCombos, ISymbolProvider symbol)
         {
-            var ret = new WeeklyFrame(_adapter.Create(), symbol);
+            var ret = new WeeklyFrame(_provider.Create(), symbol);
 
             var startDate = DateTimeFrameHelper.Get(weeklyCombos, EFrequency.eWeekly);
             var endDate = DateTimeFrameHelper.GetOrigin();
             var payload = StreamFactory.Create(symbol.Name, EFrequency.eWeekly, startDate, endDate);
 
-            ret.AddData(payload.Stream);
+            var toDataPointListAdapter = new DeedleToDataPointListAdapter(payload.Stream);
+
+            ret.AddData(toDataPointListAdapter.Convert());
             MapIndicators(ret, weeklyCombos);
             return ret;
         }
 
         public SbFrame CreateMonthlySbFrame(IDomainCombinationsProvider monthlyCombos, ISymbolProvider symbol)
         {
-            var ret = new MonthlyFrame(_adapter.Create(), symbol);
+            var ret = new MonthlyFrame(_provider.Create(), symbol);
 
             var startDate = DateTimeFrameHelper.Get(monthlyCombos, EFrequency.eMonthly);
             var endDate = DateTimeFrameHelper.GetOrigin();
             var payload = StreamFactory.Create(symbol.Name, EFrequency.eMonthly, startDate, endDate);
+            var toDataPointListAdapter = new DeedleToDataPointListAdapter(payload.Stream);
 
-            ret.AddData(payload.Stream);
+            ret.AddData(toDataPointListAdapter.Convert());
             MapIndicators(ret, monthlyCombos);
             return ret;
         }
 
         public SbFrame CreateDailySbFrame(ISymbolProvider symbol)
         {
-            var ret = new DailyFrame(_adapter.Create(), symbol);
+            var ret = new DailyFrame(_provider.Create(), symbol);
             var endDate = DateTimeFrameHelper.GetOrigin();
             var payload = StreamFactory.Create(symbol.Name, EFrequency.eDaily, _historicalStart, endDate);
-            ret.AddData(payload.Stream);
+            var toDataPointListAdapter = new DeedleToDataPointListAdapter(payload.Stream);
+
+            ret.AddData(toDataPointListAdapter.Convert());
             return ret;
         }
 
         public SbFrame CreateWeeklySbFrame(ISymbolProvider symbol)
         {
-            var ret = new WeeklyFrame(_adapter.Create(), symbol);
+            var ret = new WeeklyFrame(_provider.Create(), symbol);
             var endDate = DateTimeFrameHelper.GetOrigin();
             var payload = StreamFactory.Create(symbol.Name, EFrequency.eWeekly, _historicalStart, endDate);
-            ret.AddData(payload.Stream);
+            var toDataPointListAdapter = new DeedleToDataPointListAdapter(payload.Stream);
+
+            ret.AddData(toDataPointListAdapter.Convert());
             return ret;
         }
 
         public SbFrame CreateMonthlySbFrame(ISymbolProvider symbol)
         {
-            var ret = new MonthlyFrame(_adapter.Create(), symbol);
+            var ret = new MonthlyFrame(_provider.Create(), symbol);
             var endDate = DateTimeFrameHelper.GetOrigin();
             var payload = StreamFactory.Create(symbol.Name, EFrequency.eMonthly, _historicalStart, endDate);
-            ret.AddData(payload.Stream);
+            var toDataPointListAdapter = new DeedleToDataPointListAdapter(payload.Stream);
+
+            ret.AddData(toDataPointListAdapter.Convert());
             return ret;
         }
 

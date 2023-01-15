@@ -5,8 +5,8 @@ using StockBox.Actions;
 using StockBox.Actions.Adapters;
 using StockBox.Actions.Responses;
 using StockBox.Associations;
-using StockBox.Data.Adapters.DataFrame;
 using StockBox.Data.SbFrames;
+using StockBox.Data.SbFrames.Providers;
 using StockBox.Interpreter;
 using StockBox.Interpreter.Scanner;
 using StockBox.Models;
@@ -72,7 +72,7 @@ namespace StockBox.Controllers
             var daily = backtestDataFrames.FindByFrequency(Associations.Enums.EFrequency.eDaily);
 
             // expose the adapter and create the while loop
-            var adapter = daily.GetAdapter() as DeedleBacktestAdapter;
+            var adapter = daily.GetProvider() as BackwardTestingDataProvider;
 
             ret.Add(new ValidationResult(adapter != null, "Adapter is not null - is of type 'DeedleBacktestAdapter'"));
             if (ret.HasFailures) return ret;

@@ -6,6 +6,7 @@ using StockBox.Associations.Tokens;
 using StockBox.Data.Adapters.DataFrame;
 using StockBox.Data.Indicators;
 using StockBox.Data.SbFrames;
+using StockBox.Data.SbFrames.Helpers;
 using StockBox_TestArtifacts.Helpers;
 
 namespace StockBox_TestArtifacts.Mocks
@@ -20,11 +21,11 @@ namespace StockBox_TestArtifacts.Mocks
         public EFile DataTarget_Daily { get; set; }
         public EFile DataTarget_Weekly { get; set; }
         public EFile DataTarget_Monthly { get; set; }
-        private IDataFrameAdapter _adapter;
+        private IDataPointListProvider _provider;
 
-        public MockFrameListFactory(ICallContextProvider ctx, IDataFrameAdapter adapter)
+        public MockFrameListFactory(ICallContextProvider ctx, IDataPointListProvider provider)
         {
-            _adapter = adapter;
+            _provider = provider;
         }
 
         public List<ISbFrame> Create(IDomainCombinationsProvider combos, ISymbolProvider symbol)
@@ -40,27 +41,35 @@ namespace StockBox_TestArtifacts.Mocks
 
         public SbFrame CreateDailySbFrame(IDomainCombinationsProvider dailyCombos, ISymbolProvider symbol)
         {
-            var ret = new DailyFrame(_adapter.Create(), symbol);
+            var ret = new DailyFrame(_provider.Create(), symbol);
             var reader = new Reader();
-            ret.AddData(reader.GetFileStream(DataTarget_Daily));
+
+            var toDataPointListAdapater = new DeedleToDataPointListAdapter(reader.GetFileStream(DataTarget_Daily));
+
+            ret.AddData(toDataPointListAdapater.Convert());
             MapIndicators(ret, dailyCombos);
             return ret;
         }
 
         public SbFrame CreateWeeklySbFrame(IDomainCombinationsProvider weeklyCombos, ISymbolProvider symbol)
         {
-            var ret = new WeeklyFrame(_adapter.Create(), symbol);
+            var ret = new WeeklyFrame(_provider.Create(), symbol);
             var reader = new Reader();
-            ret.AddData(reader.GetFileStream(DataTarget_Weekly));
+            var toDataPointListAdapater = new DeedleToDataPointListAdapter(reader.GetFileStream(DataTarget_Weekly));
+
+            ret.AddData(toDataPointListAdapater.Convert());
+
             MapIndicators(ret, weeklyCombos);
             return ret;
         }
 
         public SbFrame CreateMonthlySbFrame(IDomainCombinationsProvider monthlyCombos, ISymbolProvider symbol)
         {
-            var ret = new MonthlyFrame(_adapter.Create(), symbol);
+            var ret = new MonthlyFrame(_provider.Create(), symbol);
             var reader = new Reader();
-            ret.AddData(reader.GetFileStream(DataTarget_Monthly));
+            var toDataPointListAdapater = new DeedleToDataPointListAdapter(reader.GetFileStream(DataTarget_Monthly));
+
+            ret.AddData(toDataPointListAdapater.Convert());
             MapIndicators(ret, monthlyCombos);
             return ret;
         }
@@ -95,25 +104,31 @@ namespace StockBox_TestArtifacts.Mocks
 
         public SbFrame CreateDailySbFrame(ISymbolProvider symbol)
         {
-            var ret = new DailyFrame(_adapter.Create(), symbol);
+            var ret = new DailyFrame(_provider.Create(), symbol);
             var reader = new Reader();
-            ret.AddData(reader.GetFileStream(DataTarget_Daily));
+            var toDataPointListAdapater = new DeedleToDataPointListAdapter(reader.GetFileStream(DataTarget_Daily));
+
+            ret.AddData(toDataPointListAdapater.Convert());
             return ret;
         }
 
         public SbFrame CreateWeeklySbFrame(ISymbolProvider symbol)
         {
-            var ret = new WeeklyFrame(_adapter.Create(), symbol);
+            var ret = new WeeklyFrame(_provider.Create(), symbol);
             var reader = new Reader();
-            ret.AddData(reader.GetFileStream(DataTarget_Weekly));
+            var toDataPointListAdapater = new DeedleToDataPointListAdapter(reader.GetFileStream(DataTarget_Weekly));
+
+            ret.AddData(toDataPointListAdapater.Convert());
             return ret;
         }
 
         public SbFrame CreateMonthlySbFrame(ISymbolProvider symbol)
         {
-            var ret = new MonthlyFrame(_adapter.Create(), symbol);
+            var ret = new MonthlyFrame(_provider.Create(), symbol);
             var reader = new Reader();
-            ret.AddData(reader.GetFileStream(DataTarget_Monthly));
+            var toDataPointListAdapater = new DeedleToDataPointListAdapter(reader.GetFileStream(DataTarget_Monthly));
+
+            ret.AddData(toDataPointListAdapater.Convert());
             return ret;
         }
 

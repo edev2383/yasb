@@ -3,6 +3,7 @@ using StockBox.Associations.Tokens;
 using StockBox.Data.Adapters.DataFrame;
 using StockBox.Data.Indicators;
 using StockBox.Data.SbFrames;
+using StockBox.Data.SbFrames.Providers;
 using StockBox.Data.Scraper;
 using StockBox.Interpreter.Scanner;
 using StockBox.Models;
@@ -37,7 +38,7 @@ namespace StockBox_IntegrationTests
             expAnalyzer.Scan();
 
             // create the factory and give it the analyzed combinations
-            var factory = new FrameListFactory(new SbScraper(), new DeedleAdapter());
+            var factory = new FrameListFactory(new SbScraper(), new ForwardTestingDataProvider());
             var frameList = factory.Create(expAnalyzer.Combos, new Symbol("MSFT")) as SbFrameList;
 
             // find the daily framelist
@@ -66,7 +67,7 @@ namespace StockBox_IntegrationTests
             expAnalyzer.Scan();
 
             // create the factory and give it the analyzed combinations
-            var factory = new FrameListFactory(new SbScraper(), new DeedleAdapter());
+            var factory = new FrameListFactory(new SbScraper(), new ForwardTestingDataProvider());
             var frameList = factory.Create(expAnalyzer.Combos, new Symbol("MSFT")) as SbFrameList;
 
             // find the daily framelist
@@ -95,7 +96,7 @@ namespace StockBox_IntegrationTests
             expAnalyzer.Scan();
 
             // create the factory and give it the analyzed combinations
-            var factory = new FrameListFactory(new SbScraper(), new DeedleAdapter());
+            var factory = new FrameListFactory(new SbScraper(), new ForwardTestingDataProvider());
             var frameList = factory.Create(expAnalyzer.Combos, new Symbol("MSFT")) as SbFrameList;
 
             // find the daily framelist
@@ -124,7 +125,7 @@ namespace StockBox_IntegrationTests
             expAnalyzer.Scan();
 
             // create the factory and give it the analyzed combinations
-            var factory = new FrameListFactory(new SbScraper(), new DeedleAdapter());
+            var factory = new FrameListFactory(new SbScraper(), new ForwardTestingDataProvider());
             var frameList = factory.Create(expAnalyzer.Combos, new Symbol("MSFT")) as SbFrameList;
 
             // find the daily framelist
@@ -160,7 +161,7 @@ namespace StockBox_IntegrationTests
             expAnalyzer.Scan();
 
             // create the factory and give it the analyzed combinations
-            var factory = new FrameListFactory(new SbScraper(), new DeedleAdapter());
+            var factory = new FrameListFactory(new SbScraper(), new ForwardTestingDataProvider());
             var frameList = factory.Create(expAnalyzer.Combos, new Symbol("MSFT")) as SbFrameList;
 
             // find the daily framelist
@@ -174,7 +175,7 @@ namespace StockBox_IntegrationTests
         {
             var symbol = new Symbol("AMD");
 
-            var factory = new FrameListFactory(new SbScraper(), new DeedleAdapter());
+            var factory = new FrameListFactory(new SbScraper(), new ForwardTestingDataProvider());
             var framelist = factory.CreateBacktestData(symbol) as SbFrameList;
 
             var foundDaily = framelist.FindByFrequency(StockBox.Associations.Enums.EFrequency.eDaily);
@@ -198,7 +199,7 @@ namespace StockBox_IntegrationTests
             combos.Add(new DomainCombination(2, new Token(TokenType.eWeekly, "", null, 0, 0), "SMA", new int[1] { 25 }));
             combos.Add(new DomainCombination(2, new Token(TokenType.eMonthly, "", null, 0, 0), "SMA", new int[1] { 25 }));
 
-            var factory = new FrameListFactory(new SbScraper(), new DeedleAdapter());
+            var factory = new FrameListFactory(new SbScraper(), new ForwardTestingDataProvider());
             factory.AddIndicators(framelist, combos);
 
             var foundDaily = framelist.FindByFrequency(StockBox.Associations.Enums.EFrequency.eDaily);
@@ -213,7 +214,7 @@ namespace StockBox_IntegrationTests
         private SbFrameList CreateBacktestDataFrameList(string symbol = "AMD")
         {
             var sym = new Symbol(symbol);
-            var factory = new FrameListFactory(new SbScraper(), new DeedleAdapter());
+            var factory = new FrameListFactory(new SbScraper(), new ForwardTestingDataProvider());
             var framelist = factory.CreateBacktestData(sym) as SbFrameList;
             return framelist;
         }

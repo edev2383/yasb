@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using StockBox.Associations.Enums;
 using StockBox.Data.Adapters.DataFrame;
+using StockBox.Data.SbFrames.Providers;
 using StockBox.Data.Scraper;
 using StockBox.Data.Scraper.Parsers;
 using StockBox.Data.Scraper.Providers;
@@ -112,8 +113,8 @@ namespace StockBox_IntegrationTests
             var payload = scraper.Scrape() as HistoryYahooFinanceParser.HistoryParser_OutType;
             Assert.IsNotNull(payload);
             Assert.IsNotNull(payload.Stream);
-
-            var adapter = new DeedleAdapter(payload.Stream);
+            var toDplAdapter = new DeedleToDataPointListAdapter(payload.Stream);
+            var adapter = new ForwardTestingDataProvider(toDplAdapter.Convert());
 
             Assert.IsNotNull(adapter);
             // Dataset is two days

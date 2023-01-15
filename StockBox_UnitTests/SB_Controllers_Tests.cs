@@ -19,6 +19,7 @@ using StockBox_TestArtifacts.Mocks;
 using StockBox_TestArtifacts.Helpers;
 using StockBox.Actions.Adapters;
 using StockBox_TestArtifacts.Presets.StockBox.Rules;
+using StockBox.Data.SbFrames.Providers;
 
 namespace StockBox_UnitTests
 {
@@ -32,7 +33,7 @@ namespace StockBox_UnitTests
         {
             var activeService = new ActiveService(new Scanner(), new Parser());
             var stateMachine = new StateMachine(new StateList(), new ActiveState());
-            var controller = new DomainController(activeService, stateMachine, new FrameListFactory(new SbScraper(), new DeedleAdapter()));
+            var controller = new DomainController(activeService, stateMachine, new FrameListFactory(new SbScraper(), new ForwardTestingDataProvider()));
             Assert.IsNotNull(controller);
         }
 
@@ -64,7 +65,7 @@ namespace StockBox_UnitTests
             };
 
             var activeService = new ActiveService(new Scanner(), new Parser());
-            var framelistFactory = new MockFrameListFactory(null, new DeedleAdapter());
+            var framelistFactory = new MockFrameListFactory(null, new ForwardTestingDataProvider());
             framelistFactory.DataTarget_Daily = EFile.eAmdDaily;
             framelistFactory.DataTarget_Weekly = EFile.eAmdWeekly;
             framelistFactory.DataTarget_Monthly = EFile.eAmdMonthly;
@@ -165,7 +166,7 @@ namespace StockBox_UnitTests
             var activeService = new ActiveService(new Scanner(), new Parser());
             // MockFrameListFactory loads data from local files, rather than
             // calling the Scraper
-            var framelistFactory = new MockFrameListFactory(null, new DeedleBacktestAdapter());
+            var framelistFactory = new MockFrameListFactory(null, new BackwardTestingDataProvider());
             framelistFactory.DataTarget_Daily = EFile.eAmdDaily;
             framelistFactory.DataTarget_Weekly = EFile.eAmdWeekly;
             framelistFactory.DataTarget_Monthly = EFile.eAmdMonthly;
@@ -256,7 +257,7 @@ namespace StockBox_UnitTests
             var activeService = new ActiveService(new Scanner(), new Parser());
             // MockFrameListFactory loads data from local files, rather than
             // calling the Scraper
-            var framelistFactory = new MockFrameListFactory(null, new DeedleBacktestAdapter());
+            var framelistFactory = new MockFrameListFactory(null, new BackwardTestingDataProvider());
             framelistFactory.DataTarget_Daily = EFile.eAmdDaily;
             framelistFactory.DataTarget_Weekly = EFile.eAmdWeekly;
             framelistFactory.DataTarget_Monthly = EFile.eAmdMonthly;

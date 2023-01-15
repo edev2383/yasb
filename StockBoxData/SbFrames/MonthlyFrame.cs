@@ -1,14 +1,17 @@
-﻿using System;
-using StockBox.Data.Adapters.DataFrame;
-using StockBox.Associations.Enums;
+﻿using StockBox.Associations.Enums;
 using StockBox.Associations;
+using StockBox.Data.SbFrames.Helpers;
+
 
 namespace StockBox.Data.SbFrames
 {
 
+    /// <summary>
+    /// 
+    /// </summary>
     public class MonthlyFrame : SbFrame
     {
-        public MonthlyFrame(IDataFrameAdapter adapter, ISymbolProvider symbol) : base(adapter, EFrequency.eMonthly, symbol)
+        public MonthlyFrame(IDataPointListProvider provider, ISymbolProvider symbol) : base(provider, EFrequency.eMonthly, symbol)
         {
         }
     }

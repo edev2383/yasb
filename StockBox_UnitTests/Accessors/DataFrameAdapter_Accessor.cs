@@ -1,22 +1,27 @@
 ﻿using System;
-using System.IO;
-using StockBox.Data.Adapters.DataFrame;
 using StockBox.Data.SbFrames;
+using StockBox.Data.SbFrames.Helpers;
+using StockBox.Data.SbFrames.Providers;
+
 
 namespace StockBox_UnitTests.Accessors
 {
-    public class DataFrameAdapter_Accessor : BaseDataFrameAdapter
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public class DataProvider_Accessor : BaseDataProvider
     {
-        public DataFrameAdapter_Accessor()
+        public DataProvider_Accessor()
         {
             _data = new DataPointList();
         }
 
-        public DataFrameAdapter_Accessor(MemoryStream data) : base(data)
+        public DataProvider_Accessor(DataPointList data) : base(data)
         {
         }
 
-        public override IDataFrameAdapter Create()
+        public override IDataPointListProvider Create()
         {
             throw new NotImplementedException();
         }

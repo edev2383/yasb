@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using StockBox.Data.Adapters.DataFrame;
 using System.Linq;
 using StockBox.Data.SbFrames;
-
+using StockBox.Data.SbFrames.Helpers;
 
 namespace StockBox.Data.Indicators
 {
@@ -22,7 +22,7 @@ namespace StockBox.Data.Indicators
         {
         }
 
-        protected override object CalculateIndicator(IDataFrameAdapter adapter)
+        protected override object CalculateIndicator(IDataPointListProvider provider)
         {
             var ret = new Dictionary<DateTime, (double k, double d)>();
 
@@ -31,10 +31,10 @@ namespace StockBox.Data.Indicators
 
             // If the indicator cannot be found in the IDataFrameAdapter.Parent,
             // go ahead and add it to calculate and map it home
-            if (adapter.IndicatorExists(this) != true)
-                adapter.Parent.AddIndicator(fastSto);
+            if (provider.IndicatorExists(this) != true)
+                provider.Parent.AddIndicator(fastSto);
 
-            var data = adapter.GetFullDataSource().Reversed;
+            var data = provider.GetFullDataSource().Reversed;
 
             var kseries = new SbSeries("SlowSto.k");
             var dataColumn = SbFrames.DataColumn.ParseColumnDescriptor(fastSto.Name);

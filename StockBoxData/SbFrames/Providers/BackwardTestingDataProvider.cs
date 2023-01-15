@@ -1,33 +1,26 @@
-﻿using System.IO;
-using StockBox.Data.SbFrames;
+﻿using StockBox.Data.SbFrames.Helpers;
 
 
-namespace StockBox.Data.Adapters.DataFrame
+namespace StockBox.Data.SbFrames.Providers
 {
 
     /// <summary>
-    /// Class <c>DeedleBacktestAdapter</c> creates a growing subset of data to
-    /// test against, simulating the passing of time toward the present. This
-    /// allows us to test Setups over time, versus the DeedleAdapter which only
-    /// tests from the most recent date as the origin zero-index.
+    /// 
     /// </summary>
-    public class DeedleBacktestAdapter : BaseDataFrameAdapter
+    public class BackwardTestingDataProvider : BaseDataProvider
     {
-        public DeedleBacktestAdapter()
+        public BackwardTestingDataProvider() { }
+
+        public BackwardTestingDataProvider(DataPointList source) : base(source)
         {
         }
-        public DeedleBacktestAdapter(MemoryStream data) : base(data)
+
+        public override IDataPointListProvider Create()
         {
-        }
-        public DeedleBacktestAdapter(DataPointList data)
-        {
-            if (!data.IsDesc)
-                data = data.Reversed;
-            AddData(data);
+            return new BackwardTestingDataProvider();
         }
 
         private int? _windowIndex;
-        private DataPointList _viewData { get { return GetData(); } }
 
         /// <summary>
         /// Decrease the _windowIndex integer value by 1, increasing the actual
@@ -41,15 +34,6 @@ namespace StockBox.Data.Adapters.DataFrame
                 _windowIndex = Length - 1;
             if (!IsAtEnd())
                 _windowIndex--;
-        }
-
-        /// <summary>
-        /// Create a new Backtest adapter
-        /// </summary>
-        /// <returns></returns>
-        public override IDataFrameAdapter Create()
-        {
-            return new DeedleBacktestAdapter();
         }
 
         /// <summary>
@@ -80,3 +64,4 @@ namespace StockBox.Data.Adapters.DataFrame
         }
     }
 }
+

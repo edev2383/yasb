@@ -1,28 +1,18 @@
-﻿using StockBox.Data.SbFrames;
-using Deedle;
-using System;
-using StockBox.Data.Indicators;
-using System.IO;
+﻿using StockBox.Data.Indicators;
 
-namespace StockBox.Data.Adapters.DataFrame
+
+namespace StockBox.Data.SbFrames.Helpers
 {
+
     /// <summary>
     /// DataFrame interface. Primary data handling by Deedle, however, should
     /// that change, any additional adapters can be substituted using this
     /// interface.
     /// </summary>
-    public interface IDataFrameAdapter
+    public interface IDataPointListProvider
     {
         public int? Length { get; }
         SbFrame Parent { get; set; }
-
-        /// <summary>
-        /// Add data from a MemoryStream after the object has been created.
-        /// Assumes CSV format. We can add adapters for other formats if needed,
-        /// i.e., JSON
-        /// </summary>
-        /// <param name="data"></param>
-        void AddData(MemoryStream data);
 
         /// <summary>
         /// Add data to the adapter from a source DataPointList
@@ -38,13 +28,6 @@ namespace StockBox.Data.Adapters.DataFrame
         DataPoint GetDataPoint(int indexFromZero);
 
         /// <summary>
-        /// Return an entire series of data from one Column
-        /// </summary>
-        /// <param name="column"></param>
-        /// <returns></returns>
-        ColumnSeries GetColumnData(DataColumn column);
-
-        /// <summary>
         /// Map an Indicator's payload into the DataPointList
         /// </summary>
         /// <param name="indicator"></param>
@@ -54,14 +37,7 @@ namespace StockBox.Data.Adapters.DataFrame
         /// Create a new IDataFrameAdapter object, without preexisting data
         /// </summary>
         /// <returns></returns>
-        IDataFrameAdapter Create();
-
-        /// <summary>
-        /// Return an SbSeries for a specific column header
-        /// </summary>
-        /// <param name="column"></param>
-        /// <returns></returns>
-        SbSeries GetSeries(string column);
+        IDataPointListProvider Create();
 
         /// <summary>
         /// Primary method for getting the current DataPointList. Use this when
@@ -86,3 +62,4 @@ namespace StockBox.Data.Adapters.DataFrame
         bool IndicatorExists(IIndicator indicator);
     }
 }
+

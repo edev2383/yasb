@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using StockBox.Data.Adapters.DataFrame;
 using System.Linq;
 using StockBox.Data.SbFrames;
-
+using StockBox.Data.SbFrames.Helpers;
 
 namespace StockBox.Data.Indicators
 {
@@ -19,7 +19,7 @@ namespace StockBox.Data.Indicators
         {
         }
 
-        protected override object CalculateIndicator(IDataFrameAdapter adapter)
+        protected override object CalculateIndicator(IDataPointListProvider provider)
         {
             var ret = new Dictionary<DateTime, double>();
 
@@ -32,7 +32,7 @@ namespace StockBox.Data.Indicators
             // apply the Mean method over the window of length = Indices[0]
             // the SortByKey() call may be unnecessary, however, it's probably
             // better to be safe
-            var values = adapter.GetFullDataSource()
+            var values = provider.GetFullDataSource()
                                     .ToSeries("Close")
                                     .SortByKey()
                                     .Window(

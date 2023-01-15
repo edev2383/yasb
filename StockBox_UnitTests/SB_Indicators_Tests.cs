@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using StockBox.Associations.Enums;
 using StockBox.Models;
+using StockBox.Data.SbFrames.Providers;
 
 namespace StockBox_UnitTests
 {
@@ -21,8 +22,9 @@ namespace StockBox_UnitTests
         {
             var expectedLastValue = 96.38;
             var stream = new Reader().GetFileStream(eAmdDaily);
-            var adapter = new DeedleAdapter(stream);
-            var frame = new SbFrame(adapter, EFrequency.eDaily, new Symbol(string.Empty));
+            var toDplAdapter = new DeedleToDataPointListAdapter(stream);
+            var provider = new ForwardTestingDataProvider(toDplAdapter.Convert());
+            var frame = new SbFrame(provider, EFrequency.eDaily, new Symbol(string.Empty));
             var sma = IndicatorFactory.Create("SMA", 25);
             frame.AddIndicator(sma);
 
@@ -59,8 +61,9 @@ namespace StockBox_UnitTests
         {
             var expectedLastValue = 115648348;
             var stream = new Reader().GetFileStream(eAmdDaily);
-            var adapter = new DeedleAdapter(stream);
-            var frame = new SbFrame(adapter, EFrequency.eDaily, new Symbol(string.Empty));
+            var toDplAdapter = new DeedleToDataPointListAdapter(stream);
+            var provider = new ForwardTestingDataProvider(toDplAdapter.Convert());
+            var frame = new SbFrame(provider, EFrequency.eDaily, new Symbol(string.Empty));
             var sma = IndicatorFactory.Create("AVGVolume", 25);
             frame.AddIndicator(sma);
 
@@ -97,8 +100,9 @@ namespace StockBox_UnitTests
         {
             var expectedLastValue = 34.47;
             var stream = new Reader().GetFileStream(eAmdDaily);
-            var adapter = new DeedleAdapter(stream);
-            var frame = new SbFrame(adapter, EFrequency.eDaily, new Symbol(string.Empty));
+            var toDplAdapter = new DeedleToDataPointListAdapter(stream);
+            var provider = new ForwardTestingDataProvider(toDplAdapter.Convert());
+            var frame = new SbFrame(provider, EFrequency.eDaily, new Symbol(string.Empty));
             var sma = IndicatorFactory.Create("RSI", 14);
             frame.AddIndicator(sma);
 
@@ -137,8 +141,9 @@ namespace StockBox_UnitTests
             var expectedFirstKValue = 57.82;
             var expectedFirstDValue = 62.59;
             var stream = new Reader().GetFileStream(eAmdDaily);
-            var adapter = new DeedleAdapter(stream);
-            var frame = new SbFrame(adapter, EFrequency.eDaily, new Symbol(string.Empty));
+            var toDplAdapter = new DeedleToDataPointListAdapter(stream);
+            var provider = new ForwardTestingDataProvider(toDplAdapter.Convert());
+            var frame = new SbFrame(provider, EFrequency.eDaily, new Symbol(string.Empty));
             var fastSto = IndicatorFactory.Create("FastSto", 14, 3);
             frame.AddIndicator(fastSto);
 
@@ -175,8 +180,9 @@ namespace StockBox_UnitTests
             var expectedFirstKValue = 39.26;
             var expectedFirstDValue = 52.22;
             var stream = new Reader().GetFileStream(eAmdDaily);
-            var adapter = new DeedleAdapter(stream);
-            var frame = new SbFrame(adapter, EFrequency.eDaily, new Symbol(string.Empty));
+            var toDplAdapter = new DeedleToDataPointListAdapter(stream);
+            var provider = new ForwardTestingDataProvider(toDplAdapter.Convert());
+            var frame = new SbFrame(provider, EFrequency.eDaily, new Symbol(string.Empty));
             var slowSto = IndicatorFactory.Create("SlowSto", 14, 3);
             frame.AddIndicator(slowSto);
 
