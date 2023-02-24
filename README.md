@@ -28,7 +28,7 @@ The core of _yasb_ is the `Rule` class. We create Rules to describe these patter
 
 ```c#
 
-var rules = new RuleList() {
+var rules = new Pattern() {
    // the `x` operator is the "CrossOver" operator, and denotes that
    // the lefthand side of the expression was previously less than
    // the right hand, but is now greater than
@@ -50,7 +50,7 @@ We have (2) user-defined states, "Watch", "Primed", and (3) application-defined 
 
 var symbolProfile = new SymbolProfile("AMD", new UserDefinedState("Watch"));
 
-var rules = new RuleList() {
+var rules = new Pattern() {
    new Rule("SlowSto(14,3) < 20"),
    new Rule("Close > 60"),
    new Rule("RSI(14) > 25"),
@@ -64,11 +64,11 @@ setup.AddAction(new Move("Primed"));
 
 When this Setup is run through the `DomainController` if all three of the Rules evaluate to true, Action provided to the setup is called. In this case, it's a simple `Move` action, which is essentially just a state change for the SymbolProfile, that is also updated in the Data Layer. The "AMD" stock is now in the "Primed" state.
 
-Now that the stock is in the "Primed" state, we can run it against the first RuleList we created...
+Now that the stock is in the "Primed" state, we can run it against the first Pattern we created...
 
 ```c#
 
-var rules = new RuleList() {
+var rules = new Pattern() {
    // the `x` operator is the "CrossOver" operator, and denotes that
    // the lefthand side of the expression was previously less than
    // the right hand, but is now greater than
@@ -85,7 +85,7 @@ setup.AddAction(new Buy());
 Assuming the `Buy` action was successful, our "AMD" stock is in the "BuyActive" state. We need to tell the application when to sell. 
 
 ```c#
-var rules = new RuleList() {
+var rules = new Pattern() {
    new Rule("80 x SlowSto(14,3)"),
 };
 
