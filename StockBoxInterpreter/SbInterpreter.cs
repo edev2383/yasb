@@ -1,9 +1,9 @@
 ﻿using System;
 using StockBox.Data.SbFrames;
 using StockBox.Interpreter.Expressions;
-using StockBox.Associations.Tokens;
+using StockBox.Base.Tokens;
 using StockBox.Validation;
-using static StockBox.Associations.Tokens.TokenType;
+using static StockBox.Base.Tokens.TokenType;
 using StockBox.Associations.Enums;
 using StockBox.Associations;
 using System.Collections.Generic;
@@ -211,44 +211,38 @@ namespace StockBox.Interpreter
                     var current = (double)left > (double)right;
 
                     if (expr.Left is Literal)
-                    {
                         newLeft = expr.Left;
-                    }
                     else
-                    {
                         newLeft = new Binary(new Literal((int)expr.Left.Left.Value + 1), expr.Left.Operator, expr.Left.Right);
-                    }
 
                     if (expr.Right is Literal)
-                    {
                         newRight = expr.Right;
-                    }
                     else
-                    {
                         newRight = new Binary(new Literal((int)expr.Right.Left.Value + 1), expr.Right.Operator, expr.Right.Right);
-                    }
+
                     var newLeftValue = evaluate(newLeft);
                     var newRightValue = evaluate(newRight);
+
                     return current && ((double)newLeftValue < (double)newRightValue);
-                case eGreat:
+                case eGreaterThan:
                     _results.AddRange(checkNumberOperands(expr.Operator, left, right));
                     if (_results.HasFailures)
                         throw new Exception(_results.GetFailureMessages());
                     return (double)left > (double)right;
 
-                case eGreatEqual:
+                case eGreaterThanOrEqual:
                     _results.AddRange(checkNumberOperands(expr.Operator, left, right));
                     if (_results.HasFailures)
                         throw new Exception(_results.GetFailureMessages());
                     return (double)left >= (double)right;
 
-                case eLess:
+                case eLessThan:
                     _results.AddRange(checkNumberOperands(expr.Operator, left, right));
                     if (_results.HasFailures)
                         throw new Exception(_results.GetFailureMessages());
                     return (double)left < (double)right;
 
-                case eLessEqual:
+                case eLessThenOrEqual:
                     _results.AddRange(checkNumberOperands(expr.Operator, left, right));
                     if (_results.HasFailures)
                         throw new Exception(_results.GetFailureMessages());
@@ -487,32 +481,87 @@ namespace StockBox.Interpreter
 
         #region IStatementVisitor
 
-        public void visitExpressionStmt(Expression stmt)
+        public void VisitExpressionStmt(Stmt.Expression stmt)
+        {
+            evaluate(stmt.Expr);
+        }
+
+        public void VisitIfStmt(Stmt.If stmt)
         {
             throw new NotImplementedException();
         }
 
-        public void visitIfStmt(If stmt)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void visitVarStmt(Var stmt)
+        public void VisitVarStmt(Stmt.Var stmt)
         {
             object value = null;
-            if (stmt.Initializer == null)
+            if (stmt.Initializer != null)
             {
                 value = evaluate(stmt.Initializer);
             }
             Environment.Define(stmt.Name.Lexeme, value);
+        }
 
+        public void VisitBlockStmt(Stmt.Block block)
+        {
+            ExecuteBlock(block.Statements, new sbenv.Environment(Environment));
         }
 
         #endregion
 
+        void ExecuteBlock(List<Stmt> statements, sbenv.Environment environment)
+        {
+            sbenv.Environment previous = Environment;
+            try
+            {
+                Environment = environment;
+
+                foreach (Stmt statement in statements)
+                {
+                    Execute(statement);
+                }
+            }
+            finally
+            {
+                Environment = previous;
+            }
+        }
+
         public ValidationResultList GetExceptions()
         {
             return _exceptions;
+        }
+
+        public sbenv.Environment GetEnvironment()
+        {
+            return Environment;
+        }
+
+        public object VisitAssignExpr(Assign expr)
+        {
+            object value = evaluate(expr.Right);
+            Environment.Assign(expr.Name, value);
+            return value;
+        }
+
+        public object VisitVariableExpr(Variable expr)
+        {
+            return Environment.Get(expr.Name);
+        }
+
+        public object VisitLogicalExpr(Logical expr)
+        {
+            object left = evaluate(expr.Left);
+
+            if (expr.Operator.Type == eOr)
+            {
+                if (IsTruthy(left)) return left;
+            }
+            else
+            {
+                if (!IsTruthy(left)) return left;
+            }
+
+            return evaluate(expr.Right);
         }
     }
 }

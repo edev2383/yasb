@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using StockBox_UnitTests.Accessors;
 using StockBox_TestArtifacts.Helpers;
-using StockBox.Associations.Tokens;
+using StockBox.Base.Tokens;
 using StockBox.Data.Adapters.DataFrame;
 using StockBox.Data.Indicators;
 using StockBox.Data.SbFrames;
@@ -268,7 +268,7 @@ namespace StockBox_UnitTests
             Assert.IsTrue(result.Success);
         }
 
-        [TestMethod, Description("Test the rule > scanner > parser > interpreter flow can understadn the @Entry token")]
+        [TestMethod, Description("Test the rule > scanner > parser > interpreter flow can understand the @Entry token")]
         public void SB_Interpreter_15_InterpreterCanCalculateEntryPriceAsExpected()
         {
             var symbol = new Symbol(string.Empty);
@@ -295,6 +295,41 @@ namespace StockBox_UnitTests
             var result = pattern.Evalute(new SbInterpreter(framelist, position));
             Assert.IsTrue(result.Success);
 
+        }
+
+        [TestMethod, Description("Interpreter Environment can store and recall a variable value.")]
+        public void Sb_Interpreter_16_InterpreterCanInterpretVariableStatementsAsExpected()
+        {
+            var source = "var testing = 100;";
+            var scanner = new Scanner(source);
+            var tokens = scanner.ScanTokens();
+            var parser = new Parser();
+            var statements = parser.ParseStatements(tokens);
+            Assert.IsNotNull(statements);
+            Assert.IsTrue(statements.Count > 0);
+            var interpreter = new SbInterpreter();
+            interpreter.InterpretStatements(statements);
+            Assert.AreEqual(interpreter.GetEnvironment().Get("testing"), (double)100);
+        }
+
+        [TestMethod, Description("Interpeter Environment can store, recall, and use a variable value.")]
+        public void Sb_Interpreter_17_InterpreterCanDefineAssignEvaluateVariables()
+        {
+            var source = "var testing = 100; testing = 102; var sample = (testing == 102);";
+            var scanner = new Scanner(source);
+            var tokens = scanner.ScanTokens();
+            var parser = new Parser();
+            var statements = parser.ParseStatements(tokens);
+            Assert.IsNotNull(statements);
+            Assert.AreEqual(statements.Count, 3);
+            var interpreter = new SbInterpreter();
+            interpreter.InterpretStatements(statements);
+
+            // Get the values from the environment
+            var checkTesting = interpreter.GetEnvironment().Get("testing");
+            var checkSample = interpreter.GetEnvironment().Get("sample");
+            Assert.AreEqual(102d, checkTesting);
+            Assert.AreEqual(true, checkSample);
         }
     }
 }

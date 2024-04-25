@@ -22,7 +22,7 @@ namespace StockBox.Actions
             return new Sell(this);
         }
 
-        public override ActionResponse PerformAction(DataPoint dataPoint)
+        public override ActionResponse Act(DataPoint dataPoint)
         {
             return Adapter.PerformAction(dataPoint);
         }

@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Linq;
 using StockBox.Interpreter.Expressions;
-using StockBox.Associations.Tokens;
+using StockBox.Base.Tokens;
 using StockBox.Validation;
-using static StockBox.Associations.Tokens.TokenType;
-
+using static StockBox.Base.Tokens.TokenType;
+using StockBox.Interpreter.Statements;
+using System.Collections.Generic;
+using NHibernate.Hql.Ast.ANTLR.Tree;
 
 namespace StockBox.Interpreter.Scanner
 {
@@ -15,7 +17,19 @@ namespace StockBox.Interpreter.Scanner
     /// </summary>
     public class Parser : IValidationResultsListProvider
     {
-
+        public TokenList Tokens
+        {
+            get
+            {
+                if (_tokens == null)
+                    _tokens = new TokenList();
+                return _tokens;
+            }
+            set
+            {
+                _tokens = value;
+            }
+        }
         protected TokenList _tokens;
         protected int _current = 0;
 
@@ -25,17 +39,74 @@ namespace StockBox.Interpreter.Scanner
 
         public Parser(TokenList tokens)
         {
-            _tokens = tokens;
+            Tokens = tokens;
         }
 
         public Parser() { }
 
         public Expr Parse(TokenList tokens)
         {
-            _tokens = tokens;
+            Tokens = tokens;
             return Parse();
         }
 
+        public List<Stmt> ParseStatements(List<Token> tokens)
+        {
+            Tokens.AddRange(tokens);
+            List<Stmt> statements = new List<Stmt>();
+            while (!IsAtEnd())
+            {
+                statements.Add(Declaration());
+            }
+
+            return statements;
+        }
+
+        private Stmt Declaration()
+        {
+            if (Match(eVar)) return VarDeclaration();
+            return Statement();
+        }
+
+        private Stmt VarDeclaration()
+        {
+            Token name = Consume(eIdentifier, "Expect variable name.");
+
+            Expr initializer = null;
+            if (Match(eEqual))
+            {
+                initializer = Expression();
+            }
+
+            Consume(eSemicolon, "Expect ';' after variable declaration.");
+            return new Stmt.Var(name, initializer);
+        }
+        private Stmt Statement()
+        {
+            //if (Match(PRINT)) return printStatement();
+            if (Match(eLeftBrace)) return new Stmt.Block(Block());
+            return ExpressionStatement();
+        }
+
+        private List<Stmt> Block()
+        {
+            var ret = new List<Stmt>();
+            while (!Check(eRightBrace) && !IsAtEnd())
+            {
+                ret.Add(Declaration());
+            }
+
+            Consume(eRightBrace, "Expect '}' after block.");
+
+            return ret;
+        }
+
+        private Stmt ExpressionStatement()
+        {
+            Expr expr = Expression();
+            Consume(eSemicolon, "Expect ';' after expression.");
+            return new Stmt.Expression(expr);
+        }
         /// <summary>
         /// Parse will iterate through the tokens, combining them recursively to
         /// return a Expr that the SbInterpreter will then evaluate
@@ -54,15 +125,64 @@ namespace StockBox.Interpreter.Scanner
             }
             finally
             {
-                _cacheTokens.AddRange(_tokens.Clone());
-                _tokens = null;
+                _cacheTokens.AddRange(Tokens.Clone());
+                Tokens = null;
                 _current = 0;
             }
         }
 
         protected Expr Expression()
         {
-            return Equality();
+            return Assignment();
+        }
+
+        protected Expr Or()
+        {
+            Expr expr = And();
+
+            while (Match(eOr))
+            {
+                Token op = Previous();
+                Expr right = And();
+                expr = new Logical(expr, op, right);
+            }
+
+            return expr;
+        }
+
+        protected Expr And()
+        {
+            Expr expr = Equality();
+
+            while (Match(eAnd))
+            {
+                Token op = Previous();
+                Expr right = Equality();
+                expr = new Logical(expr, op, right);
+            }
+
+            return expr;
+        }
+
+        protected Expr Assignment()
+        {
+            Expr expr = Or();
+
+            if (Match(eEqual))
+            {
+                Token equals = Previous();
+                Expr value = Assignment();
+
+                if (expr is Variable)
+                {
+                    Token name = ((Variable)expr).Name;
+                    return new Assign(name, value);
+                }
+
+                _results.Add(new ValidationResult(false, "Invalid assignment target.", equals));
+            }
+
+            return expr;
         }
 
         protected Expr Equality()
@@ -83,7 +203,7 @@ namespace StockBox.Interpreter.Scanner
         {
             Expr expr = Term();
 
-            while (Match(eCrossOver, eGreat, eGreatEqual, eLess, eLessEqual))
+            while (Match(eCrossOver, eGreaterThan, eGreaterThanOrEqual, eLessThan, eLessThenOrEqual))
             {
                 Token oper = Previous();
                 Expr right = Term();
@@ -222,7 +342,7 @@ namespace StockBox.Interpreter.Scanner
 
         protected Token Previous()
         {
-            return _tokens[_current - 1];
+            return Tokens[_current - 1];
         }
 
         protected bool IsAtEnd()
@@ -232,7 +352,7 @@ namespace StockBox.Interpreter.Scanner
 
         protected Token Peek()
         {
-            return _tokens[_current];
+            return Tokens[_current];
         }
 
         public ValidationResultList GetResults()

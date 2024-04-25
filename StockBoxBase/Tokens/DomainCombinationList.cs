@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using StockBox.Associations;
 using StockBox.Validation;
 
 
-namespace StockBox.Associations.Tokens
+namespace StockBox.Base.Tokens
 {
 
     /// <summary>

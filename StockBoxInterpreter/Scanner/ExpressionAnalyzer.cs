@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using StockBox.Associations.Tokens;
+using StockBox.Base.Tokens;
 using StockBox.Interpreter.Expressions;
 
 
@@ -114,6 +114,21 @@ namespace StockBox.Interpreter.Scanner
         public object Scan(Expr expression)
         {
             return expression.Accept(this);
+        }
+
+        public object VisitAssignExpr(Assign expr)
+        {
+            throw new NotImplementedException();
+        }
+
+        public object VisitVariableExpr(Variable expr)
+        {
+            throw new NotImplementedException();
+        }
+
+        public object VisitLogicalExpr(Logical expr)
+        {
+            throw new NotImplementedException();
         }
     }
 }

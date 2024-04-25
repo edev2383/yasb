@@ -1,11 +1,11 @@
-﻿namespace StockBox.Associations.Tokens
+﻿namespace StockBox.Base.Tokens
 {
     public class Keyword
     {
         public string Lexeme { get { return _lexeme; } }
         public TokenType? TokenType { get { return _tokenType; } }
-        public bool HasIndices {  get { return _hasIndices;  } }
-        public bool IsIndicator {  get { return _tokenType == Tokens.TokenType.eIndicator; } }
+        public bool HasIndices { get { return _hasIndices; } }
+        public bool IsIndicator { get { return _tokenType == Tokens.TokenType.eIndicator; } }
 
         private readonly string _lexeme;
         private readonly TokenType? _tokenType;

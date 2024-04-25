@@ -6,14 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Tokens\" />
+    <ProjectReference Include="..\StockBoxValidation\StockBoxValidation.csproj" />
+  </ItemGroup>
+  <ItemGroup>
     <None Remove="Enums\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Tokens\" />
     <Folder Include="Enums\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\StockBoxValidation\StockBoxValidation.csproj" />
   </ItemGroup>
 </Project>

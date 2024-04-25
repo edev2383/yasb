@@ -3,16 +3,15 @@ using StockBox.Base.Tokens;
 
 namespace StockBox.Interpreter.Expressions
 {
-    public class Variable : Expr
+    public class Logical : Expr
     {
-
-        public Variable(Token name) : base(null, null, null, name)
+        public Logical(Expr left, Token op, Expr right) : base(left, op, right)
         {
         }
 
         public override object Accept(IVisitor visitor)
         {
-            return visitor.VisitVariableExpr(this);
+            throw new NotImplementedException();
         }
 
         public override Expr Clone()
@@ -21,3 +20,4 @@ namespace StockBox.Interpreter.Expressions
         }
     }
 }
+

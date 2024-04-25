@@ -11,10 +11,8 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <None Remove="Statements\" />
-	  <None Remove="Environment\" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Folder Include="Statements\" />
-	  <Folder Include="Environment\" />
 	</ItemGroup>
 </Project>

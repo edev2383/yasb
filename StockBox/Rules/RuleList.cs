@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using StockBox.Interpreter;
 using StockBox.Interpreter.Expressions;
+using StockBox.Interpreter.Statements;
 using StockBox.Services;
 using StockBox.Validation;
 
@@ -24,6 +25,8 @@ namespace StockBox.Rules
         /// so the Expressions can be analyzed prior to Evaluation
         /// </summary>
         public List<Expr> Expressions { get; set; } = new List<Expr>();
+
+        public List<Stmt> Statements { get; set; } = new List<Stmt>();
 
         /// <summary>
         /// This method runs the aggregated Expression through the interpreter
@@ -79,6 +82,11 @@ namespace StockBox.Rules
         {
             e.Statement = statement;
             Expressions.Add(e);
+        }
+
+        public void AddStmts(List<Stmt> s, string statement)
+        {
+            Statements.AddRange(s);
         }
 
         public bool ContainsItem(Rule item)

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using StockBox.Associations.Tokens;
+using StockBox.Base.Tokens;
 using StockBox.Interpreter.Expressions;
 using StockBox.Interpreter.Scanner;
 using StockBox.Rules;

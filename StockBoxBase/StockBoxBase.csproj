@@ -8,9 +8,15 @@
   <ItemGroup>
     <None Remove="Utilities\" />
     <None Remove="Types\" />
+    <None Remove="Tokens\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Utilities\" />
     <Folder Include="Types\" />
+    <Folder Include="Tokens\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\StockBoxValidation\StockBoxValidation.csproj" />
+    <ProjectReference Include="..\StockBoxAssociations\StockBoxAssociations.csproj" />
   </ItemGroup>
 </Project>

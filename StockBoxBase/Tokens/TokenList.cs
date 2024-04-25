@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace StockBox.Associations.Tokens
+namespace StockBox.Base.Tokens
 {
     public class TokenList : List<Token>
     {

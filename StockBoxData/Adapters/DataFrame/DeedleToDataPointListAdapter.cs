@@ -5,8 +5,11 @@ using Deedle;
 using StockBox.Data.SbFrames;
 using StockBox.Validation;
 
+
 namespace StockBox.Data.Adapters.DataFrame
 {
+
+
     public class DeedleToDataPointListAdapter
     {
         private readonly MemoryStream _source;
@@ -52,9 +55,10 @@ namespace StockBox.Data.Adapters.DataFrame
             // post-processing to fill in missing values w/ averages
             data = data.FillMissing(-1);
             DataPointList ret = new DataPointList();
+            var dataAsArray = data.RowKeys.ToArray();
             for (var idx = 0; idx < data.RowCount; idx++)
             {
-                var key = data.RowKeys.ToArray()[idx];
+                var key = dataAsArray[idx];
                 var curr = data.Rows[key];
                 var vr = ValidateObjectSeries(curr);
                 // ignore any series that are missing data, the vr contains the

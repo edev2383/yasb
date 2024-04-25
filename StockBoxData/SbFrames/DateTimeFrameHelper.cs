@@ -2,7 +2,7 @@
 using System.Linq;
 using StockBox.Associations;
 using StockBox.Associations.Enums;
-using StockBox.Associations.Tokens;
+using StockBox.Base.Tokens;
 
 
 namespace StockBox.Data.SbFrames

@@ -114,7 +114,7 @@ namespace StockBox_IntegrationTests
             var primedToActiveRuleList = new Pattern()
             {
                 new Rule("SlowSto(14,3) x 20"),
-                new Rule("RSI(14) > 37.5")
+                new Rule("RSI(14) > 50")
             };
 
             var primeToActiveSetup = new Setup(primedToActiveRuleList, primedState, riskProfile);
@@ -127,6 +127,7 @@ namespace StockBox_IntegrationTests
 
             var activeToInactiveSetup = new Setup(activeToInactiveRuleList, activeState, riskProfile);
             activeToInactiveSetup.AddAction(new Sell(new BacktestSellActionAdapter()));
+
 
             var inactiveToWatchRuleList = new Pattern()
             {

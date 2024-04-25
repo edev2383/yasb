@@ -5,7 +5,7 @@ namespace StockBox.Interpreter.Expressions
 {
 
     /// <summary>
-    /// Class <c>Grouping</c> is a parentesied statement.
+    /// Class <c>Grouping</c> is a parenthesiz ed statement.
     /// In the statement `(2 + 4) - 1`, the `2 + 4` becomes the group expr. 
     /// </summary>
     public class Grouping : Expr

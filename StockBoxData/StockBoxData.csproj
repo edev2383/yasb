@@ -54,5 +54,6 @@
 		<ProjectReference Include="..\StockBoxConfiguration\StockBoxConfiguration.csproj" />
 		<ProjectReference Include="..\StockBoxValidation\StockBoxValidation.csproj" />
 		<ProjectReference Include="..\StockBoxAssociations\StockBoxAssociations.csproj" />
+		<ProjectReference Include="..\StockBoxBase\StockBoxBase.csproj" />
 	</ItemGroup>
 </Project>

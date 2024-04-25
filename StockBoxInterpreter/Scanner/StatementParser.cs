@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using StockBox.Associations.Tokens;
+using StockBox.Base.Tokens;
 using StockBox.Interpreter.Expressions;
 using StockBox.Interpreter.Statements;
-using static StockBox.Associations.Tokens.TokenType;
+using static StockBox.Base.Tokens.TokenType;
 
 
 namespace StockBox.Interpreter.Scanner
@@ -46,7 +46,7 @@ namespace StockBox.Interpreter.Scanner
         {
             Expr expr = Expression();
 
-            return new Expression(expr);
+            return new Stmt.Expression(expr);
         }
 
         protected Stmt Declaration()
@@ -64,7 +64,7 @@ namespace StockBox.Interpreter.Scanner
             }
         }
 
-        protected Stmt VarDeclaration()
+        protected Stmt.Var VarDeclaration()
         {
             Token name = Consume(eIdentifier, "Expect variable name.");
 
@@ -74,7 +74,7 @@ namespace StockBox.Interpreter.Scanner
 
             Consume(eSemicolon, "Expect ';' after variable declaration.");
 
-            return new Var(name, initializer);
+            return new Stmt.Var(name, initializer);
         }
     }
 }
