@@ -10,6 +10,6 @@ class Program
         var today = DateTime.Now;
         var startDate = today.AddDays(-200);
 
-        var scraper = new SbScraper();
+        //var scraper = new SbScraper();
     }
 }

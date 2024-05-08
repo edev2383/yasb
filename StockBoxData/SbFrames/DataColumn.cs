@@ -38,6 +38,7 @@ namespace StockBox.Data.SbFrames
             eBBandsLower,
             eBBandsHigher,
             eBBandsCenter,
+            eAtr,
         }
 
         public string Column { get { return MapToColumnString(); } }
@@ -163,6 +164,9 @@ namespace StockBox.Data.SbFrames
                 case EColumns.eFastSto:
                     ret = $"FastSto({string.Join(",", _indices)})";
                     break;
+                case EColumns.eAtr:
+                    ret = $"ATR({string.Join(",", _indices)})";
+                    break;
                 case EColumns.eEma:
                     break;
                 case EColumns.eBBandsLower:
@@ -210,6 +214,8 @@ namespace StockBox.Data.SbFrames
                     return EColumns.eSloSto;
                 case "faststo":
                     return EColumns.eFastSto;
+                case "atr":
+                    return EColumns.eAtr;
                 default:
                     throw new ArgumentOutOfRangeException();
             }

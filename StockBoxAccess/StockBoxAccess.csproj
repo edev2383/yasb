@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\StockBoxData\StockBoxData.csproj" />
     <ProjectReference Include="..\StockBoxValidation\StockBoxValidation.csproj" />
   </ItemGroup>
   <ItemGroup>

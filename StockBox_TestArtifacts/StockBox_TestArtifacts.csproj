@@ -30,12 +30,8 @@
     <Folder Include="Mocks\" />
     <Folder Include="Files\" />
     <Folder Include="Helpers\" />
-    <Folder Include="Builders\" />
     <Folder Include="Builders\StockBox\" />
     <Folder Include="Builders\StockBox\Rules\" />
-    <Folder Include="Builders\StockBoxData\" />
-    <Folder Include="Builders\StockBoxData\Adapters\" />
-    <Folder Include="Builders\StockBoxData\Adapters\DataFrame\" />
     <Folder Include="Accessors\" />
     <Folder Include="Accessors\StockBoxData\" />
     <Folder Include="Accessors\StockBoxData\SbFrames\" />

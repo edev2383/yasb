@@ -36,7 +36,6 @@
 		<Folder Include="Adapters\" />
 		<Folder Include="Adapters\DataFrame\" />
 		<Folder Include="Repositories\" />
-		<Folder Include="Indicators\" />
 		<Folder Include="Managers\" />
 		<Folder Include="Context\" />
 		<Folder Include="Interfaces\" />
