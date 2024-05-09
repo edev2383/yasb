@@ -62,12 +62,15 @@ namespace StockBox.Data.Indicators
             double atr = 0;
             if (atrs.Count == 0)
             {
-                var range = 
+                
                 atr = values.Average(x => CalculateTrueRange(x.High, x.Low, x.Close));
             }
             else
             {
-                atr = ((atrs.Last() * (Indices[0] - 1)) + CalculateTrueRange(values.First().High, values.First().Low, values.First().Close)) / Indices[0];
+                // Current ATR = [(Prior ATR x 13) + Current TR] / 14
+                var prev = values.ElementAt(Indices[0] - 2);
+                
+                atr = ((atrs.Last() * (Indices[0] - 1)) + CalculateTrueRange(values.Last().High, values.Last().Low, prev.Close)) / Indices[0];
             }
             atrs.Add(atr);
             return atr;

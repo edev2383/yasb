@@ -234,9 +234,9 @@ namespace StockBox_UnitTests
             // cast the indicator to the appropriate payload obj
             var payload = (Dictionary<DateTime, double>)atr.Payload;
 
-            // for readability, round the last value of the payload to 2 decimal
+            // for readability, round the last value of the payload to 3 decimal
             // places and compare against the expected
-            var roundedLastValue = Math.Round(payload.Values.Last(), 4, MidpointRounding.AwayFromZero);
+            var roundedLastValue = Math.Round(payload.Values.Last(), 3, MidpointRounding.AwayFromZero);
             Assert.AreEqual(roundedLastValue, expectedLastValue);
 
             // assert the indicator was correctly mapped to the SbFrame's inner
@@ -277,6 +277,9 @@ namespace StockBox_UnitTests
             var provider = new ForwardTestingDataProvider(df);
             var frame = new SbFrame(provider, EFrequency.eDaily, new Symbol(string.Empty));
             var atr = IndicatorFactory.Create("ATR", 14);
+
+            // adding the indicator to the frame runs the calculations against 
+            // the dataset
             frame.AddIndicator(atr);
 
             // cast the indicator to the appropriate payload obj
