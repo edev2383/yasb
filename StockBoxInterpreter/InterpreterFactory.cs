@@ -1,5 +1,5 @@
 ﻿using System;
-using StockBox.Associations.Tokens;
+using StockBox.Base.Tokens;
 using StockBox.Data.SbFrames;
 using StockBox.Interpreter;
 
@@ -7,6 +7,9 @@ using StockBox.Interpreter;
 namespace StockBox.Interpreter
 {
 
+    /// <summary>
+    /// Real talk. I don't remember why I made this class...
+    /// </summary>
     public static class InterpreterFactory
     {
 

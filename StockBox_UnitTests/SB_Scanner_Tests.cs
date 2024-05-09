@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using StockBox.Interpreter.Scanner;
-using StockBox.Associations.Tokens;
+using StockBox.Base.Tokens;
 using StockBox_TestArtifacts.Helpers;
 using static StockBox_TestArtifacts.Helpers.EFile;
 using Antlr.Runtime;
@@ -173,7 +173,7 @@ namespace StockBox_UnitTests
             var scanner = new Scanner("<");
             var tokens = scanner.ScanTokens();
             Assert.AreEqual(2, tokens.Count);
-            Assert.AreEqual(tokens[0].Type, TokenType.eLess);
+            Assert.AreEqual(tokens[0].Type, TokenType.eLessThan);
             Assert.AreEqual(tokens[1].Type, TokenType.eEOF);
         }
 
@@ -183,7 +183,7 @@ namespace StockBox_UnitTests
             var scanner = new Scanner("<=");
             var tokens = scanner.ScanTokens();
             Assert.AreEqual(2, tokens.Count);
-            Assert.AreEqual(tokens[0].Type, TokenType.eLessEqual);
+            Assert.AreEqual(tokens[0].Type, TokenType.eLessThenOrEqual);
             Assert.AreEqual(tokens[1].Type, TokenType.eEOF);
         }
 
@@ -193,7 +193,7 @@ namespace StockBox_UnitTests
             var scanner = new Scanner(">");
             var tokens = scanner.ScanTokens();
             Assert.AreEqual(2, tokens.Count);
-            Assert.AreEqual(tokens[0].Type, TokenType.eGreat);
+            Assert.AreEqual(tokens[0].Type, TokenType.eGreaterThan);
             Assert.AreEqual(tokens[1].Type, TokenType.eEOF);
         }
 
@@ -203,7 +203,7 @@ namespace StockBox_UnitTests
             var scanner = new Scanner(">=");
             var tokens = scanner.ScanTokens();
             Assert.AreEqual(2, tokens.Count);
-            Assert.AreEqual(tokens[0].Type, TokenType.eGreatEqual);
+            Assert.AreEqual(tokens[0].Type, TokenType.eGreaterThanOrEqual);
             Assert.AreEqual(tokens[1].Type, TokenType.eEOF);
         }
 

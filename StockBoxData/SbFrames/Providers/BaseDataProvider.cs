@@ -28,6 +28,11 @@ namespace StockBox.Data.SbFrames.Providers
         /// </summary>
         public DateTime FirstKey { get { return _data.First().Date; } }
 
+        /// <summary>
+        /// The last DateTime value in the adapter's data list
+        /// </summary>
+        public DateTime LastKey { get { return _data.Last().Date; } }
+
         public BaseDataProvider() { }
 
         public BaseDataProvider(DataPointList data)

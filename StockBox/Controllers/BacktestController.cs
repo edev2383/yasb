@@ -28,6 +28,8 @@ namespace StockBox.Controllers
     public class BacktestController : SbControllerBase
     {
 
+        private double _currentBalance;
+
         public PositionList Positions { get; set; } = new PositionList();
         public PositionSummary PositionSummary { get; set; }
 
@@ -57,6 +59,8 @@ namespace StockBox.Controllers
         protected override ValidationResultList ProcessSetups(SetupList setups, SymbolProfile symbol)
         {
             var ret = new ValidationResultList();
+
+            _currentBalance = (double)setups.First().RiskProfile.TotalBalance;
 
             // when a setup has been processed, push it here and when we pull
             // a setup from the primary list to test against the symbol, we can
@@ -148,10 +152,12 @@ namespace StockBox.Controllers
                 // rules or anything. It immediately attempts to sell
                 if (riskExit)
                 {
-                    var sellAction = new Sell(new BacktestSellActionAdapter());
-                    sellAction.Symbol = symbol;
-                    sellAction.RiskProfile = currSetup.RiskProfile;
-                    var riskResponse = sellAction.PerformAction(localDailyFrame.FirstDataPoint());
+                    var sellAction = new Sell(new BacktestSellActionAdapter())
+                    {
+                        Symbol = symbol,
+                        RiskProfile = currSetup.RiskProfile
+                    };
+                    var riskResponse = sellAction.Act(localDailyFrame.FirstDataPoint());
                     HandleResponse(riskResponse, riskExit);
                     ret.Add(new ValidationResult(EResult.eInfo, "RiskExitPerformed", riskResponse));
                 }
@@ -173,6 +179,7 @@ namespace StockBox.Controllers
                             // be handled by StateMachine.TryNextState, and any
                             // additional transitions during Backtesting will be
                             // handled by the Action's adapter
+                            currSetup.RiskProfile.TotalBalance = _currentBalance;
                             var vr = PerformSetupActions(currSetup, localDailyFrame.FirstDataPoint());
                             innerVr.AddRange(vr);
                             HandleResponses(vr.GetValidationObjects<ActionResponse>());
@@ -221,7 +228,7 @@ namespace StockBox.Controllers
                 var transaction = response.Source as Transaction;
                 if (transaction != null && transaction.Type == StockBox.Positions.Helpers.ETransactionType.eBuy)
                 {
-                    var newPosition = new Position(Guid.NewGuid(), transaction.Symbol);
+                    var newPosition = new Position(Guid.NewGuid(), transaction.Symbol, _currentBalance);
                     newPosition.AddBuy(transaction);
                     Positions.Add(newPosition);
                 }
@@ -238,6 +245,8 @@ namespace StockBox.Controllers
                         foundPosition.AddSell(transaction);
                         foundPosition.RiskExitPerformed = isRiskExit;
                     }
+
+                    _currentBalance += foundPosition.CalculateProfitLoss();
                 }
             }
         }

@@ -120,5 +120,31 @@ namespace StockBox_IntegrationTests
             // Dataset is two days
             Assert.AreEqual(adapter.Length, 3);
         }
+
+        [TestMethod]
+        public void SB_Scraper_06_HistoryScraperIntegrationWorksWithForex()
+        {
+            var startDate = new DateTime(2022, 8, 1);
+            var endDate = new DateTime(2022, 8, 3);
+
+            var historyIn = new HistoryYahooFinanceProvider.HistoryYahooFinanceProvider_InType()
+            {
+                Symbol = "EURUSD=X",
+                StartDate = startDate,
+                EndDate = endDate,
+                Interval = EFrequency.eDaily,
+            };
+
+            var scraper = new SbScraper(new HistoryYahooFinanceProvider(historyIn), new HistoryYahooFinanceParser());
+            var payload = scraper.Scrape() as HistoryYahooFinanceParser.HistoryParser_OutType;
+            Assert.IsNotNull(payload);
+            Assert.IsNotNull(payload.Stream);
+            var toDplAdapter = new DeedleToDataPointListAdapter(payload.Stream);
+            var adapter = new ForwardTestingDataProvider(toDplAdapter.Convert());
+
+            Assert.IsNotNull(adapter);
+            // Dataset is two days
+            Assert.AreEqual(adapter.Length, 4);
+        }
     }
 }

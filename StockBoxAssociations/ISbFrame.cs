@@ -8,3 +8,4 @@ namespace StockBox.Associations
         EFrequency Frequency { get; }
     }
 }
+

@@ -150,7 +150,7 @@ namespace StockBox.Base.Types
         /// mylist[5] = new Some<T>(value)
         ///
         /// The problem is the list is not a list of Options,
-        /// but a list of T, so this causes some confusion use SetAt(int, T)
+        /// but a list of T, so this causes some confusion. use SetAt(int, T)
         /// 
         /// </summary>
         /// <param name="i"></param>

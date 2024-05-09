@@ -3,14 +3,14 @@ namespace StockBox.Interpreter.Statements
 {
     public interface IStatementVisitor
     {
-        //void visitBlockStmt(Block stmt);
+        void VisitBlockStmt(Stmt.Block stmt);
         //void visitClassStmt(Class stmt);
-        void visitExpressionStmt(Expression stmt);
+        void VisitExpressionStmt(Stmt.Expression stmt);
         //void visitFunctionStmt(Function stmt);
-        void visitIfStmt(If stmt);
+        void VisitIfStmt(Stmt.If stmt);
         //void visitPrintStmt(Print stmt);
         //void visitReturnStmt(Return stmt);
-        void visitVarStmt(Var stmt);
+        void VisitVarStmt(Stmt.Var stmt);
         //void visitWhileStmt(While stmt);
     }
 }

@@ -66,7 +66,7 @@ namespace StockBox.Actions
         private ISbActionAdapter _adapter;
         private StateBase _transitionState;
 
-        public abstract ActionResponse PerformAction(DataPoint dataPoint);
+        public abstract ActionResponse Act(DataPoint dataPoint);
         public abstract ISbAction Clone();
 
     }

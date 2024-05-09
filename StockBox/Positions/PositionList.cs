@@ -45,9 +45,9 @@ namespace StockBox.Positions
             ret.TotalWinningDollars = ret.WinningPositions.GetTotalDollars();
             ret.TotalProfitLoss = GetTotalDollars();
             ret.TotalLosingDollars = ret.LosingPositions.GetTotalDollars();
-            ret.AverageAmountPerWon = ((double)ret.TotalWinningDollars / (double)ret.TotalWinningPositions);
-            ret.AverageAmountPerLoss = ((double)ret.TotalLosingDollars / (double)ret.TotalLosingPositions);
-            ret.WinPercent = ((double)ret.TotalWinningPositions / (double)ret.TotalNumberOfPositions) * 100;
+            ret.AverageAmountPerWon = (double)ret.TotalWinningDollars / (double)ret.TotalWinningPositions;
+            ret.AverageAmountPerLoss = (double)ret.TotalLosingDollars / (double)ret.TotalLosingPositions;
+            ret.WinPercent = (double)ret.TotalWinningPositions / (double)ret.TotalNumberOfPositions * 100;
             return ret;
         }
 
@@ -83,10 +83,11 @@ namespace StockBox.Positions
             var sb = new StringBuilder();
 
             sb.Add("|Symbol".PadLeft(6));
-            sb.Add("Open Date".PadLeft(20));
+            sb.Add("Open Bal.".PadLeft(12));
+            sb.Add("Open Date".PadLeft(22));
             sb.Add("Entry Price".PadLeft(12));
-            sb.Add("Close Date".PadLeft(20));
-            sb.Add("Open Len.".PadLeft(20));
+            sb.Add("Close Date".PadLeft(22));
+            sb.Add("Open Len.".PadLeft(12));
             sb.Add("Exit Price".PadLeft(12));
             sb.Add("Share Diff".PadLeft(12));
             sb.Add("Ttl Shares".PadLeft(12));
@@ -98,12 +99,14 @@ namespace StockBox.Positions
             {
                 // symbol
                 sb.Add(item.Symbol.Name.PadLeft(6));
+                // open balance
+                sb.Add(Math.Round(Convert.ToDecimal(item.StartingBalance), 2).ToString().PadLeft(12));
                 // open date
-                sb.Add(item.Transactions.First().Timestamp.Date.ToString().PadLeft(20));
+                sb.Add(item.Transactions.First().Timestamp.Date.ToString().PadLeft(22));
                 // entry price
                 sb.Add(Math.Round(item.EntryPrice, 2).ToString().PadLeft(12));
                 // close date
-                sb.Add(item.Transactions.Count > 1 ? item.Transactions[1].Timestamp.Date.ToString().PadLeft(20) : string.Empty.PadLeft(20));
+                sb.Add(item.Transactions.Count > 1 ? item.Transactions[1].Timestamp.Date.ToString().PadLeft(22) : string.Empty.PadLeft(22));
                 // Days Active
                 sb.Add(item.ActiveLength.ToString().PadLeft(12));
                 // exit price

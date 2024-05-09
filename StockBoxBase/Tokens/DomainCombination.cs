@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace StockBox.Associations.Tokens
+namespace StockBox.Base.Tokens
 {
 
     /// <summary>

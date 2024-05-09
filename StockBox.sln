@@ -1,34 +1,36 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.810.24
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34221.43
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockBox", "StockBox\StockBox.csproj", "{5A3C691F-D5DD-45B0-8F17-F5B2FA85958D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StockBox", "StockBox\StockBox.csproj", "{5A3C691F-D5DD-45B0-8F17-F5B2FA85958D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockBoxInterpreter", "StockBoxInterpreter\StockBoxInterpreter.csproj", "{6060EEF1-B943-453B-93A5-C5316030340B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StockBoxInterpreter", "StockBoxInterpreter\StockBoxInterpreter.csproj", "{6060EEF1-B943-453B-93A5-C5316030340B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockBox_UnitTests", "StockBox_UnitTests\StockBox_UnitTests.csproj", "{C33C4B75-AB54-43CD-8C57-4D8E40F1B054}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StockBox_UnitTests", "StockBox_UnitTests\StockBox_UnitTests.csproj", "{C33C4B75-AB54-43CD-8C57-4D8E40F1B054}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockBoxValidation", "StockBoxValidation\StockBoxValidation.csproj", "{A4607FBE-7A48-4693-A27B-E87286354F73}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StockBoxValidation", "StockBoxValidation\StockBoxValidation.csproj", "{A4607FBE-7A48-4693-A27B-E87286354F73}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockBoxData", "StockBoxData\StockBoxData.csproj", "{C3452D92-2903-404F-9D43-0404EF7B20DD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StockBoxData", "StockBoxData\StockBoxData.csproj", "{C3452D92-2903-404F-9D43-0404EF7B20DD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockBoxConfiguration", "StockBoxConfiguration\StockBoxConfiguration.csproj", "{761518DE-8338-4C64-91B8-427E43F55369}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StockBoxConfiguration", "StockBoxConfiguration\StockBoxConfiguration.csproj", "{761518DE-8338-4C64-91B8-427E43F55369}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockBox_IntegrationTests", "StockBox_IntegrationTests\StockBox_IntegrationTests.csproj", "{FFF3DF98-1E88-43DD-B59D-26131178F6C7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StockBox_IntegrationTests", "StockBox_IntegrationTests\StockBox_IntegrationTests.csproj", "{FFF3DF98-1E88-43DD-B59D-26131178F6C7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockBoxAssociations", "StockBoxAssociations\StockBoxAssociations.csproj", "{65F38EEF-4E01-4347-8168-09D0F4936AAE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StockBoxAssociations", "StockBoxAssociations\StockBoxAssociations.csproj", "{65F38EEF-4E01-4347-8168-09D0F4936AAE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockBoxAccess", "StockBoxAccess\StockBoxAccess.csproj", "{60D831B5-107D-4F34-95B2-99783534DBCD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StockBoxAccess", "StockBoxAccess\StockBoxAccess.csproj", "{60D831B5-107D-4F34-95B2-99783534DBCD}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{737D5836-78B1-4323-9C2C-6E1D6229E9E9}"
 	ProjectSection(SolutionItems) = preProject
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockBox_TestArtifacts", "StockBox_TestArtifacts\StockBox_TestArtifacts.csproj", "{AD6F017F-3F06-416D-B987-56B43C737DE7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StockBox_TestArtifacts", "StockBox_TestArtifacts\StockBox_TestArtifacts.csproj", "{AD6F017F-3F06-416D-B987-56B43C737DE7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockBoxBase", "StockBoxBase\StockBoxBase.csproj", "{F3509C7C-9BDF-4A7E-B97C-76653785D77B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StockBoxBase", "StockBoxBase\StockBoxBase.csproj", "{F3509C7C-9BDF-4A7E-B97C-76653785D77B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ForexBox", "ForexBox\ForexBox.csproj", "{0731DAEE-1473-4074-ACF0-6EB762821055}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -80,6 +82,10 @@ Global
 		{F3509C7C-9BDF-4A7E-B97C-76653785D77B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F3509C7C-9BDF-4A7E-B97C-76653785D77B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F3509C7C-9BDF-4A7E-B97C-76653785D77B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0731DAEE-1473-4074-ACF0-6EB762821055}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0731DAEE-1473-4074-ACF0-6EB762821055}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0731DAEE-1473-4074-ACF0-6EB762821055}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0731DAEE-1473-4074-ACF0-6EB762821055}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

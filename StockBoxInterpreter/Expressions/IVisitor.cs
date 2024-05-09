@@ -16,5 +16,8 @@ namespace StockBox.Interpreter.Expressions
         object VisitDomainExpr(DomainExpr expr);
         object VisitDomainLiteral(DomainLiteral expr);
         object VisitDomainToken(DomainToken expr);
+        object VisitAssignExpr(Assign expr);
+        object VisitVariableExpr(Variable expr);
+        object VisitLogicalExpr(Logical expr);
     }
 }

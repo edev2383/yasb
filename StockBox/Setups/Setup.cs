@@ -179,7 +179,7 @@ namespace StockBox.Setups
                 // add the ActionResponse object to the ret list. ActionResponse
                 // is an IValidationResultProvider, so the VRList knows how to
                 // parse it as a result
-                ret.Add(action.PerformAction(dataPoint));
+                ret.Add(action.Act(dataPoint));
             return ret;
         }
     }

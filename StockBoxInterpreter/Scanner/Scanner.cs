@@ -1,6 +1,6 @@
 ﻿using System;
-using StockBox.Associations.Tokens;
-using static StockBox.Associations.Tokens.TokenType;
+using StockBox.Base.Tokens;
+using static StockBox.Base.Tokens.TokenType;
 using StockBox.Validation;
 
 
@@ -10,15 +10,39 @@ namespace StockBox.Interpreter.Scanner
     public class Scanner : IValidationResultsListProvider
     {
 
+        /// <summary>
+        /// The provided source to scan.
+        /// </summary>
         protected string _source;
+
+        /// <summary>
+        /// The list of tokens created by the scanning process.
+        /// </summary>
         protected TokenList _tokens;
 
+        /// <summary>
+        /// The starting index of the active scan.
+        /// </summary>
         private int start = 0;
+
+        /// <summary>
+        /// The current index of the active scan.
+        /// </summary>
         private int current = 0;
+
+        /// <summary>
+        /// The current line of the scanner.
+        /// </summary>
         private int line = 1;
 
+        /// <summary>
+        /// A list of keywords with additional context for the scanner.
+        /// </summary>
         private static KeywordList _domainKeywords = new DomainKeywords();
 
+        /// <summary>
+        /// A helper property to get the length of the current lexeme.
+        /// </summary>
         private int _lexemeLength
         {
             get { return current - start; }
@@ -87,10 +111,10 @@ namespace StockBox.Interpreter.Scanner
                     AddToken(Match('=') ? eEqualEqual : eEqual);
                     break;
                 case '<':
-                    AddToken(Match('=') ? eLessEqual : eLess);
+                    AddToken(Match('=') ? eLessThenOrEqual : eLessThan);
                     break;
                 case '>':
-                    AddToken(Match('=') ? eGreatEqual : eGreat);
+                    AddToken(Match('=') ? eGreaterThanOrEqual : eGreaterThan);
                     break;
                 case '/':
                     if (Match('/'))
@@ -144,23 +168,36 @@ namespace StockBox.Interpreter.Scanner
             }
         }
 
+        /// <summary>
+        /// Return true if a character is an alpha type.
+        /// </summary>
+        /// <param name="c"></param>
+        /// <returns></returns>
         private bool IsAlpha(char c)
         {
-            return (c >= 'a' && c <= 'z') ||
-                (c >= 'A' && c <= 'Z') ||
-                c == '_';//|| c == '\'';
+            if (c >= 'a' && c <= 'z') return true;
+            if (c >= 'A' && c <= 'Z') return true;
+            if (c == '_') return true;
+            return false;
         }
 
+        /// <summary>
+        /// Creates an identifier, or sub-type identifier, token.
+        /// </summary>
         private void Identifier()
         {
+            // Advance the scanner until we hit a stop...
             while (IsAlphaNumeric(Peek())) Advance();
 
+            // Extract the text of the current lexeme
             string text = _source.Substring(start, _lexemeLength);
+
+            // Search the domain keywords for the found text
             Keyword keyword = _domainKeywords.Find(text);
 
             // if we don't find an actual DomainKeyword, add the type as
             // a generic eIdentifier. Currently we are not expecting generic
-            // identifiers and this will probably throw and error in the Parser.
+            // identifiers and this will probably throw an error in the Parser.
             if (keyword.IsDeficient())
             {
                 AddToken((TokenType)eIdentifier);
@@ -169,30 +206,43 @@ namespace StockBox.Interpreter.Scanner
             {
                 // an Indicator WITHOUT indices, can be added directly. If it
                 // has indices, we need to account for the parenthesis when it
-                // comes to the Literal, because we want to left with only a
+                // comes to the Literal, because we want to be left with only a
                 // comma-delimited string of ints, i.e., "14,3" for the Indices
                 // token
                 if (keyword.IsIndicator && keyword.HasIndices)
                 {
+
+                    // If we don't have a numeric or index type, we need to
+                    // assume a 0 index and inject it
                     if (!PeekPrevious().IsOfNumericOrIndexType())
                     {
                         InjectUnsourcedToken(TokenType.eNumber, "0", 0, line, current);
                         InjectUnsourcedToken(TokenType.eDaily, "day", "day", line, current);
                     }
-                    // add the indicator immediately
+
+                    // Add the token type indidcator, remember that AddToken
+                    // will get the lexeme to add the Token class to the list
                     AddToken((TokenType)eIndicator);
 
+                    // Since we're here, we've been told that the keyword is an
+                    // indicator AND it has indices, so we *could* assume the
+                    // parenthesis exist, however, we'll check to be safe
                     if (Peek() == '(')
                     {
+                        // We'll PeekNext and advance until we hit the closing
+                        // ')' char
                         while (PeekNext() != ')' && !IsAtEnd()) Advance();
 
+                        // if we hit the end, we'll add an error, but return to
+                        // skip to the next token
+                        // TODO - Test case this
                         if (IsAtEnd())
                         {
                             _results.Add(new ValidationResult(EResult.eFail, $"Unterminated indicator indices. {line}:{current}"));
                             return;
                         }
 
-                        // trailing ')'
+                        // Advance twice to remove the trailing ')'
                         Advance();
                         Advance();
 
@@ -232,6 +282,9 @@ namespace StockBox.Interpreter.Scanner
 					| - */
                     switch (keyword.TokenType)
                     {
+                        case TokenType.eVar:
+                            AddToken(TokenType.eVar);
+                            break;
                         case TokenType.eAnd:
                             AddToken(TokenType.eAnd);
                             break;
@@ -263,7 +316,7 @@ namespace StockBox.Interpreter.Scanner
                             AddToken(TokenType.eNumber, 1);
                             break;
                         case TokenType.eAgo:
-                            // ignore the "ago" string
+                            // ignore 
                             break;
                         case TokenType.eTrue:
                             AddToken(TokenType.eTrue, true);

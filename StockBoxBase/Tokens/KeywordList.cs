@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using static StockBox.Associations.Tokens.TokenType;
+using static StockBox.Base.Tokens.TokenType;
 
-namespace StockBox.Associations.Tokens
+namespace StockBox.Base.Tokens
 {
     public abstract class KeywordList : List<Keyword>
     {

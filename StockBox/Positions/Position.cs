@@ -89,10 +89,14 @@ namespace StockBox.Positions
         private RiskProfile _riskProfile;
         private Guid _token;
 
-        public Position(Guid? token, ISymbolProvider symbol)
+        public double? StartingBalance { get { return _startingBalance; } }
+        private double? _startingBalance;
+
+        public Position(Guid? token, ISymbolProvider symbol, double? startingBalance = 0.00)
         {
             _token = token != null ? (Guid)token : Guid.NewGuid();
             _symbol = symbol;
+            _startingBalance = startingBalance;
         }
 
         public double CalculateOriginalInvestment()

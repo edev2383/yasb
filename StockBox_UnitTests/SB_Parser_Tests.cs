@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using StockBox.Interpreter.Expressions;
 using StockBox.Interpreter.Scanner;
-using StockBox.Associations.Tokens;
+using StockBox.Base.Tokens;
 
 
 namespace StockBox_UnitTests
@@ -54,7 +54,7 @@ namespace StockBox_UnitTests
             Assert.IsInstanceOfType(expression, typeof(Binary));
             Assert.IsInstanceOfType(expression.Left, typeof(Binary));
             Assert.IsInstanceOfType(expression.Operator, typeof(Token));
-            Assert.AreEqual(expression.Operator.Type, TokenType.eGreat);
+            Assert.AreEqual(expression.Operator.Type, TokenType.eGreaterThan);
 
             Assert.IsInstanceOfType(expression.Right, typeof(Literal));
             Literal exprRight = (Literal)expression.Right;
@@ -149,5 +149,17 @@ namespace StockBox_UnitTests
             var expression = parser.Parse();
         }
 
+        [TestMethod]
+        public void SB_Parser_13_ParserReturnsStatementList()
+        {
+            var source = "100 > 40";
+            var scanner = new Scanner(source);
+            var tokens = scanner.ScanTokens();
+            var parser = new Parser();
+            var statements = parser.ParseStatements(tokens);
+            Assert.IsNotNull(statements);
+            Assert.IsTrue(statements.Count > 0);
+
+        }
     }
 }

@@ -66,6 +66,7 @@ namespace StockBox.Services
             {
                 var tokens = _scanner.ScanTokens(rule.Statement);
                 rules.AddExpr(_parser.Parse(tokens), rule.Statement);
+                // rules.AddStmts(_parser.ParseStatements(tokens), rule.Statement);
             }
 
             // add process results to the service results object

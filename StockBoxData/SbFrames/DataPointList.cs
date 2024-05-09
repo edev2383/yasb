@@ -166,6 +166,9 @@ namespace StockBox.Data.SbFrames
                 case EIndicatorType.eSlope:
                     MapIndicator((Slope)indicator);
                     break;
+                case EIndicatorType.eAverageTrueRange:
+                    MapIndicator((AverageTrueRange)indicator);
+                    break;
                 default:
                     break;
             }
@@ -281,6 +284,17 @@ namespace StockBox.Data.SbFrames
                     var indicatorDataPoint = new IndicatorDataPoint(faststo.Name, item.Value.k, item.Value.d);
                     foundDataPoint.AddIndicatorValue(indicatorDataPoint);
                 }
+            }
+        }
+
+        private void MapIndicator(AverageTrueRange atr)
+        {
+            var payload = (Dictionary<DateTime, double>)atr.Payload;
+            foreach (KeyValuePair<DateTime, double> item in payload)
+            {
+                var foundDataPoint = FindByDate(item.Key);
+                if (foundDataPoint != null)
+                    foundDataPoint.AddIndicatorValue(atr.Name, item.Value);
             }
         }
 

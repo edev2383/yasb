@@ -12,5 +12,6 @@ namespace StockBox.Data.Indicators
         eSlowStochastics,
         eFastStochastics,
         eSlope,
+        eAverageTrueRange,
     }
 }

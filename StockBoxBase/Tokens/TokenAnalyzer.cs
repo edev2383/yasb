@@ -1,7 +1,7 @@
 ﻿using System;
 
 
-namespace StockBox.Associations.Tokens
+namespace StockBox.Base.Tokens
 {
 
     //public class TokenAnalyzer

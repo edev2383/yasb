@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using StockBox.Associations.Tokens;
+using StockBox.Base.Tokens;
 
 
 namespace StockBox.Interpreter.Expressions
@@ -37,6 +37,12 @@ namespace StockBox.Interpreter.Expressions
         private readonly object _column;
         private readonly int[] _indices;
         private readonly Token _name;
+
+        public Expr(Token name, Expr value)
+        {
+            _name = name;
+            _right = value;
+        }
 
         public Expr(Expr left, Token op, Expr right)
         {

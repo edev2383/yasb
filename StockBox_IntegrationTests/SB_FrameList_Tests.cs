@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using StockBox.Associations.Tokens;
+using StockBox.Base.Tokens;
 using StockBox.Data.Adapters.DataFrame;
 using StockBox.Data.Indicators;
 using StockBox.Data.SbFrames;
@@ -171,7 +171,7 @@ namespace StockBox_IntegrationTests
         }
 
         [TestMethod]
-        public void SB_FrameList_05_FrameListFactoryCreateHistoricalData()
+        public void SB_FrameList_05_FramseListFactoryCreateHistoricalData()
         {
             var symbol = new Symbol("AMD");
 

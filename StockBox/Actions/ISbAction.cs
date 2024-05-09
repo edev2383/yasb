@@ -20,7 +20,7 @@ namespace StockBox.Actions
 
         object Response { get; set; }
 
-        ActionResponse PerformAction(DataPoint dataPoint);
+        ActionResponse Act(DataPoint dataPoint);
         ISbAction Clone();
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using StockBox.Associations.Tokens;
+using StockBox.Base.Tokens;
 using StockBox.Data.Adapters.DataFrame;
 using StockBox.Data.Indicators;
 using StockBox.Data.SbFrames;
