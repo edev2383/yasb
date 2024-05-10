@@ -17,13 +17,13 @@ namespace StockBox.Data.Indicators
     ///
     /// "Slope[SMA(5)] >< Slope[SMA(20)]"
     /// </summary>
-    public class Slope : BaseIndicator
+    public class Slope : BaseIndicator<Dictionary<DateTime, double>>
     {
-        public Slope(string column, int range = 3) : base(column, EIndicatorType.eSlope, new int[1] { range })
+        public Slope(string column, int range = 3) : base(column, EIndicatorType.slope, new int[1] { range })
         {
         }
 
-        protected override object CalculateIndicator(IDataPointListProvider provider)
+        protected override Dictionary<DateTime, double> CalculateIndicator(IDataPointListProvider provider)
         {
             var ret = new Dictionary<DateTime, double>();
 

@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace StockBox.Data.Indicators
 {
-    public class AverageTrueRange : BaseIndicator
+    public class AverageTrueRange : BaseIndicator<Dictionary<DateTime, double>>
     {
-        public AverageTrueRange(string column,  params int[] indices) : base(column, EIndicatorType.eAverageTrueRange, indices)
+        public AverageTrueRange(string column,  params int[] indices) : base(column, EIndicatorType.averageTrueRange, indices)
         {
         }
 
-        protected override object CalculateIndicator(IDataPointListProvider provider)
+        protected override Dictionary<DateTime, double> CalculateIndicator(IDataPointListProvider provider)
         {
             var ret = new Dictionary<DateTime, double>();
 

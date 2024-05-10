@@ -53,7 +53,7 @@ namespace StockBox_IntegrationTests
             var toDplAdapter = new DeedleToDataPointListAdapter(historyPayload as MemoryStream);
             var provider = new ForwardTestingDataProvider(toDplAdapter.Convert());
             var frame = new SbFrame(provider, EFrequency.eDaily, new Symbol(string.Empty));
-            var atr = IndicatorFactory.Create("ATR", 14);
+            var atr = IndicatorFactory.Create("ATR", 14) as AverageTrueRange;
             frame.AddIndicator(atr);
 
             // Asserting the Indicator initializes correctly and performs the

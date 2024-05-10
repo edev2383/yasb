@@ -13,9 +13,9 @@ namespace StockBox.Data.Indicators
         string Name { get; }
         string ColumnKey { get; }
         int[] Indices { get; }
-        object Payload { get; }
+
+        void Calculate(IDataPointListProvider frame);
 
         bool IdentifiesAs(IIndicator item);
-        void Calculate(IDataPointListProvider frame);
     }
 }

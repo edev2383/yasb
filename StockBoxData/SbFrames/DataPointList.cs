@@ -148,26 +148,29 @@ namespace StockBox.Data.SbFrames
         {
             switch (indicator.Type)
             {
-                case EIndicatorType.eSma:
+                case EIndicatorType.sma:
                     MapIndicator((SimpleMovingAverage)indicator);
                     break;
-                case EIndicatorType.eVolume:
+                case EIndicatorType.volume:
                     MapIndicator((AverageVolume)indicator);
                     break;
-                case EIndicatorType.eRSI:
+                case EIndicatorType.rsi:
                     MapIndicator((RelativeStrengthIndex)indicator);
                     break;
-                case EIndicatorType.eSlowStochastics:
+                case EIndicatorType.slowStochastics:
                     MapIndicator((SlowStochastic)indicator);
                     break;
-                case EIndicatorType.eFastStochastics:
+                case EIndicatorType.fastStochastics:
                     MapIndicator((FastStochastic)indicator);
                     break;
-                case EIndicatorType.eSlope:
+                case EIndicatorType.slope:
                     MapIndicator((Slope)indicator);
                     break;
-                case EIndicatorType.eAverageTrueRange:
+                case EIndicatorType.averageTrueRange:
                     MapIndicator((AverageTrueRange)indicator);
+                    break;
+                case EIndicatorType.priceChannel:
+                    MapIndicator((PriceChannel)indicator);
                     break;
                 default:
                     break;
@@ -217,8 +220,7 @@ namespace StockBox.Data.SbFrames
 
         private void MapIndicator(SimpleMovingAverage sma)
         {
-            var payload = (Dictionary<DateTime, double>)sma.Payload;
-            foreach (KeyValuePair<DateTime, double> item in payload)
+            foreach (KeyValuePair<DateTime, double> item in sma.Payload)
             {
                 var foundDataPoint = FindByDate(item.Key);
                 if (foundDataPoint != null)
@@ -228,8 +230,7 @@ namespace StockBox.Data.SbFrames
 
         private void MapIndicator(Slope slope)
         {
-            var payload = (Dictionary<DateTime, double>)slope.Payload;
-            foreach (KeyValuePair<DateTime, double> item in payload)
+            foreach (KeyValuePair<DateTime, double> item in slope.Payload)
             {
                 var foundDataPoint = FindByDate(item.Key);
                 if (foundDataPoint != null)
@@ -239,8 +240,7 @@ namespace StockBox.Data.SbFrames
 
         private void MapIndicator(AverageVolume averageVolume)
         {
-            var payload = (Dictionary<DateTime, double>)averageVolume.Payload;
-            foreach (KeyValuePair<DateTime, double> item in payload)
+            foreach (KeyValuePair<DateTime, double> item in averageVolume.Payload)
             {
                 var foundDataPoint = FindByDate(item.Key);
                 if (foundDataPoint != null)
@@ -250,8 +250,7 @@ namespace StockBox.Data.SbFrames
 
         private void MapIndicator(RelativeStrengthIndex rsi)
         {
-            var payload = (Dictionary<DateTime, double>)rsi.Payload;
-            foreach (KeyValuePair<DateTime, double> item in payload)
+            foreach (KeyValuePair<DateTime, double> item in rsi.Payload)
             {
                 var foundDataPoint = FindByDate(item.Key);
                 if (foundDataPoint != null)
@@ -261,8 +260,7 @@ namespace StockBox.Data.SbFrames
 
         private void MapIndicator(SlowStochastic slowsto)
         {
-            var payload = (Dictionary<DateTime, (double k, double d)>)slowsto.Payload;
-            foreach (KeyValuePair<DateTime, (double k, double d)> item in payload)
+            foreach (KeyValuePair<DateTime, (double k, double d)> item in slowsto.Payload)
             {
                 var foundDataPoint = FindByDate(item.Key);
                 if (foundDataPoint != null)
@@ -275,8 +273,7 @@ namespace StockBox.Data.SbFrames
 
         private void MapIndicator(FastStochastic faststo)
         {
-            var payload = (Dictionary<DateTime, (double k, double d)>)faststo.Payload;
-            foreach (KeyValuePair<DateTime, (double k, double d)> item in payload)
+            foreach (KeyValuePair<DateTime, (double k, double d)> item in faststo.Payload)
             {
                 var foundDataPoint = FindByDate(item.Key);
                 if (foundDataPoint != null)
@@ -289,12 +286,24 @@ namespace StockBox.Data.SbFrames
 
         private void MapIndicator(AverageTrueRange atr)
         {
-            var payload = (Dictionary<DateTime, double>)atr.Payload;
-            foreach (KeyValuePair<DateTime, double> item in payload)
+            foreach (KeyValuePair<DateTime, double> item in atr.Payload)
             {
                 var foundDataPoint = FindByDate(item.Key);
                 if (foundDataPoint != null)
                     foundDataPoint.AddIndicatorValue(atr.Name, item.Value);
+            }
+        }
+
+        private void MapIndicator(PriceChannel pc)
+        {
+            foreach (KeyValuePair<DateTime, (double high, double center, double low)> item in pc.Payload)
+            {
+                var foundDataPoint = FindByDate(item.Key);
+                if (foundDataPoint != null)
+                {
+                    var indicatorDataPoint = new IndicatorDataPoint(pc.Name, item.Value.high, item.Value.center, item.Value.low);
+                    foundDataPoint.AddIndicatorValue(indicatorDataPoint);
+                }
             }
         }
 

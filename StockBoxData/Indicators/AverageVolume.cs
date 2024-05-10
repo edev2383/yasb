@@ -12,14 +12,14 @@ namespace StockBox.Data.Indicators
     /// values. Allows for easy comparisons if volume is increasing or
     /// decreasing against the average
     /// </summary>
-    public class AverageVolume : BaseIndicator
+    public class AverageVolume : BaseIndicator<Dictionary<DateTime, double>>
     {
 
-        public AverageVolume(string column, params int[] indices) : base(column, EIndicatorType.eVolume, indices)
+        public AverageVolume(string column, params int[] indices) : base(column, EIndicatorType.volume, indices)
         {
         }
 
-        protected override object CalculateIndicator(IDataPointListProvider provider)
+        protected override Dictionary<DateTime, double> CalculateIndicator(IDataPointListProvider provider)
         {
             var ret = new Dictionary<DateTime, double>();
 
