@@ -39,6 +39,7 @@ namespace StockBox.Data.SbFrames
             eBBandsHigher,
             eBBandsCenter,
             eAtr,
+            ePriceChannel,
         }
 
         public string Column { get { return MapToColumnString(); } }
@@ -167,6 +168,9 @@ namespace StockBox.Data.SbFrames
                 case EColumns.eAtr:
                     ret = $"ATR({string.Join(",", _indices)})";
                     break;
+                case EColumns.ePriceChannel:
+                    ret = $"PC({string.Join(",", _indices)})";
+                    break;
                 case EColumns.eEma:
                     break;
                 case EColumns.eBBandsLower:
@@ -216,6 +220,9 @@ namespace StockBox.Data.SbFrames
                     return EColumns.eFastSto;
                 case "atr":
                     return EColumns.eAtr;
+                case "pc":
+                case "chan":
+                    return EColumns.ePriceChannel;
                 default:
                     throw new ArgumentOutOfRangeException();
             }

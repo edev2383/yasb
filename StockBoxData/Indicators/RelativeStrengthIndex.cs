@@ -13,13 +13,13 @@ namespace StockBox.Data.Indicators
     ///
     /// <see cref="https://www.omnicalculator.com/finance/rsi"/>
     /// </summary>
-    public class RelativeStrengthIndex : BaseIndicator
+    public class RelativeStrengthIndex : BaseIndicator<Dictionary<DateTime, double>>
     {
-        public RelativeStrengthIndex(string column, params int[] indices) : base(column, EIndicatorType.eRSI, indices)
+        public RelativeStrengthIndex(string column, params int[] indices) : base(column, EIndicatorType.rsi, indices)
         {
         }
 
-        protected override object CalculateIndicator(IDataPointListProvider provider)
+        protected override Dictionary<DateTime, double> CalculateIndicator(IDataPointListProvider provider)
         {
             var ret = new Dictionary<DateTime, double>();
 

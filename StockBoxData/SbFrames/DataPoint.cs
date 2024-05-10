@@ -7,7 +7,8 @@ namespace StockBox.Data.SbFrames
 {
 
     /// <summary>
-    /// 
+    /// Class <c>DataPoint</c> models the candle data for a single day, as well as,
+    /// all derived indicator data.
     /// </summary>
     public class DataPoint
     {

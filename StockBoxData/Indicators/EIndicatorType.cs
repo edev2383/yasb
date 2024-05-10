@@ -6,12 +6,13 @@ namespace StockBox.Data.Indicators
 
     public enum EIndicatorType
     {
-        eSma = 0,
-        eVolume,
-        eRSI,
-        eSlowStochastics,
-        eFastStochastics,
-        eSlope,
-        eAverageTrueRange,
+        sma = 0,
+        volume,
+        rsi,
+        slowStochastics,
+        fastStochastics,
+        slope,
+        averageTrueRange,
+        priceChannel,
     }
 }

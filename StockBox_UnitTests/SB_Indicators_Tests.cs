@@ -27,7 +27,7 @@ namespace StockBox_UnitTests
             var toDplAdapter = new DeedleToDataPointListAdapter(stream);
             var provider = new ForwardTestingDataProvider(toDplAdapter.Convert());
             var frame = new SbFrame(provider, EFrequency.eDaily, new Symbol(string.Empty));
-            var sma = IndicatorFactory.Create("SMA", 25);
+            var sma = IndicatorFactory.Create("SMA", 25) as SimpleMovingAverage;
             frame.AddIndicator(sma);
 
             // Asserting the Indicator initializes correctly and performs the
@@ -66,7 +66,7 @@ namespace StockBox_UnitTests
             var toDplAdapter = new DeedleToDataPointListAdapter(stream);
             var provider = new ForwardTestingDataProvider(toDplAdapter.Convert());
             var frame = new SbFrame(provider, EFrequency.eDaily, new Symbol(string.Empty));
-            var sma = IndicatorFactory.Create("AVGVolume", 25);
+            var sma = IndicatorFactory.Create("AVGVolume", 25) as AverageVolume;
             frame.AddIndicator(sma);
 
             // Asserting the Indicator initializes correctly and performs the
@@ -105,17 +105,17 @@ namespace StockBox_UnitTests
             var toDplAdapter = new DeedleToDataPointListAdapter(stream);
             var provider = new ForwardTestingDataProvider(toDplAdapter.Convert());
             var frame = new SbFrame(provider, EFrequency.eDaily, new Symbol(string.Empty));
-            var sma = IndicatorFactory.Create("RSI", 14);
-            frame.AddIndicator(sma);
+            var rsi = IndicatorFactory.Create("RSI", 14) as RelativeStrengthIndex;
+            frame.AddIndicator(rsi);
 
             // Asserting the Indicator initializes correctly and performs the
             // proper calculations
-            Assert.AreEqual("RSI(14)", sma.Name);
-            Assert.IsNotNull(sma.Payload);
-            Assert.IsInstanceOfType(sma.Payload, typeof(Dictionary<DateTime, double>));
+            Assert.AreEqual("RSI(14)", rsi.Name);
+            Assert.IsNotNull(rsi.Payload);
+            Assert.IsInstanceOfType(rsi.Payload, typeof(Dictionary<DateTime, double>));
 
             // cast the indicator to the appropriate payload obj
-            var payload = (Dictionary<DateTime, double>)sma.Payload;
+            var payload = (Dictionary<DateTime, double>)rsi.Payload;
 
             // for readability, round the last value of the payload to 2 decimal
             // places and compare against the expected
@@ -145,7 +145,7 @@ namespace StockBox_UnitTests
             var toDplAdapter = new DeedleToDataPointListAdapter(stream);
             var provider = new ForwardTestingDataProvider(toDplAdapter.Convert());
             var frame = new SbFrame(provider, EFrequency.eDaily, new Symbol(string.Empty));
-            var fastSto = IndicatorFactory.Create("FastSto", 14, 3);
+            var fastSto = IndicatorFactory.Create("FastSto", 14, 3) as FastStochastic;
             frame.AddIndicator(fastSto);
 
             // Asserting the Indicator initializes correctly and performs the
@@ -184,7 +184,7 @@ namespace StockBox_UnitTests
             var toDplAdapter = new DeedleToDataPointListAdapter(stream);
             var provider = new ForwardTestingDataProvider(toDplAdapter.Convert());
             var frame = new SbFrame(provider, EFrequency.eDaily, new Symbol(string.Empty));
-            var slowSto = IndicatorFactory.Create("SlowSto", 14, 3);
+            var slowSto = IndicatorFactory.Create("SlowSto", 14, 3) as SlowStochastic;
             frame.AddIndicator(slowSto);
 
             // Asserting the Indicator initializes correctly and performs the
@@ -214,7 +214,7 @@ namespace StockBox_UnitTests
             Assert.AreEqual(payload.Values.Last().k, indicatorValue);
         }
 
-        [TestMethod, Description("Test the indicator `RelativeStrengthIndex` is created and the values are as expected based on the test dataset")]
+        [TestMethod, Description("Test the indicator `AverageTrueRange` is created and the values are as expected based on the test dataset")]
         public void SB_Indicators_06_AverageTrueRange_01()
         {
             var expectedLastValue = 5.668;
@@ -222,7 +222,7 @@ namespace StockBox_UnitTests
             var toDplAdapter = new DeedleToDataPointListAdapter(stream);
             var provider = new ForwardTestingDataProvider(toDplAdapter.Convert());
             var frame = new SbFrame(provider, EFrequency.eDaily, new Symbol(string.Empty));
-            var atr = IndicatorFactory.Create("ATR", 14);
+            var atr = IndicatorFactory.Create("ATR", 14) as AverageTrueRange;
             frame.AddIndicator(atr);
 
             // Asserting the Indicator initializes correctly and performs the
@@ -276,7 +276,7 @@ namespace StockBox_UnitTests
 
             var provider = new ForwardTestingDataProvider(df);
             var frame = new SbFrame(provider, EFrequency.eDaily, new Symbol(string.Empty));
-            var atr = IndicatorFactory.Create("ATR", 14);
+            var atr = IndicatorFactory.Create("ATR", 14) as AverageTrueRange;
 
             // adding the indicator to the frame runs the calculations against 
             // the dataset
@@ -302,6 +302,49 @@ namespace StockBox_UnitTests
             // which is mostly irrelevant because the payload is mapped to the
             // DataPoint.Indicators via DateTime key. This is just for the test
             Assert.AreEqual(payload.Values.Last(), indicatorValue);
+        }
+
+        [TestMethod, Description("Test the indicator `PriceChannel` is created and the values are as expected based on the test dataset")]
+        public void SB_Indicators_08_PriceChannel_01()
+        {
+            var expectedHighValue = 125.67;
+            var expectedLowValue = 80.64;
+            var stream = new Reader().GetFileStream(eAmdDaily);
+            var toDplAdapter = new DeedleToDataPointListAdapter(stream);
+            var provider = new ForwardTestingDataProvider(toDplAdapter.Convert());
+            var frame = new SbFrame(provider, EFrequency.eDaily, new Symbol(string.Empty));
+            var pc = IndicatorFactory.Create("PC", 55) as PriceChannel;
+            frame.AddIndicator(pc);
+
+            // Asserting the Indicator initializes correctly and performs the
+            // proper calculations
+            Assert.AreEqual("PC(55)", pc.Name);
+            Assert.IsNotNull(pc.Payload);
+            Assert.IsInstanceOfType(pc.Payload, typeof(Dictionary<DateTime, (double high, double center, double low)>));
+
+            // cast the indicator to the appropriate payload obj
+
+            var lastValue = pc.Payload.Values.Last();
+            // for readability, round the last value of the payload to 3 decimal
+            // places and compare against the expected
+            var roundedLastHighValue = Math.Round(lastValue.high, 2, MidpointRounding.AwayFromZero);
+            var roundedLastLowValue = Math.Round(lastValue.low, 2, MidpointRounding.AwayFromZero);
+
+            Assert.AreEqual(roundedLastHighValue, expectedHighValue);
+            Assert.AreEqual(roundedLastLowValue, expectedLowValue);
+
+            // assert the indicator was correctly mapped to the SbFrame's inner
+            // DataPointList object
+            var firstDataPoint = frame.FirstDataPoint();
+            var indicatorValue = firstDataPoint.GetByColumn(new DataColumn("PC", 55));
+            Assert.IsNotNull(indicatorValue);
+
+            // DeedleAdapter is forward testing, i.e., DESC order - most recent
+            // DateTime first, so the last value of the calculated indicator
+            // payload is going to be the first value in the SbFrame's dataset
+            // which is mostly irrelevant because the payload is mapped to the
+            // DataPoint.Indicators via DateTime key. This is just for the test
+            Assert.AreEqual(pc.Payload.Values.Last().high, indicatorValue);
         }
     }
 }

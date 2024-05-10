@@ -13,21 +13,21 @@ namespace StockBox.Data.Indicators
     ///
     /// <see cref="https://www.investopedia.com/terms/s/sma.asp"/>
     /// </summary>
-    public class SimpleMovingAverage : BaseIndicator
+    public class SimpleMovingAverage : BaseIndicator<Dictionary<DateTime, double>>
     {
         private readonly string _targetColumn;
-        public SimpleMovingAverage(string column, string target = "Close", params int[] indices) : base(column, EIndicatorType.eSma, indices)
+        public SimpleMovingAverage(string column, string target = "Close", params int[] indices) : base(column, EIndicatorType.sma, indices)
         {
             _targetColumn = target;
         }
 
-        public SimpleMovingAverage(string column, params int[] indices) : base(column, EIndicatorType.eSma, indices)
+        public SimpleMovingAverage(string column, params int[] indices) : base(column, EIndicatorType.sma, indices)
         {
             _targetColumn = "Close";
         }
 
 
-        protected override object CalculateIndicator(IDataPointListProvider provider)
+        protected override Dictionary<DateTime, double> CalculateIndicator(IDataPointListProvider provider)
         {
             var ret = new Dictionary<DateTime, double>();
 

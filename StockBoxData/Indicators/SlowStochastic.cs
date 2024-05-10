@@ -15,14 +15,14 @@ namespace StockBox.Data.Indicators
     ///
     /// <see cref="https://www.fidelity.com/learning-center/trading-investing/technical-analysis/technical-indicator-guide/slow-stochastic"/>
     /// </summary>
-    public class SlowStochastic : BaseIndicator
+    public class SlowStochastic : BaseIndicator<Dictionary<DateTime, (double k, double d)>>
     {
 
-        public SlowStochastic(string column, params int[] indices) : base(column, EIndicatorType.eSlowStochastics, indices)
+        public SlowStochastic(string column, params int[] indices) : base(column, EIndicatorType.slowStochastics, indices)
         {
         }
 
-        protected override object CalculateIndicator(IDataPointListProvider provider)
+        protected override Dictionary<DateTime, (double k, double d)> CalculateIndicator(IDataPointListProvider provider)
         {
             var ret = new Dictionary<DateTime, (double k, double d)>();
 

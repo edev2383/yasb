@@ -8,7 +8,7 @@ namespace StockBox.Data.Indicators
     /// <summary>
     /// Class <c>BaseIndicator</c>
     /// </summary>
-    public abstract class BaseIndicator : IIndicator
+    public abstract class BaseIndicator<T> : IIndicator
     {
         public BaseIndicator(string column, EIndicatorType type, params int[] indices)
         {
@@ -16,6 +16,7 @@ namespace StockBox.Data.Indicators
             Indices = indices;
             _type = type;
         }
+
 
         /// <summary>
         /// The combined value of the provided column and the indicies, i.e.,
@@ -56,8 +57,8 @@ namespace StockBox.Data.Indicators
         /// The calculated payload, usually a Dictionary with a KeyValuePair,
         /// usually, but not always, DateTime and double
         /// </summary>
-        public object Payload { get { return _payload; } }
-        private object _payload;
+        public T Payload { get { return _payload; } }
+        private T _payload;
         private EIndicatorType _type;
 
         /// <summary>
@@ -103,7 +104,7 @@ namespace StockBox.Data.Indicators
         /// </summary>
         /// <param name="adapter"></param>
         /// <returns></returns>
-        protected abstract object CalculateIndicator(IDataPointListProvider provider);
+        protected abstract T CalculateIndicator(IDataPointListProvider provider);
 
     }
 }
