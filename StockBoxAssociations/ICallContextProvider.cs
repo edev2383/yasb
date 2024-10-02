@@ -5,8 +5,6 @@ namespace StockBox.Associations
 {
     public interface ICallContextProvider
     {
-        MemoryStream GetDaily();
-        MemoryStream GetWeekly();
-        MemoryStream GetMontly();
+   
     }
 }

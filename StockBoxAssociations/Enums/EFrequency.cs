@@ -6,8 +6,8 @@ namespace StockBox.Associations.Enums
 
     public enum EFrequency
     {
-        eDaily = 0,
-        eWeekly,
-        eMonthly,
+        Daily = 0,
+        Weekly,
+        Monthly,
     }
 }
