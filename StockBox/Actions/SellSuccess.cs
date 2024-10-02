@@ -4,6 +4,7 @@ using StockBox.Actions.Adapters;
 using StockBox.Actions.Helpers;
 using StockBox.Actions.Responses;
 using StockBox.Data.SbFrames;
+using StockBox.Positions;
 
 namespace StockBox.Actions
 {
@@ -13,7 +14,7 @@ namespace StockBox.Actions
 
         public SellSuccess(SellSuccess source) : base(source) { }
 
-        public SellSuccess(ISbActionAdapter adapter) : base(adapter, new InactivePendingState(), EActionType.eMoveSuccess)
+        public SellSuccess(ISbActionAdapter adapter) : base(adapter, new InactivePendingState(), EActionType.MoveAutoSuccess)
         {
         }
 
@@ -22,7 +23,7 @@ namespace StockBox.Actions
             return new SellSuccess(this);
         }
 
-        public override ActionResponse Act(DataPoint dataPoint)
+        public override ActionResponse Act(DataPoint dataPoint, Position position)
         {
             return null;
         }

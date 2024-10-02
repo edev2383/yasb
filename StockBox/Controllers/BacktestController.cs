@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using StockBox.Actions;
+﻿using StockBox.Actions;
 using StockBox.Actions.Adapters;
 using StockBox.Actions.Responses;
 using StockBox.Associations;
@@ -15,6 +12,10 @@ using StockBox.Services;
 using StockBox.Setups;
 using StockBox.States;
 using StockBox.Validation;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 
 namespace StockBox.Controllers
@@ -45,9 +46,9 @@ namespace StockBox.Controllers
         /// </summary>
         /// <param name="setups"></param>
         /// <param name="profiles"></param>
-        public override void ScanSetups(SetupList setups, SymbolProfileList profiles)
+        public override async Task ScanSetups(SetupList setups, SymbolProfileList profiles)
         {
-            _results.AddRange(ProcessSetups(setups, profiles.First()));
+            _results.AddRange(await ProcessSetups(setups, profiles.First()));
         }
 
         /// <summary>
@@ -56,7 +57,7 @@ namespace StockBox.Controllers
         /// <param name="setups"></param>
         /// <param name="symbol"></param>
         /// <returns></returns>
-        protected override ValidationResultList ProcessSetups(SetupList setups, SymbolProfile symbol)
+        protected override async Task<ValidationResultList> ProcessSetups(SetupList setups, SymbolProfile symbol)
         {
             var ret = new ValidationResultList();
 
@@ -69,11 +70,11 @@ namespace StockBox.Controllers
             SetupList cachedSetups = new SetupList();
 
             // create the range dataset, and add indicators as needed
-            var backtestDataFrames = _frameListProvider.CreateBacktestData(symbol.Symbol) as SbFrameList;
+            var backtestDataFrames = await _frameListProvider.CreateBacktestData(symbol.Symbol) as SbFrameList;
 
             // we always iterate against the daily, but we need to normalize the
             // weekly and monthly as we traverse the list
-            var daily = backtestDataFrames.FindByFrequency(Associations.Enums.EFrequency.eDaily);
+            var daily = backtestDataFrames.FindByFrequency(Associations.Enums.EFrequency.Daily);
 
             // expose the adapter and create the while loop
             var adapter = daily.GetProvider() as BackwardTestingDataProvider;
@@ -136,7 +137,7 @@ namespace StockBox.Controllers
 
                 // prepare the daily frame, because we will use that to denote
                 // our 'current' price of the stock being tested
-                localDailyFrame = backtestDataFrames.FindByFrequency(Associations.Enums.EFrequency.eDaily);
+                localDailyFrame = backtestDataFrames.FindByFrequency(Associations.Enums.EFrequency.Daily);
 
                 // create a local StateMachine to be used for transitions
                 var localStateMachine = _stateMachine.CreateWithStateAndTransitions();
@@ -157,7 +158,7 @@ namespace StockBox.Controllers
                         Symbol = symbol,
                         RiskProfile = currSetup.RiskProfile
                     };
-                    var riskResponse = sellAction.Act(localDailyFrame.FirstDataPoint());
+                    var riskResponse = sellAction.Act(localDailyFrame.FirstDataPoint(), localPosition);
                     HandleResponse(riskResponse, riskExit);
                     ret.Add(new ValidationResult(EResult.eInfo, "RiskExitPerformed", riskResponse));
                 }
@@ -180,7 +181,7 @@ namespace StockBox.Controllers
                             // additional transitions during Backtesting will be
                             // handled by the Action's adapter
                             currSetup.RiskProfile.TotalBalance = _currentBalance;
-                            var vr = PerformSetupActions(currSetup, localDailyFrame.FirstDataPoint());
+                            var vr = PerformSetupActions(currSetup, localDailyFrame.FirstDataPoint(), localPosition);
                             innerVr.AddRange(vr);
                             HandleResponses(vr.GetValidationObjects<ActionResponse>());
                         }
@@ -210,7 +211,7 @@ namespace StockBox.Controllers
             return ret;
         }
 
-        protected override ValidationResultList ProcessSetup(Setup setup, SymbolProfileList relatedProfiles)
+        protected override Task<ValidationResultList> ProcessSetup(Setup setup, SymbolProfileList relatedProfiles)
         {
             throw new NotImplementedException();
         }
@@ -225,8 +226,8 @@ namespace StockBox.Controllers
         {
             if (response is BuyActionResponse)
             {
-                var transaction = response.Source as Transaction;
-                if (transaction != null && transaction.Type == StockBox.Positions.Helpers.ETransactionType.eBuy)
+                var transaction = response.Source as Order;
+                if (transaction != null && transaction.Type == StockBox.Positions.Helpers.ETransactionType.Buy)
                 {
                     var newPosition = new Position(Guid.NewGuid(), transaction.Symbol, _currentBalance);
                     newPosition.AddBuy(transaction);
@@ -236,8 +237,8 @@ namespace StockBox.Controllers
 
             if (response is SellActionResponse)
             {
-                var transaction = response.Source as Transaction;
-                if (transaction != null && transaction.Type == StockBox.Positions.Helpers.ETransactionType.eSell)
+                var transaction = response.Source as Order;
+                if (transaction != null && transaction.Type == StockBox.Positions.Helpers.ETransactionType.Sell)
                 {
                     var foundPosition = Positions.GetCurrentPosition();
                     if (foundPosition != null)

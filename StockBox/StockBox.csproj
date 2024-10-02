@@ -58,7 +58,6 @@
     <Folder Include="Users\" />
     <Folder Include="Users\Permissions\" />
     <Folder Include="Users\Permissions\Helpers\" />
-    <Folder Include="Positions\" />
     <Folder Include="Positions\Helpers\" />
     <Folder Include="Actions\Responses\" />
   </ItemGroup>

@@ -1,5 +1,4 @@
-﻿using System;
-using StockBox.Actions.Responses;
+﻿using StockBox.Actions.Responses;
 using StockBox.Data.SbFrames;
 using StockBox.Positions;
 using StockBox.States;
@@ -16,17 +15,19 @@ namespace StockBox.Actions.Adapters
         {
         }
 
-        public override ActionResponse PerformAction(DataPoint dataPoint)
+        public override ActionResponse PerformAction(DataPoint dataPoint, Position position)
         {
-            var ret = new SellActionResponse(true);
+            /// transition the Symbol to its new Inactive state
             ParentAction.Symbol.TransitionState(new InactiveState());
-            ret.Message = $"Sold Symbol '{ParentAction.Symbol.Symbol.Name}' at, or near, ${dataPoint.Close}";
 
-            var transaction = new Transaction(0, dataPoint.Close);
-            transaction.Timestamp = dataPoint.Date;
-            transaction.Type = Positions.Helpers.ETransactionType.eSell;
-            ret.Source = transaction;
-            return ret;
+            /// return a successful sell response
+            return new SellActionResponse(isSuccess: true,
+                message: $"Sold Symbol '{ParentAction.Symbol.Symbol.Name}' at, or near, ${dataPoint.Close}",
+                source: Order.Sell(
+                            symbol: ParentAction.Symbol.Symbol,
+                            shareCount: 0,
+                            sharePrice: dataPoint.Close,
+                            position: position));
         }
     }
 }

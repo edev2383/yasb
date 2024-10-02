@@ -16,7 +16,7 @@ namespace StockBox.Actions.Adapters
         {
         }
 
-        public override ActionResponse PerformAction(DataPoint dataPoint)
+        public override ActionResponse PerformAction(DataPoint dataPoint, Position position)
         {
             var ret = new BuyActionResponse(true);
             // for backtest to continue, we transition directly to Active
@@ -27,12 +27,16 @@ namespace StockBox.Actions.Adapters
 
             ret.Message = $"Bought ({vrShares.Shares}) Symbol '{ParentAction.Symbol.Symbol.Name}' at, or near, ${dataPoint.Close}";
 
-            var transaction = new Transaction((int)vrShares.Shares, dataPoint.Close);
-            transaction.Symbol = ParentAction.Symbol.Symbol;
-            transaction.Timestamp = dataPoint.Date;
-            transaction.Type = Positions.Helpers.ETransactionType.eBuy;
-            ret.Source = transaction;
-            return ret;
+
+            return new BuyActionResponse(
+                isSuccess: true,
+                message: $"Buy Symbol '{ParentAction.Symbol.Symbol.Name}' at, or near, ${dataPoint.Close}",
+                source: Order.Buy(
+                            symbol: ParentAction.Symbol.Symbol,
+                            shareCount: (int)vrShares.Shares,
+                            sharePrice: dataPoint.Close,
+                            position: position,
+                            timestamp: dataPoint.Date));
         }
 
     }

@@ -4,6 +4,7 @@ using StockBox.Actions.Adapters;
 using StockBox.Actions.Helpers;
 using StockBox.Actions.Responses;
 using StockBox.Data.SbFrames;
+using StockBox.Positions;
 
 namespace StockBox.Actions
 {
@@ -18,7 +19,7 @@ namespace StockBox.Actions
 
         public BuyError(BuyError source) : base(source) { }
 
-        public BuyError(ISbActionAdapter adapter) : base(adapter, new ActiveErrorState(), EActionType.eMoveFailure)
+        public BuyError(ISbActionAdapter adapter) : base(adapter, new ActiveErrorState(), EActionType.MoveAutoFailure)
         {
         }
 
@@ -27,7 +28,7 @@ namespace StockBox.Actions
             return new BuyError(this);
         }
 
-        public override ActionResponse Act(DataPoint dataPoint)
+        public override ActionResponse Act(DataPoint dataPoint, Position position)
         {
             return null;
         }

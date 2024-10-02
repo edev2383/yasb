@@ -5,6 +5,7 @@ using StockBox.Actions.Helpers;
 using StockBox.Actions.Responses;
 using StockBox.Models;
 using StockBox.Data.SbFrames;
+using StockBox.Positions;
 
 namespace StockBox.Actions
 {
@@ -66,7 +67,7 @@ namespace StockBox.Actions
         private ISbActionAdapter _adapter;
         private StateBase _transitionState;
 
-        public abstract ActionResponse Act(DataPoint dataPoint);
+        public abstract ActionResponse Act(DataPoint dataPoint, Position position);
         public abstract ISbAction Clone();
 
     }

@@ -1,6 +1,7 @@
 ﻿using System;
 using StockBox.Actions.Responses;
 using StockBox.Data.SbFrames;
+using StockBox.Positions;
 
 namespace StockBox.Actions.Adapters
 {
@@ -17,6 +18,6 @@ namespace StockBox.Actions.Adapters
             throw new NotImplementedException();
         }
 
-        public abstract ActionResponse PerformAction(DataPoint dataPoint);
+        public abstract ActionResponse PerformAction(DataPoint dataPoint, Position position);
     }
 }

@@ -3,9 +3,9 @@ namespace StockBox.Actions.Helpers
 {
     public enum EMessageQueuePriority
     {
-        eCritical = 1,
-        eElevated = 2,
-        eGeneral = 3,
-        eNonce = 4,
+        Unknown = 0,
+        Citical = 1,
+        Elevated = 2,
+        General = 3,
     }
 }
