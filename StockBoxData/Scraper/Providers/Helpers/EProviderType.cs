@@ -3,8 +3,9 @@
 
     public enum EProviderType
     {
-        eDocument = 0,
-        eMemoryStream,
-        eString
+        Document = 0,
+        MemoryStream,
+        String,
+        Json,
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using StockBox.Associations;
 using StockBox.Associations.Enums;
 using StockBox.Base.Tokens;
@@ -38,80 +39,66 @@ namespace StockBox.Data.SbFrames
             _provider = provider;
         }
 
-        public SbFrame CreateDailySbFrame(IDomainCombinationsProvider dailyCombos, ISymbolProvider symbol)
+        public async Task<SbFrame> CreateDailySbFrame(IDomainCombinationsProvider dailyCombos, ISymbolProvider symbol)
         {
             var ret = new DailyFrame(_provider.Create(), symbol);
-
-            var startDate = DateTimeFrameHelper.Get(dailyCombos, EFrequency.eDaily);
-            var endDate = DateTimeFrameHelper.GetOrigin();
-            var payload = StreamFactory.Create(symbol.Name, EFrequency.eDaily, startDate, endDate);
-
-            var toDataPointListAdapter = new DeedleToDataPointListAdapter(payload.Stream);
-
-            ret.AddData(toDataPointListAdapter.Convert());
+            ret.AddData(await DataPointListFactory.Create(
+                symbol.Name, EFrequency.Daily, 
+                DateTimeFrameHelper.Get(dailyCombos, EFrequency.Daily), 
+                DateTimeFrameHelper.GetOrigin()));
             MapIndicators(ret, dailyCombos);
             return ret;
         }
 
-        public SbFrame CreateWeeklySbFrame(IDomainCombinationsProvider weeklyCombos, ISymbolProvider symbol)
+        public async Task<SbFrame> CreateWeeklySbFrame(IDomainCombinationsProvider weeklyCombos, ISymbolProvider symbol)
         {
             var ret = new WeeklyFrame(_provider.Create(), symbol);
-
-            var startDate = DateTimeFrameHelper.Get(weeklyCombos, EFrequency.eWeekly);
-            var endDate = DateTimeFrameHelper.GetOrigin();
-            var payload = StreamFactory.Create(symbol.Name, EFrequency.eWeekly, startDate, endDate);
-
-            var toDataPointListAdapter = new DeedleToDataPointListAdapter(payload.Stream);
-
-            ret.AddData(toDataPointListAdapter.Convert());
+            ret.AddData(await DataPointListFactory.Create(
+                symbol.Name, EFrequency.Daily,
+                DateTimeFrameHelper.Get(weeklyCombos, EFrequency.Weekly),
+                DateTimeFrameHelper.GetOrigin()));
             MapIndicators(ret, weeklyCombos);
             return ret;
         }
 
-        public SbFrame CreateMonthlySbFrame(IDomainCombinationsProvider monthlyCombos, ISymbolProvider symbol)
+        public async Task<SbFrame> CreateMonthlySbFrame(IDomainCombinationsProvider monthlyCombos, ISymbolProvider symbol)
         {
             var ret = new MonthlyFrame(_provider.Create(), symbol);
-
-            var startDate = DateTimeFrameHelper.Get(monthlyCombos, EFrequency.eMonthly);
-            var endDate = DateTimeFrameHelper.GetOrigin();
-            var payload = StreamFactory.Create(symbol.Name, EFrequency.eMonthly, startDate, endDate);
-            var toDataPointListAdapter = new DeedleToDataPointListAdapter(payload.Stream);
-
-            ret.AddData(toDataPointListAdapter.Convert());
+            ret.AddData(await DataPointListFactory.Create(
+                symbol.Name, EFrequency.Daily,
+                DateTimeFrameHelper.Get(monthlyCombos, EFrequency.Monthly),
+                DateTimeFrameHelper.GetOrigin()));
             MapIndicators(ret, monthlyCombos);
             return ret;
         }
 
-        public SbFrame CreateDailySbFrame(ISymbolProvider symbol)
+        public async Task<SbFrame> CreateDailySbFrame(ISymbolProvider symbol)
         {
             var ret = new DailyFrame(_provider.Create(), symbol);
-            var endDate = DateTimeFrameHelper.GetOrigin();
-            var payload = StreamFactory.Create(symbol.Name, EFrequency.eDaily, _historicalStart, endDate);
-            var toDataPointListAdapter = new DeedleToDataPointListAdapter(payload.Stream);
-
-            ret.AddData(toDataPointListAdapter.Convert());
+            ret.AddData(await DataPointListFactory.Create(
+               symbol.Name, EFrequency.Daily,
+               _historicalStart,
+               DateTimeFrameHelper.GetOrigin()));
             return ret;
         }
 
-        public SbFrame CreateWeeklySbFrame(ISymbolProvider symbol)
+        public async Task<SbFrame> CreateWeeklySbFrame(ISymbolProvider symbol)
         {
             var ret = new WeeklyFrame(_provider.Create(), symbol);
-            var endDate = DateTimeFrameHelper.GetOrigin();
-            var payload = StreamFactory.Create(symbol.Name, EFrequency.eWeekly, _historicalStart, endDate);
-            var toDataPointListAdapter = new DeedleToDataPointListAdapter(payload.Stream);
-
-            ret.AddData(toDataPointListAdapter.Convert());
+            ret.AddData(await DataPointListFactory.Create(
+               symbol.Name, EFrequency.Weekly,
+               _historicalStart,
+               DateTimeFrameHelper.GetOrigin()));
             return ret;
         }
 
-        public SbFrame CreateMonthlySbFrame(ISymbolProvider symbol)
+        public async Task<SbFrame> CreateMonthlySbFrame(ISymbolProvider symbol)
         {
             var ret = new MonthlyFrame(_provider.Create(), symbol);
-            var endDate = DateTimeFrameHelper.GetOrigin();
-            var payload = StreamFactory.Create(symbol.Name, EFrequency.eMonthly, _historicalStart, endDate);
-            var toDataPointListAdapter = new DeedleToDataPointListAdapter(payload.Stream);
-
-            ret.AddData(toDataPointListAdapter.Convert());
+            ret.AddData(await DataPointListFactory.Create(
+                symbol.Name, EFrequency.Monthly,
+                _historicalStart,
+                DateTimeFrameHelper.GetOrigin()));
             return ret;
         }
 
@@ -123,50 +110,50 @@ namespace StockBox.Data.SbFrames
             }
         }
 
-        public List<ISbFrame> Create(IDomainCombinationsProvider combos, ISymbolProvider symbol)
+        public async Task<List<ISbFrame>> Create(IDomainCombinationsProvider combos, ISymbolProvider symbol)
         {
             SbFrameList ret = new SbFrameList();
 
             var dailyCombos = combos.GetDailyDomainCombos() as DomainCombinationList;
             if (dailyCombos.Count > 0)
-                ret.Add(CreateDailySbFrame(dailyCombos, symbol));
+                ret.Add(await CreateDailySbFrame(dailyCombos, symbol));
 
             var weeklyCombos = combos.GetWeeklyDomainCombos() as DomainCombinationList;
             if (weeklyCombos.Count > 0)
-                ret.Add(CreateWeeklySbFrame(weeklyCombos, symbol));
+                ret.Add(await CreateWeeklySbFrame(weeklyCombos, symbol));
 
             var domainTokens = combos.GetDomainTokens() as DomainCombinationList;
             if (domainTokens.Count == 0)
             {
                 var monthlyCombos = combos.GetMonthyDomainCombos() as DomainCombinationList;
                 if (monthlyCombos.Count > 0)
-                    ret.Add(CreateMonthlySbFrame(monthlyCombos, symbol));
+                    ret.Add(await CreateMonthlySbFrame(monthlyCombos, symbol));
             }
             else
             {
-                ret.Add(CreateMonthlySbFrame(domainTokens, symbol));
+                ret.Add(await CreateMonthlySbFrame(domainTokens, symbol));
             }
 
             return ret;
         }
 
-        public List<ISbFrame> CreateBacktestData(ISymbolProvider symbol)
+        public async Task<List<ISbFrame>> CreateBacktestData(ISymbolProvider symbol)
         {
             var ret = new SbFrameList();
-            ret.Add(CreateDailySbFrame(symbol));
-            ret.Add(CreateWeeklySbFrame(symbol));
-            ret.Add(CreateMonthlySbFrame(symbol));
+            ret.Add(await CreateDailySbFrame(symbol));
+            ret.Add(await CreateWeeklySbFrame(symbol));
+            ret.Add(await CreateMonthlySbFrame(symbol));
             return ret;
         }
 
         public void AddIndicators(List<ISbFrame> framelist, IDomainCombinationsProvider domainCombinations)
         {
             var fl = framelist as SbFrameList;
-            var dailyFrameList = fl.FindByFrequency(EFrequency.eDaily);
+            var dailyFrameList = fl.FindByFrequency(EFrequency.Daily);
             MapIndicators(dailyFrameList, domainCombinations.GetDailyDomainCombos());
-            var weeklyFrameList = fl.FindByFrequency(EFrequency.eWeekly);
+            var weeklyFrameList = fl.FindByFrequency(EFrequency.Weekly);
             MapIndicators(weeklyFrameList, domainCombinations.GetWeeklyDomainCombos());
-            var montlyFrameList = fl.FindByFrequency(EFrequency.eMonthly);
+            var montlyFrameList = fl.FindByFrequency(EFrequency.Monthly);
             MapIndicators(montlyFrameList, domainCombinations.GetMonthyDomainCombos());
         }
 

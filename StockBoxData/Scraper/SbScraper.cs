@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading.Tasks;
 using StockBox.Associations;
 using StockBox.Data.Scraper.Parsers;
 using StockBox.Data.Scraper.Providers;
@@ -23,13 +24,17 @@ namespace StockBox.Data.Scraper
         public SbScraper(ISbScraperProvider provider, ISbScraperParser parser)
         {
             _provider = provider;
+            _provider.Parent = this;
             _parser = parser;
+            _parser.Parent = this;
         }
 
         public void Load(ISbScraperProvider provider, ISbScraperParser parser)
         {
             _provider = provider;
+            _provider.Parent = this;
             _parser = parser;
+            _parser.Parent = this;
         }
 
         public SbScraper Clone()
@@ -37,24 +42,11 @@ namespace StockBox.Data.Scraper
             return new SbScraper(_provider, _parser);
         }
 
-        public ScraperParserBase.OutType Scrape()
+        public async Task<ScraperParserBase.OutType> Scrape()
         {
-            return _parser.GetPayload(_provider.GetPayload());
+            var payload = await _provider.GetPayload();
+            return _parser.GetPayload(payload);
         }
 
-        MemoryStream ICallContextProvider.GetDaily()
-        {
-            throw new NotImplementedException();
-        }
-
-        MemoryStream ICallContextProvider.GetWeekly()
-        {
-            throw new NotImplementedException();
-        }
-
-        MemoryStream ICallContextProvider.GetMontly()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

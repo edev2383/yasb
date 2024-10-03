@@ -11,7 +11,7 @@ namespace StockBox.Data.SbFrames
     /// </summary>
     public class WeeklyFrame : SbFrame
     {
-        public WeeklyFrame(IDataPointListProvider provider, ISymbolProvider symbol) : base(provider, EFrequency.eWeekly, symbol)
+        public WeeklyFrame(IDataPointListProvider provider, ISymbolProvider symbol) : base(provider, EFrequency.Weekly, symbol)
         {
         }
     }

@@ -12,6 +12,9 @@ namespace StockBox.Data.SbFrames
     /// </summary>
     public class DataPointList : List<DataPoint>
     {
+        /// <summary>
+        /// A reversed clone of the DataPointList
+        /// </summary>
         public DataPointList Reversed { get { return GetReversed(); } }
 
         public DataPointList() { }
@@ -105,9 +108,11 @@ namespace StockBox.Data.SbFrames
         }
 
         /// <summary>
-        /// Clone and return the whole dataset and return the new object
-        ///
-        /// Note: Not an in-place reversal
+        /// Create a new clone of the dataset and reverses the order. This is just a 
+        /// List<T>.Reverse() call, and not an explicit Sort based on the date key. 
+        /// 
+        /// Note: We may want to update that to an explicit Sort in the future, but
+        /// for now, we're good to use this method.
         /// </summary>
         /// <returns></returns>
         public DataPointList GetReversed()

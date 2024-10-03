@@ -31,7 +31,7 @@ namespace StockBox.Data.Indicators
 
             // If the indicator cannot be found in the IDataFrameAdapter.Parent,
             // go ahead and add it to calculate and map it home
-            if (provider.IndicatorExists(this) != true)
+            if (provider.IndicatorExists(fastSto) != true)
                 provider.Parent.AddIndicator(fastSto);
 
             var data = provider.GetFullDataSource().Reversed;

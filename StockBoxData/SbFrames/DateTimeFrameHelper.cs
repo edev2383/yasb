@@ -36,13 +36,13 @@ namespace StockBox.Data.SbFrames
                 // account for offset of weekend/holidays.
                 // Note: using a 2 wasn't quite enough to guarantee total
                 // expected coverage, so to err on the side of caution, use 3.
-                case EFrequency.eDaily:
-                    max += Math.Ceiling(max / 7) * 3;
+                case EFrequency.Daily:
+                    max += Math.Ceiling(max / 7) * (marginMultiplier + 1);
                     break;
-                case EFrequency.eWeekly:
+                case EFrequency.Weekly:
                     frequencyMultiplier = 7;
                     break;
-                case EFrequency.eMonthly:
+                case EFrequency.Monthly:
                     {
                         // if the provided combo list has domain tokens, we want
                         // to go back for a larger historical dataset. In reality
@@ -65,7 +65,7 @@ namespace StockBox.Data.SbFrames
             //     use -1 to explicitly imply the inverse.
             // marginMultiplier: Our default request is double what is indexed,
             //     because we need the additional data to perform the proper
-            //     calculations. Example: SMA(50) needs 50 days of data to begin
+            //     calculations. Example: SMA(50) needs 100 days of data to begin
             //     populating the values at the start of the requested range
             // frequencyMultiplier: An offset to account for the requested freq.
             //     i.e., daily, weekly, monthly

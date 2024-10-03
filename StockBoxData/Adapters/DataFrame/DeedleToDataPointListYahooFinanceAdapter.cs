@@ -9,12 +9,15 @@ using StockBox.Validation;
 namespace StockBox.Data.Adapters.DataFrame
 {
 
-
-    public class DeedleToDataPointListAdapter
+    /// <summary>
+    /// Convert the MemoryStream from YahooFinance CSV download
+    /// into a DataPointList object.
+    /// </summary>
+    public class DeedleToDataPointListYahooFinanceAdapter
     {
         private readonly MemoryStream _source;
         public DataPointList _payload;
-        public DeedleToDataPointListAdapter(MemoryStream stream)
+        public DeedleToDataPointListYahooFinanceAdapter(MemoryStream stream)
         {
             _source = stream;
         }

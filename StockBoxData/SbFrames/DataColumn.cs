@@ -35,9 +35,7 @@ namespace StockBox.Data.SbFrames
             eEma,
             eSloSto,
             eFastSto,
-            eBBandsLower,
-            eBBandsHigher,
-            eBBandsCenter,
+            BollingerBands,
             eAtr,
             ePriceChannel,
         }
@@ -169,18 +167,14 @@ namespace StockBox.Data.SbFrames
                     ret = $"ATR({string.Join(",", _indices)})";
                     break;
                 case EColumns.ePriceChannel:
-                    ret = $"PC({string.Join(",", _indices)})";
+                    ret = $"CHAN({string.Join(",", _indices)})";
                     break;
                 case EColumns.eEma:
-                    break;
-                case EColumns.eBBandsLower:
-                    break;
-                case EColumns.eBBandsHigher:
-                    break;
-                case EColumns.eBBandsCenter:
-                    break;
+                    throw new ArgumentOutOfRangeException($"Unknown column value provided {_column}. ");
+                case EColumns.BollingerBands:
+                    throw new ArgumentOutOfRangeException($"Unknown column value provided {_column}. ");
                 default:
-                    throw new ArgumentOutOfRangeException($"Unknown column value provided {_column}");
+                    throw new ArgumentOutOfRangeException($"Unknown column value provided {_column}. ");
             }
 
             return ret;

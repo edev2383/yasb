@@ -1,11 +1,6 @@
-﻿using System;
-using StockBox.Associations;
+﻿using StockBox.Associations;
 using StockBox.Associations.Enums;
-using StockBox.Data.SbFrames;
-using StockBox.Data.Scraper;
-using StockBox.Data.Scraper.Parsers;
-using StockBox.Data.Scraper.Providers;
-using static StockBox.Data.Scraper.Providers.HistoryYahooFinanceProvider;
+using System;
 
 
 namespace StockBox.Data.Context
@@ -15,27 +10,14 @@ namespace StockBox.Data.Context
     /// Create and return an IStreamProvider object. Currently, it's just the
     /// one parser, but this will expand as we add some redundancies.
     /// </summary>
+    [Obsolete]
     public class StreamFactory
     {
         public static IStreamProvider Create(string symbol, EFrequency frequency, DateTime startDate, DateTime? endDate = null)
         {
-            return CreateYahooFinanceStream(symbol, frequency, startDate, endDate);
+            throw new NotImplementedException();
+            //return CreateNasdaqStream(symbol, frequency, startDate, endDate);
         }
 
-        private static IStreamProvider CreateYahooFinanceStream(string symbol, EFrequency frequency, DateTime startDate, DateTime? endDate = null)
-        {
-            var inType = new HistoryYahooFinanceProvider_InType()
-            {
-                Symbol = symbol,
-                Interval = frequency,
-                EndDate = endDate != null ? (DateTime)endDate : DateTimeFrameHelper.GetOrigin(),
-                StartDate = startDate,
-            };
-
-            var scraperProvider = new HistoryYahooFinanceProvider(inType);
-            var scraperParser = new HistoryYahooFinanceParser();
-            var scraper = new SbScraper(scraperProvider, scraperParser);
-            return scraper.Scrape() as HistoryYahooFinanceParser.HistoryParser_OutType;
-        }
     }
 }

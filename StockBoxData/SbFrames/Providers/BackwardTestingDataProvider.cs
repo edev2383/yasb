@@ -60,7 +60,7 @@ namespace StockBox.Data.SbFrames.Providers
 
         public int CurrentIteration()
         {
-            return _windowIndex == null ? 0 : (int)_windowIndex;
+            return _windowIndex ?? 0;
         }
     }
 }

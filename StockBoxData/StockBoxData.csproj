@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
 		<RootNamespace>StockBox.Data</RootNamespace>
-		<Version>1.0.1</Version>
+		<Version>1.0.2</Version>
 	</PropertyGroup>
 	<ItemGroup>
 		<None Remove="Deedle" />
@@ -29,23 +29,17 @@
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Deedle" Version="2.5.0" />
-		<PackageReference Include="Npgsql" Version="6.0.6" />
-		<PackageReference Include="NHibernate" Version="5.3.12" />
+		<PackageReference Include="Npgsql" Version="8.0.3" />
+		<PackageReference Include="NHibernate" Version="5.5.2" />
 		<PackageReference Include="HtmlAgilityPack" Version="1.11.45" />
 	</ItemGroup>
 	<ItemGroup>
-		<Folder Include="Adapters\" />
-		<Folder Include="Adapters\DataFrame\" />
 		<Folder Include="Repositories\" />
 		<Folder Include="Managers\" />
 		<Folder Include="Context\" />
 		<Folder Include="Interfaces\" />
 		<Folder Include="Models\" />
-		<Folder Include="Scraper\" />
-		<Folder Include="Scraper\Providers\" />
-		<Folder Include="Scraper\Parsers\" />
 		<Folder Include="Scraper\Providers\Helpers\" />
-		<Folder Include="Scraper\Helpers\" />
 		<Folder Include="Context\Providers\" />
 		<Folder Include="DataFrames\" />
 		<Folder Include="SbFrames\Helpers\" />

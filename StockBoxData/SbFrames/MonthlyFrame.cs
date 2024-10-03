@@ -11,7 +11,7 @@ namespace StockBox.Data.SbFrames
     /// </summary>
     public class MonthlyFrame : SbFrame
     {
-        public MonthlyFrame(IDataPointListProvider provider, ISymbolProvider symbol) : base(provider, EFrequency.eMonthly, symbol)
+        public MonthlyFrame(IDataPointListProvider provider, ISymbolProvider symbol) : base(provider, EFrequency.Monthly, symbol)
         {
         }
     }
