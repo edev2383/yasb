@@ -1,13 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using StockBox.Associations;
+﻿using StockBox.Associations;
 using StockBox.Associations.Enums;
 using StockBox.Base.Tokens;
 using StockBox.Data.Adapters.DataFrame;
 using StockBox.Data.Indicators;
 using StockBox.Data.SbFrames;
 using StockBox.Data.SbFrames.Helpers;
+using StockBox.Data.Scraper.Parsers;
 using StockBox_TestArtifacts.Helpers;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace StockBox_TestArtifacts.Mocks
 {
@@ -28,7 +29,7 @@ namespace StockBox_TestArtifacts.Mocks
             _provider = provider;
         }
 
-        public List<ISbFrame> Create(IDomainCombinationsProvider combos, ISymbolProvider symbol)
+        public async Task<List<ISbFrame>> Create(IDomainCombinationsProvider combos, ISymbolProvider symbol)
         {
             SbFrameList ret = new SbFrameList();
 
@@ -42,11 +43,10 @@ namespace StockBox_TestArtifacts.Mocks
         public SbFrame CreateDailySbFrame(IDomainCombinationsProvider dailyCombos, ISymbolProvider symbol)
         {
             var ret = new DailyFrame(_provider.Create(), symbol);
-            var reader = new Reader();
-
-            var toDataPointListAdapater = new DeedleToDataPointListAdapter(reader.GetFileStream(DataTarget_Daily));
-
-            ret.AddData(toDataPointListAdapater.Convert());
+            var fileContents = new Reader().GetFileContents(EFile.AlphaVantageDailyTxt);
+            var parser = new AlphaVantageSecurityHistoryParser();
+            var payload = parser.GetPayload(fileContents) as AlphaVantageSecurityHistoryParser.HistoryParser_OutType;
+            ret.AddData(payload.Data);
             MapIndicators(ret, dailyCombos);
             return ret;
         }
@@ -54,10 +54,10 @@ namespace StockBox_TestArtifacts.Mocks
         public SbFrame CreateWeeklySbFrame(IDomainCombinationsProvider weeklyCombos, ISymbolProvider symbol)
         {
             var ret = new WeeklyFrame(_provider.Create(), symbol);
-            var reader = new Reader();
-            var toDataPointListAdapater = new DeedleToDataPointListAdapter(reader.GetFileStream(DataTarget_Weekly));
-
-            ret.AddData(toDataPointListAdapater.Convert());
+            var fileContents = new Reader().GetFileContents(EFile.AlphaVantageWeeklyTxt);
+            var parser = new AlphaVantageSecurityHistoryParser();
+            var payload = parser.GetPayload(fileContents) as AlphaVantageSecurityHistoryParser.HistoryParser_OutType;
+            ret.AddData(payload.Data);
 
             MapIndicators(ret, weeklyCombos);
             return ret;
@@ -66,10 +66,10 @@ namespace StockBox_TestArtifacts.Mocks
         public SbFrame CreateMonthlySbFrame(IDomainCombinationsProvider monthlyCombos, ISymbolProvider symbol)
         {
             var ret = new MonthlyFrame(_provider.Create(), symbol);
-            var reader = new Reader();
-            var toDataPointListAdapater = new DeedleToDataPointListAdapter(reader.GetFileStream(DataTarget_Monthly));
-
-            ret.AddData(toDataPointListAdapater.Convert());
+            var fileContents = new Reader().GetFileContents(EFile.AlphaVantageMonthlyTxt);
+            var parser = new AlphaVantageSecurityHistoryParser();
+            var payload = parser.GetPayload(fileContents) as AlphaVantageSecurityHistoryParser.HistoryParser_OutType;
+            ret.AddData(payload.Data);
             MapIndicators(ret, monthlyCombos);
             return ret;
         }
@@ -82,7 +82,7 @@ namespace StockBox_TestArtifacts.Mocks
             }
         }
 
-        public List<ISbFrame> CreateBacktestData(ISymbolProvider symbol)
+        public async Task<List<ISbFrame>> CreateBacktestData(ISymbolProvider symbol)
         {
             var ret = new SbFrameList();
             ret.Add(CreateDailySbFrame(symbol));
@@ -94,11 +94,11 @@ namespace StockBox_TestArtifacts.Mocks
         public void AddIndicators(List<ISbFrame> framelist, IDomainCombinationsProvider domainCombinations)
         {
             var fl = framelist as SbFrameList;
-            var dailyFrameList = fl.FindByFrequency(EFrequency.eDaily);
+            var dailyFrameList = fl.FindByFrequency(EFrequency.Daily);
             MapIndicators(dailyFrameList, domainCombinations.GetDailyDomainCombos());
-            var weeklyFrameList = fl.FindByFrequency(EFrequency.eWeekly);
+            var weeklyFrameList = fl.FindByFrequency(EFrequency.Weekly);
             MapIndicators(weeklyFrameList, domainCombinations.GetWeeklyDomainCombos());
-            var montlyFrameList = fl.FindByFrequency(EFrequency.eMonthly);
+            var montlyFrameList = fl.FindByFrequency(EFrequency.Monthly);
             MapIndicators(montlyFrameList, domainCombinations.GetMonthyDomainCombos());
         }
 
@@ -106,7 +106,7 @@ namespace StockBox_TestArtifacts.Mocks
         {
             var ret = new DailyFrame(_provider.Create(), symbol);
             var reader = new Reader();
-            var toDataPointListAdapater = new DeedleToDataPointListAdapter(reader.GetFileStream(DataTarget_Daily));
+            var toDataPointListAdapater = new DeedleToDataPointListYahooFinanceAdapter(reader.GetFileStream(DataTarget_Daily));
 
             ret.AddData(toDataPointListAdapater.Convert());
             return ret;
@@ -116,7 +116,7 @@ namespace StockBox_TestArtifacts.Mocks
         {
             var ret = new WeeklyFrame(_provider.Create(), symbol);
             var reader = new Reader();
-            var toDataPointListAdapater = new DeedleToDataPointListAdapter(reader.GetFileStream(DataTarget_Weekly));
+            var toDataPointListAdapater = new DeedleToDataPointListYahooFinanceAdapter(reader.GetFileStream(DataTarget_Weekly));
 
             ret.AddData(toDataPointListAdapater.Convert());
             return ret;
@@ -126,7 +126,7 @@ namespace StockBox_TestArtifacts.Mocks
         {
             var ret = new MonthlyFrame(_provider.Create(), symbol);
             var reader = new Reader();
-            var toDataPointListAdapater = new DeedleToDataPointListAdapter(reader.GetFileStream(DataTarget_Monthly));
+            var toDataPointListAdapater = new DeedleToDataPointListYahooFinanceAdapter(reader.GetFileStream(DataTarget_Monthly));
 
             ret.AddData(toDataPointListAdapater.Convert());
             return ret;

@@ -1,11 +1,12 @@
-﻿using StockBox.Actions.Responses;
-using StockBox.Associations;
+﻿using StockBox.Associations;
 using StockBox.Data.SbFrames;
 using StockBox.Models;
+using StockBox.Positions;
 using StockBox.Services;
 using StockBox.Setups;
 using StockBox.States;
 using StockBox.Validation;
+using System.Threading.Tasks;
 
 
 namespace StockBox.Controllers
@@ -46,15 +47,14 @@ namespace StockBox.Controllers
         /// </summary>
         /// <param name="setup"></param>
         /// <param name="profiles"></param>
-        public void ScanSetup(Setup setup, SymbolProfileList profiles)
+        public async Task ScanSetup(Setup setup, SymbolProfileList profiles)
         {
-            ScanSetups(new SetupList(setup), profiles);
-
+            await ScanSetups(new SetupList(setup), profiles);
         }
 
-        public abstract void ScanSetups(SetupList setups, SymbolProfileList profiles);
-        protected abstract ValidationResultList ProcessSetup(Setup setup, SymbolProfileList relatedProfiles);
-        protected abstract ValidationResultList ProcessSetups(SetupList setups, SymbolProfile symbol);
+        public abstract Task ScanSetups(SetupList setups, SymbolProfileList profiles);
+        protected abstract Task<ValidationResultList> ProcessSetup(Setup setup, SymbolProfileList relatedProfiles);
+        protected abstract Task<ValidationResultList> ProcessSetups(SetupList setups, SymbolProfile symbol);
 
         /// <summary>
         /// Perform the action contained within the Setup. This includes, but
@@ -62,12 +62,12 @@ namespace StockBox.Controllers
         /// </summary>
         /// <param name="setup"></param>
         /// <returns></returns>
-        protected virtual ValidationResultList PerformSetupActions(Setup setup, DataPoint dataPoint)
+        protected virtual ValidationResultList PerformSetupActions(Setup setup, DataPoint dataPoint, Position position)
         {
             var vr = new ValidationResultList();
             vr.Add(new ValidationResult(setup.Action != null, "Setup MUST HAVE an action"));
             if (vr.Success)
-                vr.AddRange(setup.PerformActions(dataPoint));
+                vr.AddRange(setup.PerformActions(dataPoint, position));
             return vr;
         }
 

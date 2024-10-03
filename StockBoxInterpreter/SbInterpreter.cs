@@ -403,11 +403,11 @@ namespace StockBox.Interpreter
             switch (token.Type)
             {
                 case eDaily:
-                    return EFrequency.eDaily;
+                    return EFrequency.Daily;
                 case eWeekly:
-                    return EFrequency.eWeekly;
+                    return EFrequency.Weekly;
                 case eMonthly:
-                    return EFrequency.eMonthly;
+                    return EFrequency.Monthly;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -424,13 +424,13 @@ namespace StockBox.Interpreter
             var found = false;
             switch (frequency)
             {
-                case EFrequency.eDaily:
+                case EFrequency.Daily:
                     found = true;
                     break;
-                case EFrequency.eWeekly:
+                case EFrequency.Weekly:
                     found = true;
                     break;
-                case EFrequency.eMonthly:
+                case EFrequency.Monthly:
                     found = true;
                     break;
                 default:

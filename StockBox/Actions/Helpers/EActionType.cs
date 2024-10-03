@@ -6,12 +6,16 @@ namespace StockBox.Actions.Helpers
 
     public enum EActionType
     {
-        eUnknown = 0,
-        eBuy,
-        eSell,
-        eMoveGeneral,
-        eMoveFailure,
-        eMoveSuccess,
-        eAlert,
+        Unknown = 0,
+        BuyMarket,
+        BuyStop,
+        BuyLimit,
+        SellMarket,
+        SellStop,
+        SellLimit,
+        MoveGeneral,
+        MoveAutoFailure,
+        MoveAutoSuccess,
+        Alert,
     }
 }

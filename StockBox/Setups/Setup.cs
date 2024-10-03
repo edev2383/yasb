@@ -3,6 +3,7 @@ using StockBox.Actions;
 using StockBox.Data.SbFrames;
 using StockBox.Interpreter;
 using StockBox.Models;
+using StockBox.Positions;
 using StockBox.RiskProfiles;
 using StockBox.Rules;
 using StockBox.Services;
@@ -172,14 +173,14 @@ namespace StockBox.Setups
         /// </summary>
         /// <param name="dataPoint"></param>
         /// <returns></returns>
-        public ValidationResultList PerformActions(DataPoint dataPoint)
+        public ValidationResultList PerformActions(DataPoint dataPoint, Position position)
         {
             var ret = new ValidationResultList();
             foreach (ISbAction action in _actions)
                 // add the ActionResponse object to the ret list. ActionResponse
                 // is an IValidationResultProvider, so the VRList knows how to
                 // parse it as a result
-                ret.Add(action.Act(dataPoint));
+                ret.Add(action.Act(dataPoint, position));
             return ret;
         }
     }

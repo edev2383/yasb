@@ -6,6 +6,7 @@ using StockBox.Actions.Responses;
 using StockBox.Models;
 using StockBox.Data.SbFrames;
 using StockBox.RiskProfiles;
+using StockBox.Positions;
 
 namespace StockBox.Actions
 {
@@ -20,7 +21,7 @@ namespace StockBox.Actions
 
         object Response { get; set; }
 
-        ActionResponse Act(DataPoint dataPoint);
+        ActionResponse Act(DataPoint dataPoint, Position position);
         ISbAction Clone();
     }
 }

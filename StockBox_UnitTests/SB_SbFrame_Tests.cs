@@ -14,6 +14,7 @@ using StockBox.Associations.Enums;
 using StockBox.Models;
 using StockBox_TestArtifacts.Builders.StockBox.Rules;
 using StockBox.Data.SbFrames.Providers;
+using System.Threading.Tasks;
 
 namespace StockBox_UnitTests
 {
@@ -22,7 +23,7 @@ namespace StockBox_UnitTests
     public class SB_SbFrame_Tests
     {
         [TestMethod]
-        public void SB_SbFrame_01_Tests()
+        public async Task SB_SbFrame_01_Tests()
         {
             // source string
             var src = "SMA(25)";
@@ -38,12 +39,12 @@ namespace StockBox_UnitTests
 
             // from the analyzed expression, create the desired SbFrameList
             var factory = new FrameListFactory(new Reader(), new ForwardTestingDataProvider());
-            var sbframelist = factory.Create(exprAnalyzer.Combos, new Symbol("MSFT")) as SbFrameList;
+            var sbframelist = await factory.Create(exprAnalyzer.Combos, new Symbol("MSFT")) as SbFrameList;
 
             Assert.IsNotNull(sbframelist);
 
             // find the daily frame
-            var dailyFrame = sbframelist.FindByFrequency(EFrequency.eDaily);
+            var dailyFrame = sbframelist.FindByFrequency(EFrequency.Daily);
 
             Assert.IsNotNull(dailyFrame);
             Assert.IsTrue(dailyFrame.Length > 0);
@@ -104,7 +105,7 @@ namespace StockBox_UnitTests
         }
 
         [TestMethod]
-        public void SB_SbFrame_04_Tests()
+        public async Task SB_SbFrame_04_Tests()
         {
             var rules = new PatternBuilder()
                             .WithRule(new Rule("Close > 82"))
@@ -121,12 +122,12 @@ namespace StockBox_UnitTests
             analyzer.Scan();
 
             var factory = new FrameListFactory(new Reader(), new ForwardTestingDataProvider());
-            var frameList = factory.Create(analyzer.Combos, new Symbol("MSFT")) as SbFrameList;
+            var frameList = await factory.Create(analyzer.Combos, new Symbol("MSFT")) as SbFrameList;
 
             Assert.IsTrue(frameList.Count > 0);
 
             // find the daily frame
-            var dailyFrame = frameList.FindByFrequency(EFrequency.eDaily);
+            var dailyFrame = frameList.FindByFrequency(EFrequency.Daily);
 
             Assert.IsNotNull(dailyFrame);
             Assert.IsTrue(dailyFrame.Length > 0);

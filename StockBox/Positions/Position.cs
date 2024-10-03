@@ -16,7 +16,7 @@ namespace StockBox.Positions
     {
 
         public ISymbolProvider Symbol { get { return _symbol; } }
-        public TransactionList Transactions { get { return _transactions; } }
+        public OrderList Transactions { get { return _transactions; } }
         public RiskProfile RiskProfile { get { return _riskProfile; } }
 
         public bool IsOpen { get { return _transactions.HasOpenTransaction(); } }
@@ -84,7 +84,7 @@ namespace StockBox.Positions
         public int? PositionId { get; set; }
         public Guid? Token { get { return _token; } }
 
-        private TransactionList _transactions = new TransactionList();
+        private OrderList _transactions = new OrderList();
         private ISymbolProvider _symbol;
         private RiskProfile _riskProfile;
         private Guid _token;
@@ -115,22 +115,20 @@ namespace StockBox.Positions
             return ShareDiff * TotalShares;
         }
 
-        public void AddBuy(Transaction transaction)
+        public void AddBuy(Order transaction)
         {
             TotalShares = transaction.ShareCount != null ? (int)transaction.ShareCount : 0;
             ActiveShares = transaction.ShareCount;
             EntryPrice = transaction.SharePrice;
             EntryDates.Add(transaction.Timestamp);
-            transaction.PositionToken = _token;
             _transactions.Add(transaction);
         }
 
-        public void AddSell(Transaction transaction)
+        public void AddSell(Order transaction)
         {
             ActiveShares -= transaction.ShareCount;
             CurrentPrice = transaction.SharePrice;
             ExitDates.Add(transaction.Timestamp);
-            transaction.PositionToken = _token;
             _transactions.Add(transaction);
             if (ActiveShares <= 0)
             {

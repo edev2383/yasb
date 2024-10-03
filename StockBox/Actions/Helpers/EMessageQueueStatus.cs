@@ -2,9 +2,9 @@
 {
     public enum EMessageQueueStatus
     {
-        eUnsent = 1,
-        eSent = 2,
-        eError = 3,
-        eTestMessage = 4
+        Unsent = 1,
+        Sent = 2,
+        Error = 3,
+        TestMessage = 4
     }
 }

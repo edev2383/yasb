@@ -104,7 +104,7 @@ namespace StockBox_UnitTests
             var literal = new DomainLiteral("Close");
             var expr = new DomainExpr(index, op, literal);
             var stream = new Reader().GetFileStream(EFile.eAmdDaily);
-            var toDplAdapter = new DeedleToDataPointListAdapter(stream);
+            var toDplAdapter = new DeedleToDataPointListYahooFinanceAdapter(stream);
             var provider = new ForwardTestingDataProvider(toDplAdapter.Convert());
             var dailyFrame = new DailyFrame(provider, new Symbol(string.Empty));
             var framelist = new SbFrameList();
@@ -124,7 +124,7 @@ namespace StockBox_UnitTests
             var scanner = new Scanner(source);
             var parser = new Parser(scanner.ScanTokens());
             var stream = new Reader().GetFileStream(EFile.eAmdDaily);
-            var toDplAdapter = new DeedleToDataPointListAdapter(stream);
+            var toDplAdapter = new DeedleToDataPointListYahooFinanceAdapter(stream);
             var provider = new ForwardTestingDataProvider(toDplAdapter.Convert());
             var dailyFrame = new DailyFrame(provider, new Symbol(string.Empty));
             var framelist = new SbFrameList();
@@ -141,7 +141,7 @@ namespace StockBox_UnitTests
             var scanner = new Scanner(source);
             var parser = new Parser(scanner.ScanTokens());
             var stream = new Reader().GetFileStream(EFile.eAmdDaily);
-            var toDplAdapter = new DeedleToDataPointListAdapter(stream);
+            var toDplAdapter = new DeedleToDataPointListYahooFinanceAdapter(stream);
             var provider = new ForwardTestingDataProvider(toDplAdapter.Convert());
             var dailyFrame = new DailyFrame(provider, new Symbol(string.Empty));
             var framelist = new SbFrameList();
@@ -159,7 +159,7 @@ namespace StockBox_UnitTests
             var tokens = scanner.ScanTokens();
             var parser = new Parser(tokens);
             var stream = new Reader().GetFileStream(EFile.eAmdDaily);
-            var toDplAdapter = new DeedleToDataPointListAdapter(stream);
+            var toDplAdapter = new DeedleToDataPointListYahooFinanceAdapter(stream);
             var provider = new ForwardTestingDataProvider(toDplAdapter.Convert());
             var dailyFrame = new DailyFrame(provider, new Symbol(string.Empty));
             var framelist = new SbFrameList() { dailyFrame };
@@ -176,7 +176,7 @@ namespace StockBox_UnitTests
             var tokens = scanner.ScanTokens();
             var parser = new Parser(tokens);
             var stream = new Reader().GetFileStream(EFile.eAmdDaily);
-            var toDplAdapter = new DeedleToDataPointListAdapter(stream);
+            var toDplAdapter = new DeedleToDataPointListYahooFinanceAdapter(stream);
             var provider = new ForwardTestingDataProvider(toDplAdapter.Convert());
             var dailyFrame = new DailyFrame(provider, new Symbol(string.Empty));
             var framelist = new SbFrameList() { dailyFrame };
@@ -193,7 +193,7 @@ namespace StockBox_UnitTests
             var tokens = scanner.ScanTokens();
             var parser = new Parser(tokens);
             var stream = new Reader().GetFileStream(EFile.eAmdDaily);
-            var toDplAdapter = new DeedleToDataPointListAdapter(stream);
+            var toDplAdapter = new DeedleToDataPointListYahooFinanceAdapter(stream);
             var provider = new ForwardTestingDataProvider(toDplAdapter.Convert());
             var sma = new SimpleMovingAverage("SMA", 25);
             var dailyFrame = new DailyFrame(provider, new Symbol(string.Empty));

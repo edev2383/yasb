@@ -17,7 +17,7 @@ namespace StockBox.Data.SbFrames
         {
             get
             {
-                var daily = FindByFrequency(EFrequency.eWeekly);
+                var daily = FindByFrequency(EFrequency.Weekly);
                 if (daily == null) return new DataPoint();
                 return daily.FirstDataPoint();
             }
@@ -133,17 +133,17 @@ namespace StockBox.Data.SbFrames
 
         public SbFrame GetMonthly()
         {
-            return FindByFrequency(EFrequency.eMonthly);
+            return FindByFrequency(EFrequency.Monthly);
         }
 
         public SbFrame GetWeekly()
         {
-            return FindByFrequency(EFrequency.eWeekly);
+            return FindByFrequency(EFrequency.Weekly);
         }
 
         public SbFrame GetDaily()
         {
-            return FindByFrequency(EFrequency.eDaily);
+            return FindByFrequency(EFrequency.Daily);
         }
 
         public SbFrame FindGreatestAvailableFrequency()
@@ -158,11 +158,11 @@ namespace StockBox.Data.SbFrames
         {
             switch (frame.Frequency)
             {
-                case EFrequency.eMonthly:
+                case EFrequency.Monthly:
                     return 12;
-                case EFrequency.eWeekly:
+                case EFrequency.Weekly:
                     return 52;
-                case EFrequency.eDaily:
+                case EFrequency.Daily:
                     return 252;
                 default:
                     throw new ArgumentOutOfRangeException();

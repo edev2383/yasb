@@ -9,7 +9,11 @@ namespace StockBox.Positions.Helpers
     /// </summary>
     public enum ETransactionType
     {
-        eBuy = 1,
-        eSell,
+        Buy = 1,
+        BuyLimit,
+        BuyStop,
+        Sell,
+        SellLimit,
+        SellStop,
     }
 }

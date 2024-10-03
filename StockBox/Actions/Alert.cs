@@ -3,6 +3,7 @@ using StockBox.Actions.Adapters;
 using StockBox.Actions.Helpers;
 using StockBox.Actions.Responses;
 using StockBox.Data.SbFrames;
+using StockBox.Positions;
 using StockBox.States;
 
 
@@ -20,7 +21,7 @@ namespace StockBox.Actions
         {
         }
 
-        public Alert(ISbActionAdapter adapter, StateBase transitionState) : base(adapter, transitionState, EActionType.eAlert)
+        public Alert(ISbActionAdapter adapter, StateBase transitionState) : base(adapter, transitionState, EActionType.Alert)
         {
         }
 
@@ -29,7 +30,7 @@ namespace StockBox.Actions
             return new Alert(this);
         }
 
-        public override ActionResponse Act(DataPoint dataPoint)
+        public override ActionResponse Act(DataPoint dataPoint, Position position)
         {
             return null;
         }

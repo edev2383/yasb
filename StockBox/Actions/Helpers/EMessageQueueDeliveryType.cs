@@ -3,8 +3,8 @@ namespace StockBox.Actions.Helpers
 {
     public enum EMessageQueueDeliveryType
     {
-        eEmail = 1,
-        eSMS = 2,
-        ePushNotification = 3
+        Email = 1,
+        Sms = 2,
+        PushNotify = 3
     }
 }

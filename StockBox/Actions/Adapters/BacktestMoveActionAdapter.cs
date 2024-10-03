@@ -1,6 +1,7 @@
 ﻿using System;
 using StockBox.Actions.Responses;
 using StockBox.Data.SbFrames;
+using StockBox.Positions;
 
 namespace StockBox.Actions.Adapters
 {
@@ -14,7 +15,7 @@ namespace StockBox.Actions.Adapters
         {
         }
 
-        public override ActionResponse PerformAction(DataPoint dataPoint)
+        public override ActionResponse PerformAction(DataPoint dataPoint, Position position)
         {
             var ret = new ActionResponse(true);
             ret.Message = $"Symbol {ParentAction.Symbol.Symbol.Name} was moved to {ParentAction.TransitionState.Name}";

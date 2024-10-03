@@ -11,7 +11,7 @@ namespace StockBox.Data.SbFrames
     /// </summary>
     public class DailyFrame : SbFrame
     {
-        public DailyFrame(IDataPointListProvider provider, ISymbolProvider symbol) : base(provider, EFrequency.eDaily, symbol)
+        public DailyFrame(IDataPointListProvider provider, ISymbolProvider symbol) : base(provider, EFrequency.Daily, symbol)
         {
         }
     }

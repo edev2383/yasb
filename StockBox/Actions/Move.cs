@@ -4,6 +4,7 @@ using StockBox.Actions.Adapters;
 using StockBox.Actions.Helpers;
 using StockBox.Actions.Responses;
 using StockBox.Data.SbFrames;
+using StockBox.Positions;
 
 namespace StockBox.Actions
 {
@@ -21,11 +22,11 @@ namespace StockBox.Actions
         /// <param name="adapter"></param>
         /// <param name="watchlistName"></param>
         public Move(ISbActionAdapter adapter, string watchlistName)
-            : base(adapter, new UserDefinedState(watchlistName), EActionType.eMoveGeneral)
+            : base(adapter, new UserDefinedState(watchlistName), EActionType.MoveGeneral)
         { }
 
         public Move(ISbActionAdapter adapter, StateBase state)
-            : base(adapter, state, EActionType.eMoveGeneral)
+            : base(adapter, state, EActionType.MoveGeneral)
         { }
 
         public override ISbAction Clone()
@@ -36,9 +37,9 @@ namespace StockBox.Actions
         /// <summary>
         /// 
         /// </summary>
-        public override ActionResponse Act(DataPoint dataPoint)
+        public override ActionResponse Act(DataPoint dataPoint, Position position)
         {
-            return Adapter.PerformAction(dataPoint);
+            return Adapter.PerformAction(dataPoint, position);
         }
     }
 }

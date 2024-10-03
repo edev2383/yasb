@@ -36,8 +36,8 @@ namespace StockBox.Data.Indicators
                 "slowsto" => new SlowStochastic(column, indices),
                 "faststo" => new FastStochastic(column, indices),
                 "atr" => new AverageTrueRange(column, indices),
-                "pc" => new PriceChannel(column, indices),
                 "chan" => new PriceChannel(column, indices),
+                "conq" => new Conqueror(column, indices),
                 _ => throw new ArgumentOutOfRangeException(),
             }; ;
         }

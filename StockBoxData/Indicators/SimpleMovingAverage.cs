@@ -31,10 +31,15 @@ namespace StockBox.Data.Indicators
         {
             var ret = new Dictionary<DateTime, double>();
 
-            // apply the Mean method over the window of length = Indices[0]
-            // the SortByKey() call may be unnecessary, however, it's probably
-            // better to be safe
-            var values = provider.GetFullDataSource().ToSeries(_targetColumn).SortByKey()
+            /// To get the SimpleMovingAverage, we need to narrow the data source down
+            /// to a singular series and apply a Mean() function to the windowed data.
+            /// 1.) GetFullDataSource returns the entire DataPointList
+            /// 2.) ToSeries converts the DataPointList to an SbSeries object of a singular
+            ///     column
+            /// 3.) Then SortByKey() to ensure the data is in chronological order
+            /// 4.) Window() applies a Function expression to the data in the window
+            var values = provider.GetFullDataSource()
+                            .ToSeries(_targetColumn).SortByKey()
                                  .Window(Indices[0], win => win.Mean());
 
             // loop through the result set

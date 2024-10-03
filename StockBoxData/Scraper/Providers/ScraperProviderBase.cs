@@ -2,6 +2,7 @@
 using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using HtmlAgilityPack;
 using StockBox.Data.Scraper.Helpers;
 using StockBox.Data.Scraper.Providers.Helpers;
@@ -13,6 +14,7 @@ namespace StockBox.Data.Scraper.Providers
     public abstract class ScraperProviderBase : ISbScraperProvider
     {
 
+        public SbScraper Parent { get; set; }
         public InType In { get; set; }
 
         /// <summary>
@@ -59,49 +61,26 @@ namespace StockBox.Data.Scraper.Providers
         /// 
         /// </summary>
         /// <returns></returns>
-        public object GetPayload()
+        public async Task<object> GetPayload()
         {
             switch (_type)
             {
-                case EProviderType.eDocument:
-                    return LoadDocument();
-                case EProviderType.eMemoryStream:
-                    return LoadStream();
-                case EProviderType.eString:
-                    return LoadText();
+                case EProviderType.String:
+                case EProviderType.Json:
+                    return await LoadTextOrJson();
                 default:
                     throw new Exception("Unknown EProviderType");
             }
         }
 
-        /// <summary>
-        /// Use this when doing straightforward webscraping and XPath parsing
-        /// </summary>
-        /// <returns></returns>
-        public virtual HtmlDocument LoadDocument()
-        {
-            HtmlWeb web = new HtmlWeb();
-            return web.Load(Url);
-        }
-
-        /// <summary>
-        /// Use this when attemping to download a csv, or some other file
-        /// </summary>
-        /// <returns></returns>
-        public virtual MemoryStream LoadStream()
-        {
-            return null;
-        }
 
         /// <summary>
         /// Dont have a use-case yet for this, but seemed likely to be needed at
         /// some point
         /// </summary>
         /// <returns></returns>
-        public virtual string LoadText()
-        {
-            return string.Empty;
-        }
+        public abstract Task<string> LoadTextOrJson();
+
 
         /// <summary>
         /// Search the provided url for matches to the regex, and replace any

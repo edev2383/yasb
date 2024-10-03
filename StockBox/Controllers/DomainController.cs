@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Threading.Tasks;
 using StockBox.Associations;
 using StockBox.Data.SbFrames;
 using StockBox.Interpreter;
 using StockBox.Interpreter.Scanner;
 using StockBox.Models;
+using StockBox.Positions;
 using StockBox.Services;
 using StockBox.Setups;
 using StockBox.States;
@@ -32,10 +34,10 @@ namespace StockBox.Controllers
         /// </summary>
         /// <param name="setups"></param>
         /// <param name="profiles"></param>
-        public override void ScanSetups(SetupList setups, SymbolProfileList profiles)
+        public override async Task ScanSetups(SetupList setups, SymbolProfileList profiles)
         {
             foreach (Setup s in setups)
-                _results.AddRange(ProcessSetup(s, profiles.FindBySetup(s)));
+                _results.AddRange(await ProcessSetup(s, profiles.FindBySetup(s)));
         }
 
         /// <summary>
@@ -44,7 +46,7 @@ namespace StockBox.Controllers
         /// <param name="setup"></param>
         /// <param name="relatedProfiles"></param>
         /// <returns></returns>
-        protected override ValidationResultList ProcessSetup(Setup setup, SymbolProfileList relatedProfiles)
+        protected override async Task<ValidationResultList> ProcessSetup(Setup setup, SymbolProfileList relatedProfiles)
         {
             var ret = new ValidationResultList();
 
@@ -59,7 +61,7 @@ namespace StockBox.Controllers
             // Aggregate all SbFrames for all found SymbolProfiles
             foreach (SymbolProfile sp in relatedProfiles)
             {
-                masterFrameList.AddRange(_frameListProvider.Create(expressionAnalyzer.Combos, sp.Symbol));
+                masterFrameList.AddRange(await _frameListProvider.Create(expressionAnalyzer.Combos, sp.Symbol));
             }
 
             foreach (SymbolProfile sp in relatedProfiles)
@@ -95,8 +97,8 @@ namespace StockBox.Controllers
                     // perform the action contained within the Setup
                     if (innerVr.Success)
                     {
-                        var dailyFrame = localFrameList.FindByFrequency(Associations.Enums.EFrequency.eDaily);
-                        var vr = PerformSetupActions(localSetup, dailyFrame.FirstDataPoint());
+                        var dailyFrame = localFrameList.FindByFrequency(Associations.Enums.EFrequency.Daily);
+                        var vr = PerformSetupActions(localSetup, dailyFrame.FirstDataPoint(), new Position(token: null, symbol: locsym.Symbol));
                         innerVr.AddRange(vr);
                     }
                 }
@@ -111,7 +113,7 @@ namespace StockBox.Controllers
 
 
 
-        protected override ValidationResultList ProcessSetups(SetupList setups, SymbolProfile symbol)
+        protected override async Task<ValidationResultList> ProcessSetups(SetupList setups, SymbolProfile symbol)
         {
             throw new NotImplementedException();
         }

@@ -14,5 +14,6 @@ namespace StockBox.Data.Indicators
         slope,
         averageTrueRange,
         priceChannel,
+        conqueror,
     }
 }

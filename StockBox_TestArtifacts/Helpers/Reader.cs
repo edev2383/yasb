@@ -1,6 +1,6 @@
-﻿using System;
+﻿using StockBox.Associations;
+using System;
 using System.IO;
-using StockBox.Associations;
 
 namespace StockBox_TestArtifacts.Helpers
 {
@@ -98,6 +98,17 @@ namespace StockBox_TestArtifacts.Helpers
                 case EFile.eAmdDailySmallDataset:
                     ret = "AMD_DAILY_SMALL_DATASET";
                     ext = EExt.eCsv;
+                    break;
+                case EFile.AlphaVantageDailyTxt:
+                    ret = "AlphaVantage_TimeSeriesAdjustedDaily_RawJsonString";
+                    break;
+
+                case EFile.AlphaVantageWeeklyTxt:
+                    ret = "AlphaVantage_TimeSeriesAdjustedWeekly_RawJsonString";
+                    break;
+
+                case EFile.AlphaVantageMonthlyTxt:
+                    ret = "AlphaVantage_TimeSeriesAdjustedMonthly_RawJsonString";
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
