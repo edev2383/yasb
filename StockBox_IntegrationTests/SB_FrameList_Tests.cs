@@ -11,6 +11,7 @@ using StockBox.Rules;
 using StockBox.Services;
 using StockBox.Setups;
 using StockBox.States;
+using System.Threading.Tasks;
 
 
 namespace StockBox_IntegrationTests
@@ -21,7 +22,7 @@ namespace StockBox_IntegrationTests
     {
 
         [TestMethod]
-        public void SB_FrameList_01_FrameListFactoryCreatesLargeEnoughDataSetFromRulesInput_DAILYONLY()
+        public async Task SB_FrameList_01_FrameListFactoryCreatesLargeEnoughDataSetFromRulesInput_DAILYONLY()
         {
             var rules = new Pattern() {
                 new Rule("close > open"),
@@ -39,10 +40,10 @@ namespace StockBox_IntegrationTests
 
             // create the factory and give it the analyzed combinations
             var factory = new FrameListFactory(new SbScraper(), new ForwardTestingDataProvider());
-            var frameList = factory.Create(expAnalyzer.Combos, new Symbol("MSFT")) as SbFrameList;
+            var frameList = await factory.Create(expAnalyzer.Combos, new Symbol("MSFT")) as SbFrameList;
 
             // find the daily framelist
-            var daily = frameList.FindByFrequency(StockBox.Associations.Enums.EFrequency.eDaily);
+            var daily = frameList.FindByFrequency(StockBox.Associations.Enums.EFrequency.Daily);
 
             // depending on time of day, we might get 4 OR 5?
             // TODO - Needs additional testing.
@@ -50,7 +51,7 @@ namespace StockBox_IntegrationTests
         }
 
         [TestMethod]
-        public void SB_FrameList_02_FrameListFactoryCreatesLargeEnoughDataSetFromRulesInput_WEEKLYONLY()
+        public async Task SB_FrameList_02_FrameListFactoryCreatesLargeEnoughDataSetFromRulesInput_WEEKLYONLY()
         {
             var rules = new Pattern() {
                 new Rule("weekly close > weekly open"),
@@ -68,10 +69,10 @@ namespace StockBox_IntegrationTests
 
             // create the factory and give it the analyzed combinations
             var factory = new FrameListFactory(new SbScraper(), new ForwardTestingDataProvider());
-            var frameList = factory.Create(expAnalyzer.Combos, new Symbol("MSFT")) as SbFrameList;
+            var frameList = await factory.Create(expAnalyzer.Combos, new Symbol("MSFT")) as SbFrameList;
 
             // find the daily framelist
-            var weekly = frameList.FindByFrequency(StockBox.Associations.Enums.EFrequency.eWeekly);
+            var weekly = frameList.FindByFrequency(StockBox.Associations.Enums.EFrequency.Weekly);
 
             // depending on time of day, we might get 4 OR 5?
             // TODO - Needs additional testing.
@@ -79,7 +80,7 @@ namespace StockBox_IntegrationTests
         }
 
         [TestMethod]
-        public void SB_FrameList_03_FrameListFactoryCreatesLargeEnoughDataSetFromRulesInput_MONTHLYONLY()
+        public async Task SB_FrameList_03_FrameListFactoryCreatesLargeEnoughDataSetFromRulesInput_MONTHLYONLY()
         {
             var rules = new Pattern() {
                 new Rule("Monthly close > monthly open"),
@@ -97,10 +98,10 @@ namespace StockBox_IntegrationTests
 
             // create the factory and give it the analyzed combinations
             var factory = new FrameListFactory(new SbScraper(), new ForwardTestingDataProvider());
-            var frameList = factory.Create(expAnalyzer.Combos, new Symbol("MSFT")) as SbFrameList;
+            var frameList = await factory.Create(expAnalyzer.Combos, new Symbol("MSFT")) as SbFrameList;
 
             // find the daily framelist
-            var monthly = frameList.FindByFrequency(StockBox.Associations.Enums.EFrequency.eMonthly);
+            var monthly = frameList.FindByFrequency(StockBox.Associations.Enums.EFrequency.Monthly);
 
             // depending on time of day, we might get 4 OR 5?
             // TODO - Needs additional testing.
@@ -108,7 +109,7 @@ namespace StockBox_IntegrationTests
         }
 
         [TestMethod]
-        public void SB_FrameList_03_FrameListFactoryCreatesLargeEnoughDataSetFromRulesInput_MONTHLYWEEKLYDAILYCOMPLEX()
+        public async Task SB_FrameList_03_FrameListFactoryCreatesLargeEnoughDataSetFromRulesInput_MONTHLYWEEKLYDAILYCOMPLEX()
         {
             var rules = new Pattern() {
                 new Rule("Monthly close > weekly open"),
@@ -126,12 +127,12 @@ namespace StockBox_IntegrationTests
 
             // create the factory and give it the analyzed combinations
             var factory = new FrameListFactory(new SbScraper(), new ForwardTestingDataProvider());
-            var frameList = factory.Create(expAnalyzer.Combos, new Symbol("MSFT")) as SbFrameList;
+            var frameList = await factory.Create(expAnalyzer.Combos, new Symbol("MSFT")) as SbFrameList;
 
             // find the daily framelist
-            var monthly = frameList.FindByFrequency(StockBox.Associations.Enums.EFrequency.eMonthly);
-            var weekly = frameList.FindByFrequency(StockBox.Associations.Enums.EFrequency.eWeekly);
-            var daily = frameList.FindByFrequency(StockBox.Associations.Enums.EFrequency.eDaily);
+            var monthly = frameList.FindByFrequency(StockBox.Associations.Enums.EFrequency.Monthly);
+            var weekly = frameList.FindByFrequency(StockBox.Associations.Enums.EFrequency.Weekly);
+            var daily = frameList.FindByFrequency(StockBox.Associations.Enums.EFrequency.Daily);
 
             // depending on time of day, we might get 4 OR 5?
             // TODO - Needs additional testing.
@@ -141,7 +142,7 @@ namespace StockBox_IntegrationTests
         }
 
         [TestMethod]
-        public void SB_FrameList_04_FrameListFactoryCreatesLargeEnoughDataSetFromRulesInput_Indicators()
+        public async Task SB_FrameList_04_FrameListFactoryCreatesLargeEnoughDataSetFromRulesInput_Indicators()
         {
             // indicators with indices require double the data to ensure that
             // we are able to compute the full range of data.
@@ -162,25 +163,25 @@ namespace StockBox_IntegrationTests
 
             // create the factory and give it the analyzed combinations
             var factory = new FrameListFactory(new SbScraper(), new ForwardTestingDataProvider());
-            var frameList = factory.Create(expAnalyzer.Combos, new Symbol("MSFT")) as SbFrameList;
+            var frameList = await factory.Create(expAnalyzer.Combos, new Symbol("MSFT")) as SbFrameList;
 
             // find the daily framelist
-            var daily = frameList.FindByFrequency(StockBox.Associations.Enums.EFrequency.eDaily);
+            var daily = frameList.FindByFrequency(StockBox.Associations.Enums.EFrequency.Daily);
 
             Assert.IsTrue(daily.Length >= 50);
         }
 
         [TestMethod]
-        public void SB_FrameList_05_FramseListFactoryCreateHistoricalData()
+        public async Task SB_FrameList_05_FramseListFactoryCreateHistoricalData()
         {
             var symbol = new Symbol("AMD");
 
             var factory = new FrameListFactory(new SbScraper(), new ForwardTestingDataProvider());
-            var framelist = factory.CreateBacktestData(symbol) as SbFrameList;
+            var framelist = await factory.CreateBacktestData(symbol) as SbFrameList;
 
-            var foundDaily = framelist.FindByFrequency(StockBox.Associations.Enums.EFrequency.eDaily);
-            var foundWeekly = framelist.FindByFrequency(StockBox.Associations.Enums.EFrequency.eWeekly);
-            var foundMonthly = framelist.FindByFrequency(StockBox.Associations.Enums.EFrequency.eMonthly);
+            var foundDaily = framelist.FindByFrequency(StockBox.Associations.Enums.EFrequency.Daily);
+            var foundWeekly = framelist.FindByFrequency(StockBox.Associations.Enums.EFrequency.Weekly);
+            var foundMonthly = framelist.FindByFrequency(StockBox.Associations.Enums.EFrequency.Monthly);
 
             Assert.IsNotNull(foundDaily);
             Assert.IsTrue(foundDaily.Length > 0);
@@ -191,9 +192,9 @@ namespace StockBox_IntegrationTests
         }
 
         [TestMethod]
-        public void SB_FrameList_06_FrameListFactoryCreateHistoricalData_AddIndicatorsByDomainCombos()
+        public async Task SB_FrameList_06_FrameListFactoryCreateHistoricalData_AddIndicatorsByDomainCombos()
         {
-            var framelist = CreateBacktestDataFrameList();
+            var framelist = await CreateBacktestDataFrameList();
             var combos = new DomainCombinationList();
             combos.Add(new DomainCombination(2, new Token(TokenType.eDaily, "", null, 0, 0), "SMA", new int[1] { 25 }));
             combos.Add(new DomainCombination(2, new Token(TokenType.eWeekly, "", null, 0, 0), "SMA", new int[1] { 25 }));
@@ -202,20 +203,20 @@ namespace StockBox_IntegrationTests
             var factory = new FrameListFactory(new SbScraper(), new ForwardTestingDataProvider());
             factory.AddIndicators(framelist, combos);
 
-            var foundDaily = framelist.FindByFrequency(StockBox.Associations.Enums.EFrequency.eDaily);
-            var foundWeekly = framelist.FindByFrequency(StockBox.Associations.Enums.EFrequency.eWeekly);
-            var foundMonthly = framelist.FindByFrequency(StockBox.Associations.Enums.EFrequency.eMonthly);
+            var foundDaily = framelist.FindByFrequency(StockBox.Associations.Enums.EFrequency.Daily);
+            var foundWeekly = framelist.FindByFrequency(StockBox.Associations.Enums.EFrequency.Weekly);
+            var foundMonthly = framelist.FindByFrequency(StockBox.Associations.Enums.EFrequency.Monthly);
 
             Assert.IsTrue(foundDaily.Inidcators.ContainsItem(new SimpleMovingAverage("SMA", 25)));
             Assert.IsTrue(foundWeekly.Inidcators.ContainsItem(new SimpleMovingAverage("SMA", 25)));
             Assert.IsTrue(foundMonthly.Inidcators.ContainsItem(new SimpleMovingAverage("SMA", 25)));
         }
 
-        private SbFrameList CreateBacktestDataFrameList(string symbol = "AMD")
+        private async Task<SbFrameList> CreateBacktestDataFrameList(string symbol = "AMD")
         {
             var sym = new Symbol(symbol);
             var factory = new FrameListFactory(new SbScraper(), new ForwardTestingDataProvider());
-            var framelist = factory.CreateBacktestData(sym) as SbFrameList;
+            var framelist = await factory.CreateBacktestData(sym) as SbFrameList;
             return framelist;
         }
     }

@@ -3,6 +3,7 @@ using StockBox.Actions;
 using StockBox.Actions.Adapters;
 using StockBox.Actions.Responses;
 using StockBox.Data.SbFrames;
+using StockBox.Positions;
 
 namespace StockBox_TestArtifacts.Mocks
 {
@@ -20,7 +21,7 @@ namespace StockBox_TestArtifacts.Mocks
         }
 
 
-        public override ActionResponse PerformAction(DataPoint dataPoint)
+        public override ActionResponse PerformAction(DataPoint dataPoint, Position positon)
         {
             var ret = new ActionResponse(true);
             ParentAction.Symbol.TransitionState(ParentAction.TransitionState);

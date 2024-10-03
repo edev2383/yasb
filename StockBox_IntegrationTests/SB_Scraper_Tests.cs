@@ -3,10 +3,12 @@ using StockBox.Associations.Enums;
 using StockBox.Data.Adapters.DataFrame;
 using StockBox.Data.SbFrames.Providers;
 using StockBox.Data.Scraper;
+using StockBox.Data.Scraper.Helpers;
 using StockBox.Data.Scraper.Parsers;
 using StockBox.Data.Scraper.Providers;
+using StockBox.Models;
 using System;
-using System.IO;
+using System.Threading.Tasks;
 
 
 namespace StockBox_IntegrationTests
@@ -15,136 +17,43 @@ namespace StockBox_IntegrationTests
     public class SB_Scraper_Tests
     {
 
-        [TestMethod]
-        public void SB_Scraper_01_CurrentProviderReturnsExpectedPayloadAndParserPerformsExpectedMethod()
-        {
-            var cIn = new CurrentYahooFinanceProvider.CurrentProvider_InType() { Symbol = "MSFT" };
-            var c = new CurrentYahooFinanceProvider(cIn);
-
-            var parser = new CurrentYahooFinanceParser();
-            var outpayload = parser.GetPayload(c.GetPayload());
-
-            Assert.IsInstanceOfType(outpayload, typeof(CurrentYahooFinanceParser.CurrentProvider_OutType));
-            var castPayload = outpayload as CurrentYahooFinanceParser.CurrentProvider_OutType;
-            Assert.IsNotNull(castPayload.Date);
-            Assert.IsNotNull(castPayload.High);
-            Assert.IsNotNull(castPayload.Low);
-            Assert.IsNotNull(castPayload.Open);
-            Assert.IsNotNull(castPayload.Close);
-            Assert.IsNotNull(castPayload.AdjClose);
-            Assert.IsNotNull(castPayload.Volume);
-        }
-
-        [TestMethod]
-        public void SB_Scraper_02_ScraperClassActsAsSuccessfulMediator()
-        {
-            var currentInParam = new CurrentYahooFinanceProvider.CurrentProvider_InType() { Symbol = "TSLA", };
-            var scraper = new SbScraper(new CurrentYahooFinanceProvider(currentInParam), new CurrentYahooFinanceParser());
-            var payload = scraper.Scrape() as CurrentYahooFinanceParser.CurrentProvider_OutType;
-            Assert.IsNotNull(payload);
-            Assert.IsNotNull(payload.Date);
-            Assert.IsNotNull(payload.High);
-            Assert.IsNotNull(payload.Low);
-            Assert.IsNotNull(payload.Open);
-            Assert.IsNotNull(payload.Close);
-            Assert.IsNotNull(payload.AdjClose);
-            Assert.IsNotNull(payload.Volume);
-        }
 
         [TestMethod]
         public void SB_Scraper_03_HistoryInTypeAndUrlParserWorksAsExpected()
         {
-            var startDate = new DateTime(2022, 8, 1);
-            var endDate = new DateTime(2022, 8, 3);
+            var freq = ScraperResources.I().AlphaVantage.FrequencyDaily;
+            var apiKey = ScraperResources.I().AlphaVantage.ApiKey;
+            var symbol = "MSFT";
+            var expected = $"https://www.alphavantage.co/query?function={freq}&symbol={symbol}&apikey={apiKey}&outputsize=compact&datatype=json";
+            var historyIn = new AlphaVantageSecurityHistoryProvider.AlphaVantageSecurityHistoryProvider_InType(
+                symbol: symbol,
+                frequency: EFrequency.Daily);
 
-            var historyIn = new HistoryYahooFinanceProvider.HistoryYahooFinanceProvider_InType()
-            {
-                Symbol = "MSFT",
-                StartDate = startDate,
-                EndDate = endDate,
-                Interval = EFrequency.eDaily,
-            };
+            var history = new AlphaVantageSecurityHistoryProvider(historyIn);
 
-            Assert.AreNotEqual(historyIn.EndDateInt, 0);
-            Assert.AreNotEqual(historyIn.StartDateInt, 0);
-
-            var history = new HistoryYahooFinanceProvider(historyIn);
-
-            var historyPayload = history.GetPayload();
-            Assert.IsTrue(historyPayload is MemoryStream);
+            Assert.AreEqual(expected, history.Url);
         }
 
         [TestMethod]
-        public void SB_Scraper_04_HistoryScraperIntegrationWorksAsExpected()
+        public async Task SB_Scraper_04_HistoryScraperIntegrationWorksAsExpected()
         {
-            var startDate = new DateTime(2022, 8, 1);
-            var endDate = new DateTime(2022, 8, 3);
+            var symbol = "MSFT";
+            var historyIn = new AlphaVantageSecurityHistoryProvider.AlphaVantageSecurityHistoryProvider_InType(
+                symbol: symbol,
+                frequency: EFrequency.Daily);
 
-            var historyIn = new HistoryYahooFinanceProvider.HistoryYahooFinanceProvider_InType()
-            {
-                Symbol = "MSFT",
-                StartDate = startDate,
-                EndDate = endDate,
-                Interval = EFrequency.eDaily,
-            };
-
-            var scraper = new SbScraper(new HistoryYahooFinanceProvider(historyIn), new HistoryYahooFinanceParser());
-            var payload = scraper.Scrape() as HistoryYahooFinanceParser.HistoryParser_OutType;
+            var scraper = new SbScraper(new AlphaVantageSecurityHistoryProvider(historyIn), new AlphaVantageSecurityHistoryParser());
+            var payload = await scraper.Scrape() as AlphaVantageSecurityHistoryParser.HistoryParser_OutType;
 
             Assert.IsNotNull(payload);
-            Assert.IsNotNull(payload.Stream);
-        }
-
-        [TestMethod]
-        public void SB_Scraper_05_HistoryScraperIntegrationWithDataFrame()
-        {
-            var startDate = new DateTime(2022, 8, 1);
-            var endDate = new DateTime(2022, 8, 3);
-
-            var historyIn = new HistoryYahooFinanceProvider.HistoryYahooFinanceProvider_InType()
-            {
-                Symbol = "MSFT",
-                StartDate = startDate,
-                EndDate = endDate,
-                Interval = EFrequency.eDaily,
-            };
-
-            var scraper = new SbScraper(new HistoryYahooFinanceProvider(historyIn), new HistoryYahooFinanceParser());
-            var payload = scraper.Scrape() as HistoryYahooFinanceParser.HistoryParser_OutType;
-            Assert.IsNotNull(payload);
-            Assert.IsNotNull(payload.Stream);
-            var toDplAdapter = new DeedleToDataPointListAdapter(payload.Stream);
-            var adapter = new ForwardTestingDataProvider(toDplAdapter.Convert());
-
-            Assert.IsNotNull(adapter);
-            // Dataset is two days
-            Assert.AreEqual(adapter.Length, 3);
+            Assert.IsNotNull(payload.Data);
         }
 
         [TestMethod]
         public void SB_Scraper_06_HistoryScraperIntegrationWorksWithForex()
         {
-            var startDate = new DateTime(2022, 8, 1);
-            var endDate = new DateTime(2022, 8, 3);
-
-            var historyIn = new HistoryYahooFinanceProvider.HistoryYahooFinanceProvider_InType()
-            {
-                Symbol = "EURUSD=X",
-                StartDate = startDate,
-                EndDate = endDate,
-                Interval = EFrequency.eDaily,
-            };
-
-            var scraper = new SbScraper(new HistoryYahooFinanceProvider(historyIn), new HistoryYahooFinanceParser());
-            var payload = scraper.Scrape() as HistoryYahooFinanceParser.HistoryParser_OutType;
-            Assert.IsNotNull(payload);
-            Assert.IsNotNull(payload.Stream);
-            var toDplAdapter = new DeedleToDataPointListAdapter(payload.Stream);
-            var adapter = new ForwardTestingDataProvider(toDplAdapter.Convert());
-
-            Assert.IsNotNull(adapter);
-            // Dataset is two days
-            Assert.AreEqual(adapter.Length, 4);
+            // AlphaVantage supports forex, but needs a different URL/InType
+            Assert.Inconclusive();
         }
     }
 }

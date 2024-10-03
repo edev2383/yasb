@@ -28,7 +28,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Mocks\" />
-    <Folder Include="Files\" />
     <Folder Include="Helpers\" />
     <Folder Include="Builders\StockBox\" />
     <Folder Include="Builders\StockBox\Rules\" />
@@ -54,6 +53,15 @@
     <ProjectReference Include="..\StockBoxValidation\StockBoxValidation.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <None Update="Files\AlphaVantage_TimeSeriesAdjustedDaily_RawJsonString.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Files\AlphaVantage_TimeSeriesAdjustedMonthly_RawJsonString.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Files\AlphaVantage_TimeSeriesAdjustedWeekly_RawJsonString.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Files\AMD_DAILY.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

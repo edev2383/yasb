@@ -24,9 +24,9 @@ namespace StockBox_UnitTests
         {
             var expectedLastValue = 96.38;
             var stream = new Reader().GetFileStream(eAmdDaily);
-            var toDplAdapter = new DeedleToDataPointListAdapter(stream);
+            var toDplAdapter = new DeedleToDataPointListYahooFinanceAdapter(stream);
             var provider = new ForwardTestingDataProvider(toDplAdapter.Convert());
-            var frame = new SbFrame(provider, EFrequency.eDaily, new Symbol(string.Empty));
+            var frame = new SbFrame(provider, EFrequency.Daily, new Symbol(string.Empty));
             var sma = IndicatorFactory.Create("SMA", 25) as SimpleMovingAverage;
             frame.AddIndicator(sma);
 
@@ -63,9 +63,9 @@ namespace StockBox_UnitTests
         {
             var expectedLastValue = 115648348;
             var stream = new Reader().GetFileStream(eAmdDaily);
-            var toDplAdapter = new DeedleToDataPointListAdapter(stream);
+            var toDplAdapter = new DeedleToDataPointListYahooFinanceAdapter(stream);
             var provider = new ForwardTestingDataProvider(toDplAdapter.Convert());
-            var frame = new SbFrame(provider, EFrequency.eDaily, new Symbol(string.Empty));
+            var frame = new SbFrame(provider, EFrequency.Daily, new Symbol(string.Empty));
             var sma = IndicatorFactory.Create("AVGVolume", 25) as AverageVolume;
             frame.AddIndicator(sma);
 
@@ -102,9 +102,9 @@ namespace StockBox_UnitTests
         {
             var expectedLastValue = 34.47;
             var stream = new Reader().GetFileStream(eAmdDaily);
-            var toDplAdapter = new DeedleToDataPointListAdapter(stream);
+            var toDplAdapter = new DeedleToDataPointListYahooFinanceAdapter(stream);
             var provider = new ForwardTestingDataProvider(toDplAdapter.Convert());
-            var frame = new SbFrame(provider, EFrequency.eDaily, new Symbol(string.Empty));
+            var frame = new SbFrame(provider, EFrequency.Daily, new Symbol(string.Empty));
             var rsi = IndicatorFactory.Create("RSI", 14) as RelativeStrengthIndex;
             frame.AddIndicator(rsi);
 
@@ -142,9 +142,9 @@ namespace StockBox_UnitTests
             var expectedFirstKValue = 57.82;
             var expectedFirstDValue = 62.59;
             var stream = new Reader().GetFileStream(eAmdDaily);
-            var toDplAdapter = new DeedleToDataPointListAdapter(stream);
+            var toDplAdapter = new DeedleToDataPointListYahooFinanceAdapter(stream);
             var provider = new ForwardTestingDataProvider(toDplAdapter.Convert());
-            var frame = new SbFrame(provider, EFrequency.eDaily, new Symbol(string.Empty));
+            var frame = new SbFrame(provider, EFrequency.Daily, new Symbol(string.Empty));
             var fastSto = IndicatorFactory.Create("FastSto", 14, 3) as FastStochastic;
             frame.AddIndicator(fastSto);
 
@@ -181,9 +181,9 @@ namespace StockBox_UnitTests
             var expectedFirstKValue = 39.26;
             var expectedFirstDValue = 52.22;
             var stream = new Reader().GetFileStream(eAmdDaily);
-            var toDplAdapter = new DeedleToDataPointListAdapter(stream);
+            var toDplAdapter = new DeedleToDataPointListYahooFinanceAdapter(stream);
             var provider = new ForwardTestingDataProvider(toDplAdapter.Convert());
-            var frame = new SbFrame(provider, EFrequency.eDaily, new Symbol(string.Empty));
+            var frame = new SbFrame(provider, EFrequency.Daily, new Symbol(string.Empty));
             var slowSto = IndicatorFactory.Create("SlowSto", 14, 3) as SlowStochastic;
             frame.AddIndicator(slowSto);
 
@@ -219,9 +219,9 @@ namespace StockBox_UnitTests
         {
             var expectedLastValue = 5.668;
             var stream = new Reader().GetFileStream(eAmdDaily);
-            var toDplAdapter = new DeedleToDataPointListAdapter(stream);
+            var toDplAdapter = new DeedleToDataPointListYahooFinanceAdapter(stream);
             var provider = new ForwardTestingDataProvider(toDplAdapter.Convert());
-            var frame = new SbFrame(provider, EFrequency.eDaily, new Symbol(string.Empty));
+            var frame = new SbFrame(provider, EFrequency.Daily, new Symbol(string.Empty));
             var atr = IndicatorFactory.Create("ATR", 14) as AverageTrueRange;
             frame.AddIndicator(atr);
 
@@ -275,7 +275,7 @@ namespace StockBox_UnitTests
                 .CreateDataPoints();
 
             var provider = new ForwardTestingDataProvider(df);
-            var frame = new SbFrame(provider, EFrequency.eDaily, new Symbol(string.Empty));
+            var frame = new SbFrame(provider, EFrequency.Daily, new Symbol(string.Empty));
             var atr = IndicatorFactory.Create("ATR", 14) as AverageTrueRange;
 
             // adding the indicator to the frame runs the calculations against 
@@ -283,7 +283,7 @@ namespace StockBox_UnitTests
             frame.AddIndicator(atr);
 
             // cast the indicator to the appropriate payload obj
-            var payload = (Dictionary<DateTime, double>)atr.Payload;
+            var payload = atr.Payload;
 
             // for readability, round the last value of the payload to 2 decimal
             // places and compare against the expected
@@ -310,15 +310,15 @@ namespace StockBox_UnitTests
             var expectedHighValue = 125.67;
             var expectedLowValue = 80.64;
             var stream = new Reader().GetFileStream(eAmdDaily);
-            var toDplAdapter = new DeedleToDataPointListAdapter(stream);
+            var toDplAdapter = new DeedleToDataPointListYahooFinanceAdapter(stream);
             var provider = new ForwardTestingDataProvider(toDplAdapter.Convert());
-            var frame = new SbFrame(provider, EFrequency.eDaily, new Symbol(string.Empty));
-            var pc = IndicatorFactory.Create("PC", 55) as PriceChannel;
+            var frame = new SbFrame(provider, EFrequency.Daily, new Symbol(string.Empty));
+            var pc = IndicatorFactory.Create("CHAN", 55) as PriceChannel;
             frame.AddIndicator(pc);
 
             // Asserting the Indicator initializes correctly and performs the
             // proper calculations
-            Assert.AreEqual("PC(55)", pc.Name);
+            Assert.AreEqual("CHAN(55)", pc.Name);
             Assert.IsNotNull(pc.Payload);
             Assert.IsInstanceOfType(pc.Payload, typeof(Dictionary<DateTime, (double high, double center, double low)>));
 
@@ -345,6 +345,50 @@ namespace StockBox_UnitTests
             // which is mostly irrelevant because the payload is mapped to the
             // DataPoint.Indicators via DateTime key. This is just for the test
             Assert.AreEqual(pc.Payload.Values.Last().high, indicatorValue);
+        }
+
+        [TestMethod]
+        public void SB_Indicators_09_Conqueror_01()
+        {
+            Assert.Inconclusive();
+            //var expectedHighValue = 125.67;
+            //var expectedLowValue = 80.64;
+            //var stream = new Reader().GetFileStream(eAmdDaily);
+            //var toDplAdapter = new DeedleToDataPointListAdapter(stream);
+            //var provider = new ForwardTestingDataProvider(toDplAdapter.Convert());
+            //var frame = new SbFrame(provider, EFrequency.eDaily, new Symbol(string.Empty));
+            //var pc = IndicatorFactory.Create("CONQ") as Conqueror;
+            //frame.AddIndicator(pc);
+
+            //// Asserting the Indicator initializes correctly and performs the
+            //// proper calculations
+            //Assert.AreEqual("CONQ", pc.Name);
+            //Assert.IsNotNull(pc.Payload);
+            //Assert.IsInstanceOfType(pc.Payload, typeof(Dictionary<DateTime, (double high, double center, double low)>));
+
+            //// cast the indicator to the appropriate payload obj
+
+            //var lastValue = pc.Payload.Values.Last();
+            // for readability, round the last value of the payload to 3 decimal
+            // places and compare against the expected
+            //var roundedLastHighValue = Math.Round(lastValue.high, 2, MidpointRounding.AwayFromZero);
+            //var roundedLastLowValue = Math.Round(lastValue.low, 2, MidpointRounding.AwayFromZero);
+
+            //Assert.AreEqual(roundedLastHighValue, expectedHighValue);
+            //Assert.AreEqual(roundedLastLowValue, expectedLowValue);
+
+            //// assert the indicator was correctly mapped to the SbFrame's inner
+            //// DataPointList object
+            //var firstDataPoint = frame.FirstDataPoint();
+            //var indicatorValue = firstDataPoint.GetByColumn(new DataColumn("PC", 55));
+            //Assert.IsNotNull(indicatorValue);
+
+            //// DeedleAdapter is forward testing, i.e., DESC order - most recent
+            //// DateTime first, so the last value of the calculated indicator
+            //// payload is going to be the first value in the SbFrame's dataset
+            //// which is mostly irrelevant because the payload is mapped to the
+            //// DataPoint.Indicators via DateTime key. This is just for the test
+            //Assert.AreEqual(pc.Payload.Values.Last().high, indicatorValue);
         }
     }
 }

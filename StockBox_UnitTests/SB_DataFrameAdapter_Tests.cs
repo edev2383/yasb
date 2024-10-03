@@ -24,7 +24,7 @@ namespace StockBox_UnitTests
         public void SB_01_DeedleAdapterCanBeCreated()
         {
             var stream = new Reader().GetFileStream(eAmdDaily);
-            var toDplAdapter = new DeedleToDataPointListAdapter(stream);
+            var toDplAdapter = new DeedleToDataPointListYahooFinanceAdapter(stream);
             var provider = new ForwardTestingDataProvider(toDplAdapter.Convert());
 
             Assert.IsNotNull(provider);
@@ -34,7 +34,7 @@ namespace StockBox_UnitTests
         public void SB_02_DeedleBacktestAdapterCanBeCreated()
         {
             var stream = new Reader().GetFileStream(eAmdDaily);
-            var toDplAdapter = new DeedleToDataPointListAdapter(stream);
+            var toDplAdapter = new DeedleToDataPointListYahooFinanceAdapter(stream);
             var provider = new BackwardTestingDataProvider(toDplAdapter.Convert());
 
             Assert.IsNotNull(provider);
@@ -45,7 +45,7 @@ namespace StockBox_UnitTests
         {
             DateTime expected = new DateTime(2022, 6, 17, 0, 0, 0).Date;
             var stream = new Reader().GetFileStream(eAmdDaily);
-            var toDplAdapter = new DeedleToDataPointListAdapter(stream);
+            var toDplAdapter = new DeedleToDataPointListYahooFinanceAdapter(stream);
 
             var provider = new ForwardTestingDataProvider(toDplAdapter.Convert());
             Assert.AreEqual(expected, provider.FirstKey.Date);
@@ -56,7 +56,7 @@ namespace StockBox_UnitTests
         {
             DateTime expected = new DateTime(2022, 6, 17, 0, 0, 0).Date;
             var stream = new Reader().GetFileStream(eAmdDaily);
-            var toDplAdapter = new DeedleToDataPointListAdapter(stream);
+            var toDplAdapter = new DeedleToDataPointListYahooFinanceAdapter(stream);
 
             var provider = new BackwardTestingDataProvider(toDplAdapter.Convert());
             Assert.AreEqual(expected, provider.FirstKey.Date);
@@ -67,7 +67,7 @@ namespace StockBox_UnitTests
         {
 
             var stream = new Reader().GetFileStream(eAmdDailySmallDataset);
-            var toDplAdapter = new DeedleToDataPointListAdapter(stream);
+            var toDplAdapter = new DeedleToDataPointListYahooFinanceAdapter(stream);
 
             var provider = new BackwardTestingDataProvider_Accessor(toDplAdapter.Convert());
             provider.IterateWindow();
@@ -83,7 +83,7 @@ namespace StockBox_UnitTests
         public void SB_06_DeedleBacktestAdapter_WindowIterationWorksAsExpected()
         {
             var stream = new Reader().GetFileStream(eAmdDailySmallDataset);
-            var toDplAdapter = new DeedleToDataPointListAdapter(stream);
+            var toDplAdapter = new DeedleToDataPointListYahooFinanceAdapter(stream);
 
             var provider = new BackwardTestingDataProvider_Accessor(toDplAdapter.Convert());
             provider.IterateWindow();
@@ -98,7 +98,7 @@ namespace StockBox_UnitTests
         public void SB_06_DeedleBacktestAdapter_IsAtEndCheckWorksAsIntended()
         {
             var stream = new Reader().GetFileStream(eAmdDailySmallDataset);
-            var toDplAdapter = new DeedleToDataPointListAdapter(stream);
+            var toDplAdapter = new DeedleToDataPointListYahooFinanceAdapter(stream);
 
             var provider = new BackwardTestingDataProvider_Accessor(toDplAdapter.Convert());
 

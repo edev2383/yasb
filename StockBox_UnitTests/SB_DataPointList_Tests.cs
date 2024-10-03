@@ -17,7 +17,7 @@ namespace StockBox_UnitTests
         public void SB_01_DataPointList_Tests()
         {
             var stream = new Reader().GetFileStream(eAmdDaily);
-            var toDplAdapter = new DeedleToDataPointListAdapter(stream);
+            var toDplAdapter = new DeedleToDataPointListYahooFinanceAdapter(stream);
             var adapter = new DataProvider_Accessor(toDplAdapter.Convert());
 
             var data = adapter.Access_GetData();

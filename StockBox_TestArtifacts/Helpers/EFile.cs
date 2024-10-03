@@ -10,6 +10,9 @@ namespace StockBox_TestArtifacts.Helpers
         eAmdWeekly,
         eAmdMonthly,
         eAmdDailySmallDataset,
+        AlphaVantageDailyTxt,
+        AlphaVantageWeeklyTxt,
+        AlphaVantageMonthlyTxt,
     }
 
     public enum EExt
