@@ -1,9 +1,12 @@
 # yasb
 
-## Introduction
-The _yasb_ project is essentially a stock trading bot. While there are many such items available, I strongly believe that anything available for purchase is __worthless__ out of the box, because if were any good, the author(s) would have little interest in selling, as a product, something that was consistently beating the market.
+## Note
+- YahooFinance has changed their setup and the `SbScaper` and collaborating providers no longer work in this version, so integration tests will fail. A forth coming push/PR will create a new Parser/Provider adapter pair to hit the AlphaVantage API. 
 
-The original intent was to create a "simple" way to test different market patterns against previous years of market data, searching for patterns that were consistent winners. During development of v1, we realized that we could also test the patterns in real-time, potentially to allow the program to make trades for us. That is the ultimate goal -- automated, consistent market profits.
+## Introduction
+The _yasb_ project is essentially a stock backtesting/trading bot. The original intent was to create a "simple" way to test different market patterns against previous years of market data, searching for patterns that were consistent winners. During development of v1, we realized that we could also test the patterns in real-time, potentially to allow the program to make trades for us. That was the ultimate goal -- automated, consistent market profits. 
+
+However, the development process would give us the opportunity to deal with large swaths of time-series data, market indicator calculations, and building a custom languauge for describing stock market patterns.
 
 ## Theory
 We wanted a system that would allow for simple ways to test different stock market patterns on the fly, without having to hard-code different variables for different patterns. Versions 1 and 2 handled this with RegEx, but that proved to be buggy and sluggish. Version 3 has been rewritten as an run-time interpretter in C#, allowing for greater flexibility and better test coverage.
